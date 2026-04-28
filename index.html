@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Pensjonsveileder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --klp-green: #1f7a5c;
+      --klp-light: #e6f2ee;
+      --klp-bg: #f5f7f6;
+      --text-dark: #1a1a1a;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: var(--klp-bg);
+      margin: 0;
+      padding: 40px 20px;
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+      color: var(--klp-green);
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .choices {
+      margin-top: 24px;
+      display: grid;
+      gap: 12px;
+    }
+
+    button {
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--klp-green);
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.95;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card" id="app"></div>
+  <footer>
+    Eksempel på interaktiv pensjonsveileder
+  </footer>
+</div>
+
+<script>
+  const steps = {
+    start: {
+      title: "Pensjonsveileder",
+      text: "Denne veiledningen stiller noen enkle spørsmål om pensjon.",
+      choices: [
+        { label: "Start veiledning", next: "sektor" }
+      ]
+    },
+
+    sektor: {
+      title: "Arbeidssektor",
+      text: "Jobber du i offentlig sektor?",
+      choices: [
+        { label: "Ja", next: "alder" },
+        { label: "Nei", next: "privat" }
+      ]
+    },
+
+    privat: {
+      title: "Privat sektor",
+      text: "Dersom du jobber i privat sektor, bør du sjekke pensjonsordningen via arbeidsgiver.",
+      choices: [
+        { label: "Start på nytt", next: "start" }
+      ]
+    },
+
+    alder: {
+      title: "Alder",
+      text: "Hvor gammel er du?",
+      choices: [
+        { label: "Under 62 år", next: "under62" },
+        { label: "62 år eller eldre", next: "over62" }
+      ]
+    },
+
+    under62: {
+      title: "Under 62 år",
+      text: "Du har fortsatt tid til å bygge pensjon. Det kan være lurt å følge med på opptjeningen.",
+      choices: [
+        { label: "Hva bør jeg gjøre?", next: "rad_under62" },
+        { label: "Start på nytt", next: "start" }
+      ]
+    },
+
+    rad_under62: {
+      title: "Videre råd",
+      text: "Sjekk pensjonsopptjening, vurder egen sparing og hold deg oppdatert på regelverket.",
+      choices: [
+        { label: "Start på nytt", next: "start" }
+      ]
+    },
+
+    over62: {
+      title: "62 år eller eldre",
+      text: "Du kan ha mulighet for fleksibelt uttak av pensjon.",
+      choices: [
+        { label: "Hva betyr dette?", next: "rad_over62" },
+        { label: "Start på nytt", next: "start" }
+      ]
+    },
+
+    rad_over62: {
+      title: "Videre veiledning",
+      text: "Det kan være lurt å vurdere tidspunkt for uttak basert på din økonomiske situasjon.",
+      choices: [
+        { label: "Start på nytt", next: "start" }
+      ]
+    }
+  };
+
+  function render(stepKey) {
+    const step = steps[stepKey];
+    const app = document.getElementById("app");
+
+    app.innerHTML = `
+      <h1>${step.title}</h1>
+      <p>${step.text}</p>
+      <div class="choices">
+        ${step.choices.map(choice =>
+          `<button onclick="render('${choice.next}')">${choice.label}</button>`
+        ).join("")}
+      </div>
+    `;
+  }
+
+  render("start");
+</script>
+
+</body>
+</html>
+<script>
+  const ADMIN_PASSWORD = "admin123"; // ← du kan endre dette
+
+  const defaultSteps = {
+    start: {
+      title: "Pensjonsveileder",
+      text: "Denne veiledningen stiller noen enkle spørsmål om pensjon.",
+      choices: [{ label: "Start veiledning", next: "sektor" }]
+    },
+    sektor: {
+      title: "Arbeidssektor",
+      text: "Jobber du i offentlig sektor?",
+      choices: [
+        { label: "Ja", next: "alder" },
+        { label: "Nei", next: "privat" }
+      ]
+    },
+    privat: {
+      title: "Privat sektor",
+      text: "Sjekk pensjonsordningen hos arbeidsgiveren din.",
+      choices: [{ label: "Start på nytt", next: "start" }]
+    },
+    alder: {
+      title: "Alder",
+      text: "Hvor gammel er du?",
+      choices: [
+        { label: "Under 62 år", next: "under62" },
+        { label: "62 år eller eldre", next: "over62" }
+      ]
+    },
+    under62: {
+      title: "Under 62 år",
+      text: "Du har god tid til å bygge pensjon.",
+      choices: [{ label: "Start på nytt", next: "start" }]
+    },
+    over62: {
+      title: "62 år eller eldre",
+      text: "Du kan ha mulighet for fleksibelt uttak.",
+      choices: [{ label: "Start på nytt", next: "start" }]
+    }
+  };
+
+  let steps =
+    JSON.parse(localStorage.getItem("steps")) || defaultSteps;
+
+  function render(stepKey) {
+    const step = steps[stepKey];
+    document.getElementById("app").innerHTML = `
+      <h1>${step.title}</h1>
+      <p>${step.text}</p>
+      <div class="choices">
+        ${step.choices
+          .map(
+            c =>
+              `<button onclick="render('${c.next}')">${c.label}</button>`
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  function openAdmin() {
+    const pwd = prompt("Admin-passord:");
+    if (pwd !== ADMIN_PASSWORD) {
+      alert("Feil passord");
+      return;
+    }
+
+    document.getElementById("app").innerHTML = `
+      <h1>Admin</h1>
+      <p>Her kan du endre teksten i flytskjemaet.</p>
+      <textarea id="editor" style="width:100%; height:300px;">${JSON.stringify(
+        steps,
+        null,
+        2
+      )}</textarea>
+      <br><br>
+      <button onclick="saveAdmin()">Lagre</button>
+      <button onclick="render('start')">Avbryt</button>
+    `;
+  }
+
+  function saveAdmin() {
+    try {
+      const value = document.getElementById("editor").value;
+      steps = JSON.parse(value);
+      localStorage.setItem("steps", JSON.stringify(steps));
+      alert("Lagret ✅");
+      render("start");
+    } catch {
+      alert("Noe gikk galt. Ikke gyldig format.");
+    }
+  }
+
+  render("start");
+</script>
+<p style="text-align:center; font-size:12px; cursor:pointer;" onclick="openAdmin()">
+  Admin
+</p>
