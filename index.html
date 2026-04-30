@@ -1,286 +1,788 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-  <meta charset="UTF-8">
-  <title>Pensjonsveileder</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KLP Veiledningsflyt</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g: #1a5c3a;
+  --g2: #2d7a52;
+  --g-light: #e6f2ec;
+  --g-mid: #a8d4bc;
+  --amber: #c97a00;
+  --amber-bg: #fff8e6;
+  --amber-border: #f0c050;
+  --purple: #5b21b6;
+  --purple-bg: #f0ebff;
+  --blue: #1d4ed8;
+  --blue-bg: #eff6ff;
+  --bg: #f2efe9;
+  --card: #ffffff;
+  --text: #111;
+  --muted: #6b6b6b;
+  --border: #ddd8ce;
+  --done-bg: #d4ead9;
+  --connector: #c8c2b6;
+  --radius: 10px;
+}
 
-  <style>
-    :root {
-      --klp-green: #1f7a5c;
-      --klp-light: #e6f2ee;
-      --klp-bg: #f5f7f6;
-      --text-dark: #1a1a1a;
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: var(--klp-bg);
-      margin: 0;
-      padding: 40px 20px;
-      color: var(--text-dark);
-    }
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: auto;
+}
 
-    .container {
-      max-width: 650px;
-      margin: auto;
-    }
+/* ══ HEADER ══ */
+header {
+  background: var(--g);
+  color: white;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+}
+.logo { font-family: 'Instrument Serif', serif; font-size: 1.45rem; }
+.header-meta { font-size: 0.65rem; opacity: 0.6; letter-spacing: 0.07em; text-transform: uppercase; margin-top: 2px; }
+.reset-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.28);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  padding: 7px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.reset-btn:hover { background: rgba(255,255,255,0.22); }
 
-    .card {
-      background: #ffffff;
-      padding: 28px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      animation: fadeIn 0.25s ease-in-out;
-    }
+/* ══ CANVAS: horizontal scroll ══ */
+.canvas {
+  padding: 44px 40px 80px 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  min-height: calc(100vh - 60px);
+  width: max-content;
+  min-width: 100vw;
+}
 
-    h1 {
-      margin-top: 0;
-      font-size: 24px;
-      color: var(--klp-green);
-    }
+/* ══ COLUMN: each step lives in a column ══ */
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
 
-    p {
-      font-size: 16px;
-      line-height: 1.5;
-    }
+/* horizontal connector line between columns */
+.col-connector {
+  width: 40px;
+  height: 2px;
+  background: var(--connector);
+  margin-top: 52px; /* aligns with card center top */
+  flex-shrink: 0;
+  position: relative;
+}
 
-    .choices {
-      margin-top: 24px;
-      display: grid;
-      gap: 12px;
-    }
+.col-connector.animated {
+  background: var(--g-mid);
+  animation: connGrow 0.3s ease forwards;
+}
 
-    button {
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: var(--klp-green);
-      color: white;
-    }
+@keyframes connGrow {
+  from { width: 0; opacity: 0; }
+  to   { width: 40px; opacity: 1; }
+}
 
-    button:hover {
-      opacity: 0.95;
-    }
+/* ══ CARD ══ */
+.card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  width: 200px;
+  padding: 16px 18px;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
 
-    footer {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 14px;
-      color: #666;
-    }
+.card.start {
+  background: var(--g);
+  border-color: var(--g);
+  color: white;
+  width: 185px;
+}
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+.card.answered {
+  border-color: var(--g);
+  background: var(--g-light);
+  cursor: pointer;
+}
+.card.answered:hover { box-shadow: 0 0 0 3px var(--g-mid); }
+
+.card.active-question {
+  border-color: var(--g);
+  box-shadow: 0 0 0 3px var(--g-light), 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.card.amber-card { border-color: var(--amber-border); background: var(--amber-bg); }
+.card.purple-card { border-color: #c4b5fd; background: var(--purple-bg); }
+
+.card-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.card.start .card-label { color: rgba(255,255,255,0.6); }
+.card.answered .card-label { color: var(--g2); }
+
+.card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.card.start .card-title { color: white; }
+
+.card-answer {
+  font-size: 0.75rem;
+  color: var(--g);
+  font-weight: 600;
+  margin-top: 6px;
+  background: white;
+  border-radius: 5px;
+  padding: 4px 8px;
+  display: inline-block;
+}
+
+.card-sub {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+.card.start .card-sub { color: rgba(255,255,255,0.7); }
+
+/* edit hint */
+.edit-hint {
+  font-size: 0.6rem;
+  color: var(--g-mid);
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* check badge */
+.check-badge {
+  position: absolute;
+  top: -9px; right: -9px;
+  width: 22px; height: 22px;
+  background: var(--g);
+  border-radius: 50%;
+  display: flex;
+  align-items: center; justify-content: center;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ══ YEAR GRID inside start card ══ */
+.year-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.year-btn {
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 6px;
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.year-btn:hover { background: rgba(255,255,255,0.28); }
+.year-btn.selected { background: white; color: var(--g); border-color: white; }
+
+/* ══ QUESTION DROPDOWN ══ */
+.q-options {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.q-btn {
+  width: 100%;
+  padding: 9px 12px;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1.35;
+}
+.q-btn:hover { border-color: var(--g); background: var(--g-light); }
+.q-btn .q-sub { font-size: 0.65rem; font-weight: 400; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+.q-btn.amber:hover { border-color: var(--amber); background: var(--amber-bg); }
+.q-btn.purple:hover { border-color: var(--purple); background: var(--purple-bg); }
+
+/* ══ CHECKLIST COLUMN: wide ══ */
+.checklist-col {
+  width: 280px;
+}
+
+.checklist-panel {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+  width: 280px;
+  animation: fadeUp 0.2s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+  padding: 10px 14px;
+  background: var(--g);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-header.amber { background: var(--amber); }
+.panel-header.purple { background: var(--purple); }
+.panel-header.blue { background: var(--blue); }
+.panel-header.dark { background: #374151; }
+.panel-header.brown { background: #b45309; }
+
+.prog-label { font-size: 0.62rem; opacity: 0.75; font-weight: 400; }
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 1px solid #f0ede6;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item:hover { background: #fafaf7; }
+.check-item.checked { background: var(--done-bg); }
+
+.checkbox {
+  width: 19px; height: 19px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  background: white;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: white; font-weight: 700;
+  transition: all 0.12s;
+}
+.check-item.checked .checkbox { background: var(--g); border-color: var(--g); }
+.check-item.checked .checkbox::after { content: '✓'; }
+
+.item-title { font-size: 0.8rem; font-weight: 600; line-height: 1.35; color: var(--text); }
+.check-item.checked .item-title { color: var(--g); }
+.item-note { font-size: 0.68rem; color: var(--muted); margin-top: 3px; line-height: 1.45; font-weight: 400; }
+.check-item.checked .item-note { color: #4a9a6a; }
+
+/* ══ SECTION LABEL above cols ══ */
+.col-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-left: 2px;
+}
+
+/* ══ TAG ══ */
+.tag {
+  display: inline-block;
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.tag-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.tag-purple { background: var(--purple-bg); color: var(--purple); border: 1px solid #c4b5fd; }
+.tag-green { background: var(--g-light); color: var(--g); border: 1px solid var(--g-mid); }
+
+/* ══ HIDDEN ══ */
+.hidden { display: none !important; }
+/* connectors are always in flex flow, just invisible/zero-width when hidden */
+.col-connector.hidden { display: flex !important; width: 0 !important; opacity: 0 !important; overflow: hidden !important; transition: none !important; }
+
+</style>
 </head>
-
 <body>
 
-<div class="container">
-  <div class="card" id="app"></div>
-  <footer>
-    Eksempel på interaktiv pensjonsveileder
-  </footer>
-</div>
+<header>
+  <div>
+    <div class="logo">KLP Veiledningsflyt</div>
+    <div class="header-meta">Alderspensjon — 1963 eller senere</div>
+  </div>
+  <button class="reset-btn" onclick="resetAll()">↺ Ny samtale</button>
+</header>
+
+<div class="canvas" id="canvas">
+
+  <!-- ══ COL 1: START / FØDSELSÅR ══ -->
+  <div class="col" id="col-year">
+    <div class="col-label">Start</div>
+    <div class="card start" id="card-year">
+      <div class="card-label">Steg 1</div>
+      <div class="card-title">Fødselsår</div>
+      <div class="card-sub">Velg årstall for å starte</div>
+      <div class="year-grid" id="yearGrid"></div>
+    </div>
+  </div>
+
+  <!-- connector 1→2 -->
+  <div class="col-connector hidden" id="conn-1"></div>
+
+  <!-- ══ COL 2: SÆRALDERSGRENSE ══ -->
+  <div class="col hidden" id="col-saer">
+    <div class="col-label">Sorteringsspørsmål</div>
+    <div class="card active-question" id="card-saer">
+      <div class="card-label">Steg 2 — viktig</div>
+      <div class="card-title">Særaldersgrense?</div>
+      <div class="card-sub" style="margin-top:4px">Avgjør om tidligpensjon er aktuelt og hvilke regler som gjelder.</div>
+      <div class="q-options" id="saer-opts">
+        <button class="q-btn amber" onclick="selectSaer('60')">
+          60 år
+          <div class="q-sub">Brannpersonell, ambulanse, helsepersonell m.fl.</div>
+        </button>
+        <button class="q-btn amber" onclick="selectSaer('65')">
+          65 år
+          <div class="q-sub">Sykepleiere og visse andre stillinger</div>
+        </button>
+        <button class="q-btn" onclick="selectSaer('ingen')">
+          Ingen særaldersgrense
+          <div class="q-sub">Vanlig aldersgrense 70 år</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- connector 2→3 -->
+  <div class="col-connector hidden" id="conn-2"></div>
+
+  <!-- ══ COL 3: SUBKATEGORI (særalder 60 eller 65) ══ -->
+  <div class="col hidden" id="col-sub">
+    <div class="col-label">Presiser</div>
+    <div class="card active-question" id="card-sub">
+      <div class="card-label" id="sub-label">Steg 3</div>
+      <div class="card-title" id="sub-title">—</div>
+      <div class="card-sub" id="sub-desc">—</div>
+      <div class="q-options" id="sub-opts"></div>
+    </div>
+  </div>
+
+  <!-- connector 3→4 -->
+  <div class="col-connector hidden" id="conn-3"></div>
+
+  <!-- ══ COL 4: VEILEDNING / CHECKLIST ══ -->
+  <div class="col checklist-col hidden" id="col-checklist">
+    <div class="col-label" id="checklist-col-label">Veiledning</div>
+
+    <!-- summary card -->
+    <div class="card answered" id="card-summary" style="margin-bottom:12px; cursor:default;">
+      <div class="card-label">Profil</div>
+      <div class="card-title" id="summary-title">—</div>
+      <div style="margin-top:8px;" id="summary-tags"></div>
+    </div>
+
+    <!-- panels injected here -->
+    <div id="panels"></div>
+
+  </div>
+
+</div><!-- /canvas -->
 
 <script>
-  const steps = {
-    start: {
-      title: "Pensjonsveileder",
-      text: "Denne veiledningen stiller noen enkle spørsmål om pensjon.",
-      choices: [
-        { label: "Start veiledning", next: "sektor" }
-      ]
-    },
+// ── STATE ──
+let S = { year: null, saer: null, sub: null };
+const progCounts = {};
 
-    sektor: {
-      title: "Arbeidssektor",
-      text: "Jobber du i offentlig sektor?",
-      choices: [
-        { label: "Ja", next: "alder" },
-        { label: "Nei", next: "privat" }
-      ]
-    },
+// ── YEAR BUTTONS ──
+const years = [1963,1964,1965,1966,1967,1968,1969,1970];
+const grid = document.getElementById('yearGrid');
+years.forEach(y => {
+  const btn = document.createElement('button');
+  btn.className = 'year-btn';
+  btn.textContent = y;
+  btn.onclick = () => selectYear(y, btn);
+  grid.appendChild(btn);
+});
 
-    privat: {
-      title: "Privat sektor",
-      text: "Dersom du jobber i privat sektor, bør du sjekke pensjonsordningen via arbeidsgiver.",
-      choices: [
-        { label: "Start på nytt", next: "start" }
-      ]
-    },
+// ── SELECT YEAR ──
+function selectYear(year, btn) {
+  S.year = year;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
 
-    alder: {
-      title: "Alder",
-      text: "Hvor gammel er du?",
-      choices: [
-        { label: "Under 62 år", next: "under62" },
-        { label: "62 år eller eldre", next: "over62" }
-      ]
-    },
+  // Freeze the start card visually
+  const cardYear = document.getElementById('card-year');
+  cardYear.classList.remove('start');
+  cardYear.classList.add('answered');
+  cardYear.innerHTML = `
+    <div class="check-badge">✓</div>
+    <div class="card-label">Steg 1</div>
+    <div class="card-title">Fødselsår</div>
+    <div class="card-answer">${year}</div>
+    <div class="edit-hint">Klikk for å endre</div>
+  `;
+  cardYear.onclick = () => goBackToYear();
 
-    under62: {
-      title: "Under 62 år",
-      text: "Du har fortsatt tid til å bygge pensjon. Det kan være lurt å følge med på opptjeningen.",
-      choices: [
-        { label: "Hva bør jeg gjøre?", next: "rad_under62" },
-        { label: "Start på nytt", next: "start" }
-      ]
-    },
+  revealCol('conn-1', 'col-saer');
+}
 
-    rad_under62: {
-      title: "Videre råd",
-      text: "Sjekk pensjonsopptjening, vurder egen sparing og hold deg oppdatert på regelverket.",
-      choices: [
-        { label: "Start på nytt", next: "start" }
-      ]
-    },
+// ── SELECT SÆRALDERSGRENSE ──
+function selectSaer(val) {
+  S.saer = val;
+  const labels = { '60': 'Særalder 60 år', '65': 'Særalder 65 år', 'ingen': 'Ingen særaldersgrense' };
 
-    over62: {
-      title: "62 år eller eldre",
-      text: "Du kan ha mulighet for fleksibelt uttak av pensjon.",
-      choices: [
-        { label: "Hva betyr dette?", next: "rad_over62" },
-        { label: "Start på nytt", next: "start" }
-      ]
-    },
+  // Freeze saer card
+  const cardSaer = document.getElementById('card-saer');
+  cardSaer.classList.remove('active-question');
+  cardSaer.classList.add('answered');
+  cardSaer.innerHTML = `
+    <div class="check-badge">✓</div>
+    <div class="card-label">Steg 2</div>
+    <div class="card-title">Særaldersgrense</div>
+    <div class="card-answer">${labels[val]}</div>
+    <div class="edit-hint">Klikk for å endre</div>
+  `;
+  cardSaer.onclick = () => goBackToSaer();
 
-    rad_over62: {
-      title: "Videre veiledning",
-      text: "Det kan være lurt å vurdere tidspunkt for uttak basert på din økonomiske situasjon.",
-      choices: [
-        { label: "Start på nytt", next: "start" }
-      ]
-    }
-  };
+  if (val === '60' || val === '65') {
+    buildSubOptions(val);
+    revealCol('conn-2', 'col-sub');
+  } else {
+    // skip sub-step — go straight to checklist
+    hide('col-sub');
+    revealCol('conn-3', 'col-checklist');
+    buildChecklist();
+  }
+}
 
-  function render(stepKey) {
-    const step = steps[stepKey];
-    const app = document.getElementById("app");
+// ── BUILD SUB-OPTIONS ──
+function buildSubOptions(saer) {
+  const label = document.getElementById('sub-label');
+  const title = document.getElementById('sub-title');
+  const desc  = document.getElementById('sub-desc');
+  const opts  = document.getElementById('sub-opts');
 
-    app.innerHTML = `
-      <h1>${step.title}</h1>
-      <p>${step.text}</p>
-      <div class="choices">
-        ${step.choices.map(choice =>
-          `<button onclick="render('${choice.next}')">${choice.label}</button>`
-        ).join("")}
-      </div>
+  if (saer === '60') {
+    label.textContent = 'Steg 3';
+    title.textContent = 'Særalder 60 — hvilket kull?';
+    desc.textContent  = 'Uttaksregler og 85-årsregelen varierer.';
+    opts.innerHTML = `
+      <button class="q-btn amber" onclick="selectSub('60a')">
+        Født 1963–1969
+        <div class="q-sub">Tidligpensjon fra 60 (57 ved 85-årsregel). Valg mellom tidlig- og alderspensjon fra 62.</div>
+      </button>
+      <button class="q-btn amber" onclick="selectSub('60b')">
+        Født 1970 eller senere
+        <div class="q-sub">Tidspunkt øker per kull. Beregning av tidligpensjon krever innboks-kontakt.</div>
+      </button>
+    `;
+  } else {
+    label.textContent = 'Steg 3';
+    title.textContent = 'Særalder 65 — hvilket kull?';
+    desc.textContent  = 'Skillet går ved 1965.';
+    opts.innerHTML = `
+      <button class="q-btn amber" onclick="selectSub('65a')">
+        Født 1963–1964
+        <div class="q-sub">Tidligpensjon eller alderspensjon fra 62 år. To reelle alternativer.</div>
+      </button>
+      <button class="q-btn amber" onclick="selectSub('65b')">
+        Født 1965 eller senere
+        <div class="q-sub">Alderspensjon etter nye regler + særalderspåslag (ny lov juni 2025).</div>
+      </button>
     `;
   }
+}
 
-  render("start");
+// ── SELECT SUB ──
+function selectSub(sub) {
+  S.sub = sub;
+  const labels = { '60a':'1963–1969', '60b':'1970+', '65a':'1963–1964', '65b':'1965+' };
+
+  const cardSub = document.getElementById('card-sub');
+  cardSub.classList.remove('active-question');
+  cardSub.classList.add('answered');
+  cardSub.innerHTML = `
+    <div class="check-badge">✓</div>
+    <div class="card-label">Steg 3</div>
+    <div class="card-title">Fødselsgruppe</div>
+    <div class="card-answer">${labels[sub]}</div>
+    <div class="edit-hint">Klikk for å endre</div>
+  `;
+  cardSub.onclick = () => goBackToSub();
+
+  revealCol('conn-3', 'col-checklist');
+  buildChecklist();
+}
+
+// ── BUILD CHECKLIST ──
+function buildChecklist() {
+  const y    = S.year;
+  const saer = S.saer;
+  const sub  = S.sub;
+
+  // Summary
+  document.getElementById('summary-title').textContent = 'Født ' + y;
+  const tagsEl = document.getElementById('summary-tags');
+  tagsEl.innerHTML = '';
+  const addTag = (t, cls) => { tagsEl.innerHTML += `<span class="tag ${cls}">${t}</span> `; };
+  if (saer === '60') addTag('Særalder 60 år','tag-amber');
+  else if (saer === '65') addTag('Særalder 65 år','tag-amber');
+  else addTag('Vanlig aldersgrense','tag-green');
+  if (sub) { const sl = {'60a':'1963–1969','60b':'1970+','65a':'1963–1964','65b':'1965+'}; addTag(sl[sub],'tag-green'); }
+  if (y >= 1963 && y <= 1970) addTag('Overgangstillegg','tag-amber');
+  if (y >= 1965) addTag('Økt pensjonsalder','tag-purple');
+
+  // Build panels
+  const panels = document.getElementById('panels');
+  panels.innerHTML = '';
+
+  // Always: pensjonsdeler
+  panels.appendChild(makePanel('Alltid aktuelt — pensjonsdeler', 'green', 'felles', [
+    { t: 'Påslagspensjon (opptjening fra 01.01.2020)', n: 'Prosentandel av lønn settes av hvert år. Begge sektorer teller. Kan tas ut gradvis.' },
+    { t: 'Alderspensjon opptjent før 2020', n: 'Gammel opptjening er beskyttet og upåvirket av nye regler.' },
+    { t: 'Alderspensjon fra NAV', n: 'Fleksibelt uttak fra 62 år. Jo lenger man venter, jo høyere beløp. Kan kombineres med KLP.' },
+    { t: 'AFP Livsvarig — sjekk vilkår', n: 'Livsvarig ytelse, ny AFP 1963+ vedtatt des. 2024 (KS-tariff). Hvis ikke: betinget tjenestepensjon.' },
+  ]));
+
+  // Særaldersgrense-panel
+  if (sub === '60a') {
+    panels.appendChild(makePanel('Særaldersgrense 60 år — 1963–1969', 'amber', 's60a', [
+      { t: 'Tidligpensjon mulig fra 60 år (eller 57 ved 85-årsregelen)', n: '85-årsregel: alder + år offentlig tjenestepensjon = 85. Krever hel/delvis fratreden.' },
+      { t: 'Mellom 62–67 år: valg mellom tidligpensjon og alderspensjon', n: 'Tidligpensjon: krever fratreden. Alderspensjon: full jobb mulig ved siden av, pensjonen reduseres ikke.' },
+      { t: 'Særalderspåslag — livsvarig tillegg (ny lov juni 2025)', n: 'Sikrer at tidlig avgang ikke gir pensjonsmessig tap sammenlignet med vanlig aldersgrense.' },
+      { t: 'Anbefal pensjonskalkulator — sammenlign alternativene', n: 'Pensjon er individuelt. Beregn begge alternativer på Min side.' },
+    ]));
+  } else if (sub === '60b') {
+    panels.appendChild(makePanel('Særaldersgrense 60 år — 1970+', 'amber', 's60b', [
+      { t: 'Tidligpensjon fra 60 år — tidspunkt øker per kull', n: 'For 1970–1972: kan ta ut før 60 år ved 85-årsregelen. Eksakt tidspunkt avhenger av fødselsmåned.' },
+      { t: 'Alderspensjon fra 62 år + 7 mnd (1970), +1 mnd per kull', n: 'Kan kombineres med full jobb uten reduksjon, offentlig og privat sektor.' },
+      { t: 'Tidligpensjon beregnes ikke i kalkulator — kontakt via innboks', n: 'Trenger: dato, andre arbeidsgivere, pensjonskasser, NAV-ytelser, barn under 18, privat AFP.' },
+      { t: 'Særalderspåslag — livsvarig tillegg (ny lov juni 2025)', n: 'Sikrer pensjonsnivå på linje med ansatte uten særaldersgrense.' },
+    ]));
+  } else if (sub === '65a') {
+    panels.appendChild(makePanel('Særaldersgrense 65 år — 1963–1964', 'amber', 's65a', [
+      { t: 'Tidligpensjon eller alderspensjon — begge mulig fra 62 år', n: 'Tidligpensjon: krever hel/delvis fratreden. Alderspensjon: kan jobbe ubegrenset ved siden av.' },
+      { t: 'Etter 67 år: kun alderspensjon, jo lenger man venter jo høyere', n: 'Alderspensjonens deler kan tas ut på ulike tidspunkt.' },
+      { t: 'Still 4 nøkkelspørsmål om planer og ønsker', n: 'Vil de slutte helt? Jobbe delvis? Når? Trenger de beregning? Pensjon er alltid individuelt.' },
+      { t: 'Anbefal pensjonskalkulator', n: 'Beregn begge alternativer på Min side hos KLP.' },
+    ]));
+  } else if (sub === '65b') {
+    panels.appendChild(makePanel('Særaldersgrense 65 år — 1965+', 'amber', 's65b', [
+      { t: 'Alderspensjon etter nye regler — kan jobbe fritt ved siden av', n: 'Gjelder offentlig og privat sektor. Pensjonen reduseres ikke.' },
+      { t: 'Sen uttak = høyere pensjon — utbetales livsvarig', n: 'Jo lenger man venter, jo høyere beløp. Kan kombineres med NAV-pensjon.' },
+      { t: 'Særalderspåslag — livsvarig tillegg (ny lov juni 2025)', n: 'Kompenserer for tidlig avgang. Sikrer rettferdig pensjonsnivå.' },
+    ]));
+  } else if (saer === 'ingen') {
+    panels.appendChild(makePanel('Vanlig aldersgrense', 'blue', 'ingen', [
+      { t: 'Alderspensjon kan tas ut fleksibelt fra 62 år', n: 'Kan kombineres med full jobb uten at pensjonen reduseres.' },
+      { t: 'Jo lenger man venter med uttak, jo høyere blir pensjonen', n: 'Gjelder alle pensjonsdeler. Anbefal pensjonskalkulator på Min side.' },
+    ]));
+  }
+
+  // Overgangstillegg
+  if (y >= 1963 && y <= 1970) {
+    panels.appendChild(makePanel('Overgangstillegg — gjelder dette medlemmet', 'brown', 'overgang', [
+      { t: 'Informer om overgangstillegg (kun 1963–1970)', n: 'Tillegg for de som ønsker å slutte før 67 år. Sikrer rettferdig overgang til nytt regelverk.' },
+      { t: 'Avklar om de planlegger å slutte før 67 år', n: 'Kun relevant å gå i detalj dersom de faktisk ønsker tidlig avgang.' },
+    ]));
+  }
+
+  // Økt pensjonsalder
+  if (y >= 1965) {
+    panels.appendChild(makePanel('Økt pensjonsalder — pensjonsforliket 2025', 'purple', 'pensjonsalder', [
+      { t: 'Informer om økt pensjonsalder for 1965+ (vedtatt feb. 2025)', n: 'Konkrete grenser under utforming. Informer om at endring kommer og at de bør følge med.' },
+    ]));
+  }
+
+  // Alltid: avslutning
+  panels.appendChild(makePanel('Avslutt alltid med', 'dark', 'avslut', [
+    { t: 'Oppsummer hvilke pensjonsdeler som gjelder', n: 'Gjenta de viktigste punktene og bekreft at medlemmet har forstått sin situasjon.' },
+    { t: 'Anbefal pensjonskalkulator på Min side (klp.no)', n: 'Uttakstidspunkt for de ulike delene kan velges uavhengig av hverandre.' },
+  ]));
+}
+
+// ── MAKE PANEL ──
+function makePanel(title, color, group, items) {
+  progCounts[group] = progCounts[group] || 0;
+  const div = document.createElement('div');
+  div.className = 'checklist-panel';
+
+  const total = items.length;
+  const header = document.createElement('div');
+  header.className = `panel-header ${color}`;
+  header.innerHTML = `<span>${title}</span><span class="prog-label" id="prog-${group}">${progCounts[group]} / ${total}</span>`;
+  div.appendChild(header);
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'check-item' + (false ? ' checked' : '');
+    row.innerHTML = `
+      <div class="checkbox"></div>
+      <div>
+        <div class="item-title">${item.t}</div>
+        <div class="item-note">${item.n}</div>
+      </div>
+    `;
+    row.onclick = () => {
+      const was = row.classList.contains('checked');
+      row.classList.toggle('checked');
+      progCounts[group] = (progCounts[group] || 0) + (was ? -1 : 1);
+      const el = document.getElementById('prog-' + group);
+      if (el) el.textContent = progCounts[group] + ' / ' + total;
+    };
+    div.appendChild(row);
+  });
+
+  return div;
+}
+
+// ── REVEAL COLUMNS ──
+function revealCol(connId, colId) {
+  const conn = document.getElementById(connId);
+  const col  = document.getElementById(colId);
+  if (conn) {
+    conn.classList.remove('hidden');
+    // force reflow then animate
+    conn.style.width = '0';
+    conn.style.opacity = '0';
+    requestAnimationFrame(() => {
+      conn.style.transition = 'width 0.3s ease, opacity 0.3s ease';
+      conn.style.width = '40px';
+      conn.style.opacity = '1';
+      conn.style.background = 'var(--g-mid)';
+    });
+  }
+  if (col) {
+    col.classList.remove('hidden');
+    col.style.animation = 'fadeUp 0.25s ease';
+    setTimeout(() => {
+      col.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' });
+    }, 80);
+  }
+}
+
+// ── GO BACK ──
+function goBackToYear() {
+  const cardYear = document.getElementById('card-year');
+  cardYear.classList.remove('answered');
+  cardYear.classList.add('start');
+  cardYear.onclick = null;
+  cardYear.innerHTML = `
+    <div class="card-label">Steg 1</div>
+    <div class="card-title">Fødselsår</div>
+    <div class="card-sub">Velg årstall for å starte</div>
+    <div class="year-grid" id="yearGrid"></div>
+  `;
+  // Re-render year buttons
+  const g = document.getElementById('yearGrid');
+  years.forEach(y => {
+    const btn = document.createElement('button');
+    btn.className = 'year-btn';
+    btn.textContent = y;
+    btn.onclick = () => selectYear(y, btn);
+    g.appendChild(btn);
+  });
+  S = { year: null, saer: null, sub: null };
+  // Hide everything after col 1
+  ['conn-1','col-saer','conn-2','col-sub','conn-3','col-checklist'].forEach(hide);
+}
+
+function goBackToSaer() {
+  const cardSaer = document.getElementById('card-saer');
+  cardSaer.classList.remove('answered');
+  cardSaer.classList.add('active-question');
+  cardSaer.onclick = null;
+  cardSaer.innerHTML = `
+    <div class="card-label">Steg 2 — viktig</div>
+    <div class="card-title">Særaldersgrense?</div>
+    <div class="card-sub" style="margin-top:4px">Avgjør om tidligpensjon er aktuelt.</div>
+    <div class="q-options" id="saer-opts">
+      <button class="q-btn amber" onclick="selectSaer('60')">60 år<div class="q-sub">Brannpersonell, ambulanse, helse m.fl.</div></button>
+      <button class="q-btn amber" onclick="selectSaer('65')">65 år<div class="q-sub">Sykepleiere og visse andre stillinger</div></button>
+      <button class="q-btn" onclick="selectSaer('ingen')">Ingen særaldersgrense<div class="q-sub">Vanlig aldersgrense 70 år</div></button>
+    </div>
+  `;
+  S.saer = null; S.sub = null;
+  ['conn-2','col-sub','conn-3','col-checklist'].forEach(hide);
+}
+
+function goBackToSub() {
+  const cardSub = document.getElementById('card-sub');
+  cardSub.classList.remove('answered');
+  cardSub.classList.add('active-question');
+  cardSub.onclick = null;
+  buildSubOptions(S.saer);
+  S.sub = null;
+  ['conn-3','col-checklist'].forEach(hide);
+}
+
+// ── UTILS ──
+function show(id) { const e = document.getElementById(id); if (e) e.classList.remove('hidden'); }
+function hide(id) { const e = document.getElementById(id); if (e) e.classList.add('hidden'); }
+
+function resetAll() {
+  S = { year: null, saer: null, sub: null };
+  Object.keys(progCounts).forEach(k => delete progCounts[k]);
+  goBackToYear();
+}
 </script>
 
+<style>
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
 </body>
 </html>
-<script>
-  const ADMIN_PASSWORD = "admin123"; // ← du kan endre dette
-
-  const defaultSteps = {
-    start: {
-      title: "Pensjonsveileder",
-      text: "Denne veiledningen stiller noen enkle spørsmål om pensjon.",
-      choices: [{ label: "Start veiledning", next: "sektor" }]
-    },
-    sektor: {
-      title: "Arbeidssektor",
-      text: "Jobber du i offentlig sektor?",
-      choices: [
-        { label: "Ja", next: "alder" },
-        { label: "Nei", next: "privat" }
-      ]
-    },
-    privat: {
-      title: "Privat sektor",
-      text: "Sjekk pensjonsordningen hos arbeidsgiveren din.",
-      choices: [{ label: "Start på nytt", next: "start" }]
-    },
-    alder: {
-      title: "Alder",
-      text: "Hvor gammel er du?",
-      choices: [
-        { label: "Under 62 år", next: "under62" },
-        { label: "62 år eller eldre", next: "over62" }
-      ]
-    },
-    under62: {
-      title: "Under 62 år",
-      text: "Du har god tid til å bygge pensjon.",
-      choices: [{ label: "Start på nytt", next: "start" }]
-    },
-    over62: {
-      title: "62 år eller eldre",
-      text: "Du kan ha mulighet for fleksibelt uttak.",
-      choices: [{ label: "Start på nytt", next: "start" }]
-    }
-  };
-
-  let steps =
-    JSON.parse(localStorage.getItem("steps")) || defaultSteps;
-
-  function render(stepKey) {
-    const step = steps[stepKey];
-    document.getElementById("app").innerHTML = `
-      <h1>${step.title}</h1>
-      <p>${step.text}</p>
-      <div class="choices">
-        ${step.choices
-          .map(
-            c =>
-              `<button onclick="render('${c.next}')">${c.label}</button>`
-          )
-          .join("")}
-      </div>
-    `;
-  }
-
-  function openAdmin() {
-    const pwd = prompt("Admin-passord:");
-    if (pwd !== ADMIN_PASSWORD) {
-      alert("Feil passord");
-      return;
-    }
-
-    document.getElementById("app").innerHTML = `
-      <h1>Admin</h1>
-      <p>Her kan du endre teksten i flytskjemaet.</p>
-      <textarea id="editor" style="width:100%; height:300px;">${JSON.stringify(
-        steps,
-        null,
-        2
-      )}</textarea>
-      <br><br>
-      <button onclick="saveAdmin()">Lagre</button>
-      <button onclick="render('start')">Avbryt</button>
-    `;
-  }
-
-  function saveAdmin() {
-    try {
-      const value = document.getElementById("editor").value;
-      steps = JSON.parse(value);
-      localStorage.setItem("steps", JSON.stringify(steps));
-      alert("Lagret ✅");
-      render("start");
-    } catch {
-      alert("Noe gikk galt. Ikke gyldig format.");
-    }
-  }
-
-  render("start");
-</script>
-<p style="text-align:center; font-size:12px; cursor:pointer;" onclick="openAdmin()">
-  Admin
-</p>
