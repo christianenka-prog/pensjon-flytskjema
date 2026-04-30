@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pensjonskompasset — Samtaleoppsummering</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g:      #1a5c3a;
+  --g2:     #2d7a52;
+  --g-lt:   #e6f2ec;
+  --g-mid:  #a8d4bc;
+  --am:     #b45309;
+  --am-bg:  #fef3c7;
+  --am-bd:  #fbbf24;
+  --pur:    #6d28d9;
+  --pur-bg: #f5f3ff;
+  --bg:     #f4f1eb;
+  --wh:     #ffffff;
+  --txt:    #111827;
+  --muted:  #6b7280;
+  --bdr:    #e2ddd6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--txt); min-height: 100vh; }
+
+header {
+  background: var(--g); color: #fff; padding: 14px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.18);
+}
+.logo { font-family: 'Instrument Serif', serif; font-size: 1.3rem; }
+.logo-sub { font-size: .58rem; opacity: .55; letter-spacing: .09em; text-transform: uppercase; margin-top: 1px; }
+.reset-btn {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+  color: #fff; font-family: 'Syne', sans-serif; font-size: .7rem;
+  padding: 6px 14px; border-radius: 6px; cursor: pointer;
+}
+.reset-btn:hover { background: rgba(255,255,255,.22); }
+
+#outer { max-width: 860px; margin: 0 auto; padding: 36px 32px 80px; }
+
+/* ── PROFIL ── */
+.profil-card {
+  background: var(--g); border-radius: 12px; padding: 20px 24px;
+  margin-bottom: 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.profil-year { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: #fff; }
+.profil-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.ptag { font-size: .62rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; }
+.ptag-wh  { background: rgba(255,255,255,.18); color: rgba(255,255,255,.9); }
+.ptag-am  { background: var(--am-bg); color: var(--am); }
+.ptag-pur { background: var(--pur-bg); color: var(--pur); }
+
+/* ── SEKSJON LABEL ── */
+.sec-lbl {
+  font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sec-lbl::after { content: ''; flex: 1; height: 1px; background: var(--bdr); }
+
+/* ── EMNE-GRID ── */
+.emne-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+
+.emne-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; border-radius: 9px;
+  background: var(--wh); border: 1.5px solid var(--bdr);
+  font-family: 'Syne', sans-serif; font-size: .78rem; font-weight: 600;
+  color: var(--txt); cursor: pointer; user-select: none;
+  transition: all .12s;
+}
+.emne-btn:hover { border-color: var(--g); background: var(--g-lt); }
+.emne-btn.valgt { background: var(--g-lt); border-color: var(--g); color: var(--g); }
+.emne-btn.valgt .ikon { background: var(--g); color: #fff; }
+.emne-btn.amber         { border-left: 3px solid var(--am); }
+.emne-btn.amber:hover   { border-color: var(--am); background: var(--am-bg); }
+.emne-btn.amber.valgt   { background: var(--am-bg); border-color: var(--am); color: var(--am); }
+.emne-btn.amber.valgt .ikon { background: var(--am); }
+.emne-btn.pur           { border-left: 3px solid var(--pur); }
+.emne-btn.pur.valgt     { background: var(--pur-bg); border-color: var(--pur); color: var(--pur); }
+.emne-btn.pur.valgt .ikon { background: var(--pur); }
+
+.ikon {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: var(--bdr); display: flex; align-items: center;
+  justify-content: center; font-size: 11px; color: var(--muted);
+  flex-shrink: 0; font-weight: 700; transition: all .12s;
+}
+
+/* ── NOTATFELT ── */
+.notat-section { margin-top: 28px; }
+.notat-label { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+textarea {
+  width: 100%; padding: 12px 16px; border: 1.5px solid var(--bdr);
+  border-radius: 9px; font-family: 'Syne', sans-serif; font-size: .82rem;
+  line-height: 1.6; color: var(--txt); background: var(--wh);
+  resize: vertical; min-height: 80px;
+}
+textarea:focus { outline: none; border-color: var(--g); box-shadow: 0 0 0 3px var(--g-lt); }
+
+/* ── GENERERT NOTAT ── */
+#notat-section { margin-top: 32px; display: none; }
+.notat-box {
+  background: var(--wh); border: 2px solid var(--g);
+  border-radius: 12px; padding: 24px 28px;
+}
+.notat-title { font-family: 'Instrument Serif', serif; font-size: 1.2rem; color: var(--g); margin-bottom: 16px; }
+.notat-tekst {
+  font-size: .85rem; line-height: 1.7; color: var(--txt);
+  white-space: pre-wrap; font-family: 'Syne', sans-serif;
+}
+.notat-ingress { margin-bottom: 10px; }
+.notat-punkter { margin-left: 2px; }
+.notat-punkt { display: flex; gap: 8px; margin-bottom: 4px; font-size: .83rem; }
+.notat-punkt::before { content: '–'; color: var(--g); font-weight: 700; flex-shrink: 0; }
+
+.copy-btn {
+  margin-top: 16px; background: var(--g); color: #fff; border: none;
+  font-family: 'Syne', sans-serif; font-size: .78rem; font-weight: 700;
+  padding: 10px 20px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+.copy-btn:hover { background: var(--g2); }
+.copy-btn.kopiert { background: var(--g2); }
+
+.gen-btn {
+  background: var(--g); color: #fff; border: none;
+  font-family: 'Syne', sans-serif; font-size: .82rem; font-weight: 700;
+  padding: 12px 24px; border-radius: 9px; cursor: pointer; margin-top: 20px;
+}
+.gen-btn:hover { background: var(--g2); }
+
+/* ── INPUT FELT ── */
+.felt-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.felt { flex: 1; min-width: 140px; }
+.felt label { display: block; font-size: .7rem; font-weight: 700; margin-bottom: 5px; }
+.felt select, .felt input {
+  width: 100%; padding: 9px 12px; border: 1.5px solid var(--bdr);
+  border-radius: 8px; font-family: 'Syne', sans-serif; font-size: .82rem;
+  font-weight: 600; color: var(--txt); background: var(--bg);
+  -moz-appearance: textfield;
+}
+.felt select:focus, .felt input:focus {
+  outline: none; border-color: var(--g); box-shadow: 0 0 0 3px var(--g-lt);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Pensjonskompasset</div>
+    <div class="logo-sub">Samtaleoppsummering</div>
+  </div>
+  <button class="reset-btn" onclick="nullstill()">↺ Ny samtale</button>
+</header>
+
+<div id="outer">
+
+  <!-- PROFIL -->
+  <div class="sec-lbl">Profil</div>
+  <div class="felt-row">
+    <div class="felt">
+      <label>Fødselsår</label>
+      <select id="inp-aar" onchange="oppdaterProfil()">
+        <option value="">Velg år</option>
+        <option>1963</option><option>1964</option><option>1965</option>
+        <option>1966</option><option>1967</option><option>1968</option>
+        <option>1969</option><option>1970</option>
+      </select>
+    </div>
+    <div class="felt">
+      <label>Særaldersgrense</label>
+      <select id="inp-saer" onchange="oppdaterProfil()">
+        <option value="">Velg</option>
+        <option value="60">60 år</option>
+        <option value="65">65 år</option>
+        <option value="ingen">Ingen</option>
+      </select>
+    </div>
+    <div class="felt">
+      <label>Ønsker å</label>
+      <select id="inp-plan" onchange="oppdaterProfil()">
+        <option value="">Velg</option>
+        <option value="slutte">Slutte helt</option>
+        <option value="jobbe">Jobbe videre</option>
+        <option value="delvis">Delvis jobb</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="profil-strip" style="display:none;" class="profil-card">
+    <div class="profil-year" id="profil-year">—</div>
+    <div class="profil-tags" id="profil-tags"></div>
+  </div>
+
+  <!-- EMNER SNAKKET OM -->
+  <div class="sec-lbl" style="margin-top:8px;">Hva ble snakket om?</div>
+  <div id="emne-grid" class="emne-grid"></div>
+
+  <!-- FRITEKST -->
+  <div class="notat-section">
+    <div class="notat-label">Tillegg / egne notater (valgfritt)</div>
+    <textarea id="fritekst" placeholder="F.eks. anbefalt å kontakte innboks for beregning, avklart at tidligpensjon ikke er ønsket, osv."></textarea>
+  </div>
+
+  <button class="gen-btn" onclick="generer()">Generer samtalenotat →</button>
+
+  <!-- GENERERT NOTAT -->
+  <div id="notat-section">
+    <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:32px;display:flex;align-items:center;gap:8px;">
+      Generert notat <span style="flex:1;height:1px;background:var(--bdr);display:block;"></span>
+    </div>
+    <div class="notat-box">
+      <div class="notat-title">Samtalenotat — Pensjonskompasset</div>
+      <div id="notat-ingress" class="notat-ingress"></div>
+      <div id="notat-punkter" class="notat-punkter"></div>
+      <div id="notat-fritekst" style="margin-top:8px;font-size:.83rem;color:var(--muted);"></div>
+    </div>
+    <button class="copy-btn" id="copy-btn" onclick="kopier()">
+      <span>📋</span><span id="copy-lbl">Kopier notat</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+// ── EMNER ─────────────────────────────────────────────────────────────
+var EMNER = [
+  // Alltid relevante
+  { id:'paaslag',    lbl:'Påslagspensjon',              kat:'Pensjonsdeler',     cls:'',    tekst:'påslagspensjon' },
+  { id:'for2020',    lbl:'Opptjening før 2020',          kat:'Pensjonsdeler',     cls:'',    tekst:'opptjening før 2020' },
+  { id:'nav',        lbl:'Alderspensjon NAV',             kat:'Pensjonsdeler',     cls:'',    tekst:'NAV-pensjon' },
+  { id:'afp',        lbl:'AFP Livsvarig',                kat:'AFP',               cls:'amber', tekst:'AFP livsvarig' },
+  { id:'betinget',   lbl:'Betinget tjenestepensjon',     kat:'AFP',               cls:'amber', tekst:'betinget tjenestepensjon' },
+  { id:'s60a',       lbl:'Tidligpensjon 60 år (1963–69)',kat:'Særaldersgrense',   cls:'amber', tekst:'tidligpensjon fra 60 år (85-årsregel)' },
+  { id:'s60a2',      lbl:'Jobbe ved siden av — 60 år',   kat:'Særaldersgrense',   cls:'amber', tekst:'valg mellom tidligpensjon og alderspensjon 62–67 år' },
+  { id:'s60b',       lbl:'Tidligpensjon 60 år (1970+)',  kat:'Særaldersgrense',   cls:'amber', tekst:'tidligpensjon fra 60 år 1970+' },
+  { id:'s60b2',      lbl:'Innboks-beregning (1970+)',    kat:'Særaldersgrense',   cls:'amber', tekst:'henvist til innboks for beregning av tidligpensjon' },
+  { id:'s65a',       lbl:'Tidligpensjon 65 år (1963–64)',kat:'Særaldersgrense',   cls:'amber', tekst:'valg mellom tidligpensjon og alderspensjon fra 62 år' },
+  { id:'s65a2',      lbl:'Hjelp til valg — 65 år',      kat:'Særaldersgrense',   cls:'amber', tekst:'avklart uttaksønske og jobbplaner' },
+  { id:'s65b',       lbl:'Alderspensjon nye regler 65+', kat:'Særaldersgrense',   cls:'amber', tekst:'alderspensjon nye regler' },
+  { id:'s65b2',      lbl:'Særalderspåslag',              kat:'Særaldersgrense',   cls:'amber', tekst:'særalderspåslag' },
+  { id:'overgang',   lbl:'Overgangstillegg',             kat:'Tillegg',           cls:'amber', tekst:'overgangstillegg' },
+  { id:'pensjonsalder', lbl:'Økt pensjonsalder',         kat:'Tillegg',           cls:'pur',   tekst:'økt pensjonsalder (1965+)' },
+  { id:'plan',       lbl:'Pensjonskalkulator anbefalt',  kat:'Avslutning',        cls:'',      tekst:'henvist til pensjonskalkulator på Min side' },
+  { id:'oppfolging', lbl:'Oppfølging avtalt',            kat:'Avslutning',        cls:'',      tekst:'oppfølging avtalt' },
+];
+
+var valgte = {};
+
+// ── INIT ─────────────────────────────────────────────────────────────
+function init() {
+  var grid = document.getElementById('emne-grid');
+  grid.innerHTML = '';
+
+  // Grupper per kategori
+  var kats = [];
+  var katMap = {};
+  EMNER.forEach(function(e) {
+    if (!katMap[e.kat]) { katMap[e.kat] = []; kats.push(e.kat); }
+    katMap[e.kat].push(e);
+  });
+
+  kats.forEach(function(kat) {
+    // Kategori-label
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'width:100%;font-size:.58rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;margin-top:8px;';
+    lbl.textContent = kat;
+    grid.appendChild(lbl);
+
+    katMap[kat].forEach(function(e) {
+      var btn = document.createElement('button');
+      btn.className = 'emne-btn' + (e.cls ? ' ' + e.cls : '') + (valgte[e.id] ? ' valgt' : '');
+      btn.id = 'emne-' + e.id;
+
+      var ikon = document.createElement('div');
+      ikon.className = 'ikon';
+      ikon.textContent = valgte[e.id] ? '✓' : '';
+
+      var span = document.createElement('span');
+      span.textContent = e.lbl;
+
+      btn.appendChild(ikon);
+      btn.appendChild(span);
+      btn.onclick = function() { toggle(e.id, btn, ikon); };
+      grid.appendChild(btn);
+    });
+  });
+}
+
+function toggle(id, btn, ikon) {
+  valgte[id] = !valgte[id];
+  if (valgte[id]) {
+    btn.classList.add('valgt');
+    ikon.textContent = '✓';
+  } else {
+    btn.classList.remove('valgt');
+    ikon.textContent = '';
+  }
+}
+
+// ── PROFIL ────────────────────────────────────────────────────────────
+function oppdaterProfil() {
+  var aar  = document.getElementById('inp-aar').value;
+  var saer = document.getElementById('inp-saer').value;
+  var plan = document.getElementById('inp-plan').value;
+
+  var strip = document.getElementById('profil-strip');
+  if (!aar) { strip.style.display = 'none'; return; }
+  strip.style.display = 'flex';
+
+  document.getElementById('profil-year').textContent = 'Født ' + aar;
+
+  var tags = '';
+  var saerLbl = { '60':'Særalder 60 år','65':'Særalder 65 år','ingen':'Ingen særaldersgrense' };
+  var planLbl = { 'slutte':'Slutter helt','jobbe':'Jobbe videre','delvis':'Delvis jobb' };
+  if (saer) tags += ptag(saerLbl[saer], 'wh');
+  if (plan) tags += ptag(planLbl[plan], 'wh');
+  if (aar >= 1963 && aar <= 1970) tags += ptag('Overgangskullet','am');
+  if (aar >= 1965) tags += ptag('Økt pensjonsalder','pur');
+  document.getElementById('profil-tags').innerHTML = tags;
+}
+
+function ptag(t, c) {
+  return '<span class="ptag ptag-' + c + '">' + t + '</span>';
+}
+
+// ── GENERER NOTAT ──────────────────────────────────────────────────────
+function generer() {
+  var aar  = document.getElementById('inp-aar').value;
+  var saer = document.getElementById('inp-saer').value;
+  var plan = document.getElementById('inp-plan').value;
+  var fri  = document.getElementById('fritekst').value.trim();
+
+  var valgteListe = EMNER.filter(function(e) { return valgte[e.id]; });
+
+  // Bygg ingress
+  var saerLbl = { '60':'særaldersgrense 60 år','65':'særaldersgrense 65 år','ingen':'ingen særaldersgrense' };
+  var planLbl = { 'slutte':'ønsker å slutte helt','jobbe':'ønsker å jobbe videre','delvis':'vurderer delvis jobb' };
+
+  var ingress = 'Telefonsamtale om alderspensjon (KLP).';
+
+  // Bygg punktliste
+  var ingressEl = document.getElementById('notat-ingress');
+  ingressEl.textContent = ingress;
+
+  var punkterEl = document.getElementById('notat-punkter');
+  punkterEl.innerHTML = '';
+
+  if (valgteListe.length === 0) {
+    punkterEl.innerHTML = '<div style="font-size:.8rem;color:var(--muted);font-style:italic;">Ingen emner valgt.</div>';
+  } else {
+    var stikkord = valgteListe.map(function(e) { return e.tekst; }).join(', ');
+    // Capitalize first letter
+    stikkord = stikkord.charAt(0).toUpperCase() + stikkord.slice(1) + '.';
+    punkterEl.textContent = stikkord;
+  }
+
+  // Fritekst
+  var friEl = document.getElementById('notat-fritekst');
+  friEl.textContent = fri ? fri : '';
+
+  document.getElementById('notat-section').style.display = 'block';
+  document.getElementById('notat-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── KOPIER ────────────────────────────────────────────────────────────
+function kopier() {
+  var aar  = document.getElementById('inp-aar').value;
+  var saer = document.getElementById('inp-saer').value;
+  var plan = document.getElementById('inp-plan').value;
+  var fri  = document.getElementById('fritekst').value.trim();
+
+  var saerLbl = { '60':'særaldersgrense 60 år','65':'særaldersgrense 65 år','ingen':'ingen særaldersgrense' };
+  var planLbl = { 'slutte':'ønsker å slutte helt','jobbe':'ønsker å jobbe videre','delvis':'vurderer delvis jobb' };
+
+  var ingress = 'Telefonsamtale om alderspensjon (KLP).';
+
+  var valgteListe = EMNER.filter(function(e) { return valgte[e.id]; });
+  var stikkord = valgteListe.map(function(e) { return e.tekst; }).join(', ');
+  if (stikkord) stikkord = stikkord.charAt(0).toUpperCase() + stikkord.slice(1) + '.';
+
+  var linjer = [ingress];
+  if (stikkord) linjer.push(stikkord);
+  if (fri) linjer.push(fri);
+
+  var tekst = linjer.join('\n');
+
+  navigator.clipboard.writeText(tekst).then(function() {
+    var btn = document.getElementById('copy-btn');
+    var lbl = document.getElementById('copy-lbl');
+    btn.classList.add('kopiert');
+    lbl.textContent = '✓ Kopiert!';
+    setTimeout(function() {
+      btn.classList.remove('kopiert');
+      lbl.textContent = 'Kopier notat';
+    }, 2500);
+  });
+}
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// ── NULLSTILL ─────────────────────────────────────────────────────────
+function nullstill() {
+  valgte = {};
+  document.getElementById('inp-aar').value = '';
+  document.getElementById('inp-saer').value = '';
+  document.getElementById('inp-plan').value = '';
+  document.getElementById('fritekst').value = '';
+  document.getElementById('profil-strip').style.display = 'none';
+  document.getElementById('notat-section').style.display = 'none';
+  init();
+}
+
+// ── START ─────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
