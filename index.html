@@ -1,33 +1,669 @@
 <!DOCTYPE html>
 <html lang="nb">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KLP Veiledningsflyt for alderspensjon – interaktivt flytskjema." />
-  <title>KLP Veiledningsflyt – Alderspensjon</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --g: #1a5c3a;
-      --g2: #2d7a52;
-      --g-light: #e6f2ec;
-      --g-mid: #a8d4bc;
-      --amber: #d97<!DOCTYPE html>
-<html lang="nb">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KLP Veiledningsflyt for alderspensjon – interaktivt flytskjema." />
-  <title>KLP Veiledningsflyt – Alderspensjon</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --g: #1a5c3a;
-      --g2: #2d7a52;
-      --g-light: #e6f2ec;
-      --g-mid: #a8d4bc;
-      --amber: #d97
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KLP Veiledningsflyt – Alderspensjon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --g: #1a5c3a;
+  --g2: #2d7a52;
+  --g-light: #e6f2ec;
+  --g-mid: #a8d4bc;
+  --amber: #d97706;
+  --amber-light: #fef3c7;
+  --purple: #6d28d9;
+  --purple-light: #ede9fe;
+  --bg: #f7f5f0;
+  --card: #ffffff;
+  --text: #111;
+  --muted: #6b6b6b;
+  --border: #ddd8ce;
+  --done: #d1ead9;
+  --done-text: #1a5c3a;
+  --connector: #c8c2b6;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: auto;
+}
+header {
+  background: var(--g);
+  color: white;
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+}
+.header-right { display: flex; align-items: center; gap: 16px; }
+.progress-pill {
+  background: rgba(255,255,255,0.15);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+#progress-count { font-weight: 700; }
+.reset-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.72rem;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.reset-btn:hover { background: rgba(255,255,255,0.22); }
+
+.canvas { padding: 36px 32px 80px; min-width: 900px; }
+.flow-row { display: flex; align-items: flex-start; position: relative; }
+.node { position: relative; flex-shrink: 0; }
+.node::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -28px;
+  width: 28px;
+  height: 2px;
+  background: var(--connector);
+  transform: translateY(-50%);
+}
+.node.no-connector::after { display: none; }
+.node + .node { margin-left: 28px; }
+
+.card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  width: 210px;
+  padding: 14px 16px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  position: relative;
+}
+.card.start {
+  background: var(--g);
+  border-color: var(--g);
+  color: white;
+  width: 170px;
+}
+.card.start .card-label { color: rgba(255,255,255,0.7); }
+.card.question { border-color: var(--g); background: var(--g-light); }
+.card.action { border-color: var(--border); cursor: pointer; user-select: none; }
+.card.action.done { background: var(--done); border-color: var(--g2); }
+.card.warning { border-color: var(--amber); background: var(--amber-light); }
+.card.special { border-color: var(--purple); background: var(--purple-light); }
+.card.action:hover:not(.done),
+.card.warning:hover:not(.done),
+.card.special:hover:not(.done) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+
+.card-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+.card-title { font-size: 0.88rem; font-weight: 600; line-height: 1.35; }
+.card.start .card-title { color: white; font-size: 0.95rem; }
+.card-sub { font-size: 0.72rem; color: var(--muted); margin-top: 5px; line-height: 1.45; }
+.card.done .card-title { color: var(--done-text); }
+.card.done .card-sub { color: #3a8a5a; }
+
+.check-badge {
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 22px; height: 22px;
+  background: var(--g);
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.card.done .check-badge { display: flex; }
+
+.year-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.year-btn {
+  padding: 6px 13px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.15);
+  color: white;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.year-btn:hover { background: rgba(255,255,255,0.28); }
+.year-btn.selected { background: white; color: var(--g); border-color: white; }
+
+.branch-container { display: flex; flex-direction: column; }
+.v-connector {
+  width: 2px;
+  height: 24px;
+  background: var(--connector);
+  margin-left: 105px;
+  flex-shrink: 0;
+}
+
+.section-divider { margin: 28px 0 16px; display: flex; align-items: center; gap: 12px; }
+.section-divider::before { content: ''; height: 1px; width: 24px; background: var(--g-mid); }
+.section-divider span {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--g);
+  font-weight: 700;
+}
+.section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.hidden { display: none; }
+
+.card-note {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: white;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  padding: 10px 13px;
+  border-radius: 8px;
+  width: 220px;
+  z-index: 200;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.card-note::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1a1a1a;
+}
+.card:hover .card-note { display: block; }
+
+.tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.tag-ny { background: #ede9fe; color: #6d28d9; }
+.tag-obs { background: #fef3c7; color: #92600a; }
+.tag-kun { background: #e0f2fe; color: #0369a1; }
+
+.saer-buttons { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+.saer-btn {
+  font-size: 0.68rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: white;
+  cursor: pointer;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+}
+.saer-btn.muted { color: var(--muted); }
+.saer-btn.active { background: var(--g); color: white; border-color: var(--g); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">KLP Veiledningsflyt</div>
+  <div class="header-right">
+    <div class="progress-pill">Avkrysset: <span id="progress-count">0</span> punkter</div>
+    <button class="reset-btn" id="reset-btn" type="button">↺ Nullstill</button>
+  </div>
+</header>
+
+<main class="canvas">
+
+  <div class="section-divider"><span>Steg 1 — Identifiser medlem</span></div>
+
+  <div class="flow-row">
+    <div class="node">
+      <div class="card start">
+        <div class="card-label">Start samtale</div>
+        <div class="card-title">Alderspensjon KLP</div>
+        <div class="year-grid" id="yearGrid"></div>
+      </div>
+    </div>
+
+    <div class="node hidden" id="node-born">
+      <div class="card question">
+        <div class="card-label">Medlem født</div>
+        <div class="card-title" id="born-title">—</div>
+        <div class="card-sub" id="born-sub">—</div>
+      </div>
+    </div>
+
+    <div class="node hidden no-connector" id="node-paaslag-wrap">
+      <div class="branch-container">
+        <div class="flow-row">
+          <div class="node">
+            <div class="card action" data-toggle id="c-paaslag">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Alltid aktuelt</div>
+              <div class="card-title">Påslagspensjon</div>
+              <div class="card-sub">Opptjening fra 01.01.2020. % av lønn settes av hvert år – begge sektorer teller.</div>
+              <span class="tag tag-ny">Ny fra 2025</span>
+              <div class="card-note">Kan tas ut gradvis. Hele yrkeslivet teller, også privat sektor etter 2020.</div>
+            </div>
+          </div>
+          <div class="node">
+            <div class="card action" data-toggle id="c-for2020">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Alltid aktuelt</div>
+              <div class="card-title">Opptjening før 2020</div>
+              <div class="card-sub">Gammel opptjening i offentlig sektor er beskyttet og upåvirket av nye regler.</div>
+              <div class="card-note">Trygghetsfortelling: det du har tjent opp er trygt.</div>
+            </div>
+          </div>
+          <div class="node no-connector">
+            <div class="card action" data-toggle id="c-nav">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Alltid aktuelt</div>
+              <div class="card-title">Alderspensjon NAV</div>
+              <div class="card-sub">Fleksibelt uttak fra 62 år. Sen uttak = høyere årlig beløp. Kan kombineres med KLP.</div>
+              <div class="card-note">NAV-pensjon er oftest den største delen. Viktig å nevne uttakstidspunkt.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider hidden" id="div-afp"><span>Steg 2 — AFP og alternativ</span></div>
+
+  <div class="flow-row hidden" id="row-afp">
+    <div class="node">
+      <div class="card question">
+        <div class="card-label">Avklar</div>
+        <div class="card-title">Oppfyller vilkår for AFP?</div>
+        <div class="card-sub">Opptjening fra 13–62 år, begge sektorer. Livsvarig ytelse.</div>
+      </div>
+    </div>
+
+    <div class="node">
+      <div class="branch-container">
+        <div class="flow-row">
+          <div class="node no-connector">
+            <div class="card action" data-toggle id="c-afp">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Ja → Informer om</div>
+              <div class="card-title">AFP Livsvarig</div>
+              <div class="card-sub">Livsvarig ytelse i tillegg til KLP og NAV. Spart opp gjennom hele livet.</div>
+              <div class="card-note">Ny AFP for 1963+ vedtatt des. 2024. Gjelder KS-tariffområdet.</div>
+            </div>
+          </div>
+        </div>
+        <div class="v-connector"></div>
+        <div class="flow-row">
+          <div class="node no-connector">
+            <div class="card action warning" data-toggle id="c-betinget">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Nei → Alternativ</div>
+              <div class="card-title">Betinget tjenestepensjon</div>
+              <div class="card-sub">For de som ikke oppfyller AFP-vilkår. % av lønn etter 01.01.2020 i offentlig sektor.</div>
+              <div class="card-note">Husk å avklare om AFP ikke er aktuelt – da er betinget tjenestepensjon fallback.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="node no-connector">
+      <div class="card action" id="c-saer">
+        <div class="check-badge">✓</div>
+        <div class="card-label">Sjekk alltid</div>
+        <div class="card-title">Særaldersgrense?</div>
+        <div class="card-sub">Sykepleiere, brannmenn, ambulanse, renholdere m.fl.</div>
+        <div class="saer-buttons">
+          <button type="button" class="saer-btn" data-saer="60">60 år</button>
+          <button type="button" class="saer-btn" data-saer="65">65 år</button>
+          <button type="button" class="saer-btn muted" data-saer="0">Ingen</button>
+        </div>
+        <div class="card-note">Ny lov vedtatt 10. juni 2025: særaldersgrense-ansatte 1963+ får livsvarig særalderspåslag.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider hidden" id="div-saer"><span>Særaldersgrense — velg grense og fødselsår</span></div>
+
+  <div class="flow-row hidden" id="row-saer">
+    <div class="node">
+      <div class="card question">
+        <div class="card-label">Særaldersgrense</div>
+        <div class="card-title" id="saer-q-title">—</div>
+        <div class="card-sub" id="saer-q-sub">—</div>
+      </div>
+    </div>
+
+    <div class="node hidden" id="saer-60-wrap">
+      <div class="branch-container">
+        <div class="flow-row">
+          <div class="node">
+            <div class="card action warning" data-toggle id="c-s60a">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Født 1963–1969</div>
+              <div class="card-title">Tidligpensjon fra 60 år</div>
+              <div class="card-sub">Eller fra 57 år ved 85-årsregelen (alder + tjeneste = 85). Må slutte helt/delvis.</div>
+              <span class="tag tag-obs">Kun 1963–1969</span>
+              <div class="card-note">Mellom 62–67 år: kan velge mellom tidligpensjon (krever fratreden) eller alderspensjon (kan jobbe fritt).</div>
+            </div>
+          </div>
+          <div class="node no-connector">
+            <div class="card action" data-toggle id="c-s60a-2">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Husk å avklar</div>
+              <div class="card-title">Jobbe ved siden av?</div>
+              <div class="card-sub">Tidligpensjon: krever redusert stilling. Alderspensjon: full jobb mulig ved siden av.</div>
+              <div class="card-note">Anbefal pensjonskalkulator for å sammenligne tidligpensjon vs. alderspensjon.</div>
+            </div>
+          </div>
+        </div>
+        <div class="v-connector"></div>
+        <div class="flow-row">
+          <div class="node">
+            <div class="card action warning" data-toggle id="c-s60b">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Født 1970 eller senere</div>
+              <div class="card-title">Tidligpensjon fra 60 år</div>
+              <div class="card-sub">For 1970–1972: kan ta ut før 60 år dersom 85-årsregelen er oppfylt. Tidspunkt øker per kull.</div>
+              <span class="tag tag-kun">1970+</span>
+              <div class="card-note">Alderspensjon fra 62 år + 7 mnd (1970), øker med 1 mnd per kull. Kan kombineres med full jobb.</div>
+            </div>
+          </div>
+          <div class="node no-connector">
+            <div class="card action special" data-toggle id="c-s60b-2">
+              <div class="check-badge">✓</div>
+              <div class="card-label">OBS – 1970+</div>
+              <div class="card-title">Beregning av tidligpensjon</div>
+              <div class="card-sub">Tidligpensjon beregnes ikke i kalkulator – må kontaktes via innboks med 6 opplysninger.</div>
+              <div class="card-note">Informasjon som trengs: dato, andre arbeidsgivere, tidligere pensjonskasser, NAV-ytelser, barn under 18, privat AFP.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="node hidden" id="saer-65-wrap">
+      <div class="branch-container">
+        <div class="flow-row">
+          <div class="node">
+            <div class="card action warning" data-toggle id="c-s65a">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Født 1963–1964</div>
+              <div class="card-title">Tidligpensjon eller alderspensjon fra 62 år</div>
+              <div class="card-sub">Tidligpensjon: krever hel/delvis fratreden. Alderspensjon: kan jobbe fritt ved siden av.</div>
+              <span class="tag tag-obs">Kun 1963–1964</span>
+              <div class="card-note">Etter 67 år: kun alderspensjon. Jo lenger man venter, jo høyere utbetaling.</div>
+            </div>
+          </div>
+          <div class="node no-connector">
+            <div class="card action" data-toggle id="c-s65a-2">
+              <div class="check-badge">✓</div>
+              <div class="card-label">4 spørsmål til medlemmet</div>
+              <div class="card-title">Hjelp til valg</div>
+              <div class="card-sub">Vil de slutte helt? Jobbe delvis? Tidspunkt for uttak? Pensjon er individuelt.</div>
+              <div class="card-note">Anbefal pensjonskalkulator: kan beregne begge alternativer selv på Min side.</div>
+            </div>
+          </div>
+        </div>
+        <div class="v-connector"></div>
+        <div class="flow-row">
+          <div class="node">
+            <div class="card action special" data-toggle id="c-s65b">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Født 1965 eller senere</div>
+              <div class="card-title">Alderspensjon etter nye regler</div>
+              <div class="card-sub">Kan jobbe fritt ved siden av. Sen uttak = høyere pensjon. Særalderspåslag sikrer nivå.</div>
+              <span class="tag tag-kun">1965+</span>
+              <div class="card-note">Særalderspåslaget er et livsvarig tillegg som kompenserer for tidlig avgang vs. ansatte med normal aldersgrense.</div>
+            </div>
+          </div>
+          <div class="node no-connector">
+            <div class="card action" data-toggle id="c-s65b-2">
+              <div class="check-badge">✓</div>
+              <div class="card-label">Alltid informer om</div>
+              <div class="card-title">Særalderspåslag</div>
+              <div class="card-sub">Livsvarig tillegg vedtatt juni 2025. Sikrer at tidlig avgang ikke gir pensjonsmessig tap.</div>
+              <div class="card-note">Gjelder alle med særaldersgrense født 1963+. Nytt regelverk fra 2025.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="node hidden no-connector" id="saer-ingen-wrap">
+      <div class="card action done" style="cursor:default">
+        <div class="card-label">Ikke aktuelt</div>
+        <div class="card-title">Ingen særaldersgrense</div>
+        <div class="card-sub">Gå videre til steg 3.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider hidden" id="div-extra"><span>Steg 3 — Tillegg basert på fødselsår</span></div>
+
+  <div class="flow-row hidden" id="row-extra">
+    <div class="node hidden" id="node-overgang">
+      <div class="card action warning" data-toggle id="c-overgang">
+        <div class="check-badge">✓</div>
+        <div class="card-label">Gjelder dette medlemmet</div>
+        <div class="card-title">Overgangstillegg</div>
+        <div class="card-sub">For 1963–1970 som ønsker å slutte før 67 år. Sikrer rettferdig overgang til nytt regelverk.</div>
+        <span class="tag tag-obs">Kun 1963–1970</span>
+        <div class="card-note">Avklar om de faktisk planlegger å slutte før 67 – kun da er det relevant å gå i detalj.</div>
+      </div>
+    </div>
+
+    <div class="node hidden" id="node-pensjonsalder">
+      <div class="card action special" data-toggle id="c-pensjonsalder">
+        <div class="check-badge">✓</div>
+        <div class="card-label">Gjelder dette medlemmet</div>
+        <div class="card-title">Økt pensjonsalder</div>
+        <div class="card-sub">Pensjonsforliket 2025: født 1965+ må jobbe lenger. Viktig å nevne i planleggingen.</div>
+        <span class="tag tag-kun">Kun 1965+</span>
+        <div class="card-note">Vedtatt feb 2025. Konkrete aldersgrenser er under utforming – informer om at endring kommer.</div>
+      </div>
+    </div>
+
+    <div class="node no-connector">
+      <div class="card action" data-toggle id="c-plan">
+        <div class="check-badge">✓</div>
+        <div class="card-label">Avslutt alltid med</div>
+        <div class="card-title">Planlegging og fleksibilitet</div>
+        <div class="card-sub">Oppsummer hvilke deler som gjelder, anbefal pensjonskalkulator og eventuell videre oppfølging.</div>
+        <div class="card-note">Minn om at uttakstidspunkt for de ulike delene kan velges uavhengig av hverandre.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var years = [1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970];
+  var grid = document.getElementById('yearGrid');
+  var progressEl = document.getElementById('progress-count');
+
+  var checkedCount = 0;
+  var currentYear = null;
+  var currentSaer = null;
+
+  years.forEach(function (year) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'year-btn';
+    btn.textContent = year;
+    btn.addEventListener('click', function () { selectYear(year, btn); });
+    grid.appendChild(btn);
+  });
+
+  document.querySelectorAll('[data-toggle]').forEach(function (card) {
+    card.addEventListener('click', function () { toggleCard(card); });
+  });
+
+  document.querySelectorAll('.saer-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      selectSaer(parseInt(btn.dataset.saer, 10));
+    });
+  });
+
+  document.getElementById('reset-btn').addEventListener('click', resetAll);
+
+  function show(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('hidden');
+  }
+  function hide(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  }
+  function toggleShow(id, visible) {
+    if (visible) show(id); else hide(id);
+  }
+
+  function selectYear(year, btn) {
+    document.querySelectorAll('.year-btn').forEach(function (b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    currentYear = year;
+
+    document.getElementById('born-title').textContent = 'Født ' + year;
+
+    var flags = [];
+    if (year >= 1963 && year <= 1970) flags.push('Overgangskullet');
+    if (year >= 1965) flags.push('Økt pensjonsalder');
+    document.getElementById('born-sub').textContent = flags.length ? flags.join(' · ') : 'Standardregler';
+
+    ['node-born', 'node-paaslag-wrap', 'div-afp', 'row-afp', 'div-extra', 'row-extra'].forEach(show);
+    toggleShow('node-overgang', year >= 1963 && year <= 1970);
+    toggleShow('node-pensjonsalder', year >= 1965);
+
+    if (currentSaer === 60) updateSaer60Branches();
+    if (currentSaer === 65) updateSaer65Branches();
+  }
+
+  function selectSaer(grense) {
+    currentSaer = grense;
+
+    document.querySelectorAll('.saer-btn').forEach(function (b) { b.classList.remove('active'); });
+    var activeBtn = document.querySelector('.saer-btn[data-saer="' + grense + '"]');
+    if (activeBtn) activeBtn.classList.add('active');
+
+    var saerCard = document.getElementById('c-saer');
+    if (!saerCard.classList.contains('done')) {
+      saerCard.classList.add('done');
+      checkedCount++;
+      progressEl.textContent = checkedCount;
+    }
+
+    show('div-saer');
+    show('row-saer');
+
+    var titles = { 60: 'Særaldersgrense 60 år', 65: 'Særaldersgrense 65 år', 0: 'Ingen særaldersgrense' };
+    var subs = {
+      60: 'Helsepersonell, brannpersonell, ambulanse m.fl. Vedtatt ny lov juni 2025.',
+      65: 'Sykepleiere og andre yrkesgrupper med 65 år som grense.',
+      0: 'Vanlig aldersgrense 70 år gjelder.'
+    };
+    document.getElementById('saer-q-title').textContent = titles[grense] || '—';
+    document.getElementById('saer-q-sub').textContent = subs[grense] || '—';
+
+    hide('saer-60-wrap');
+    hide('saer-65-wrap');
+    hide('saer-ingen-wrap');
+
+    if (grense === 60) { show('saer-60-wrap'); updateSaer60Branches(); }
+    else if (grense === 65) { show('saer-65-wrap'); updateSaer65Branches(); }
+    else { show('saer-ingen-wrap'); }
+  }
+
+  function setBranchOpacity(elId, opacity) {
+    var el = document.getElementById(elId);
+    if (el) el.closest('.flow-row').style.opacity = opacity;
+  }
+
+  function updateSaer60Branches() {
+    if (!currentYear) return;
+    var early = currentYear <= 1969;
+    setBranchOpacity('c-s60a', early ? '1' : '0.35');
+    setBranchOpacity('c-s60b', early ? '0.35' : '1');
+  }
+
+  function updateSaer65Branches() {
+    if (!currentYear) return;
+    var early = currentYear <= 1964;
+    setBranchOpacity('c-s65a', early ? '1' : '0.35');
+    setBranchOpacity('c-s65b', early ? '0.35' : '1');
+  }
+
+  function toggleCard(card) {
+    var nowDone = card.classList.toggle('done');
+    checkedCount += nowDone ? 1 : -1;
+    progressEl.textContent = checkedCount;
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.year-btn').forEach(function (b) { b.classList.remove('selected'); });
+    document.querySelectorAll('.card').forEach(function (c) { c.classList.remove('done'); });
+    document.querySelectorAll('.saer-btn').forEach(function (b) { b.classList.remove('active'); });
+
+    [
+      'node-born', 'node-paaslag-wrap', 'div-afp', 'row-afp',
+      'div-saer', 'row-saer', 'div-extra', 'row-extra',
+      'node-overgang', 'node-pensjonsalder',
+      'saer-60-wrap', 'saer-65-wrap', 'saer-ingen-wrap'
+    ].forEach(hide);
+
+    ['c-s60a', 'c-s60b', 'c-s65a', 'c-s65b'].forEach(function (id) { setBranchOpacity(id, '1'); });
+
+    checkedCount = 0;
+    currentYear = null;
+    currentSaer = null;
+    progressEl.textContent = '0';
+  }
+})();
+</script>
+
+</body>
+</html>
