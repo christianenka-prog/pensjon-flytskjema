@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pensjonskompasset</title>
+  <style>    :root {      --klp-gray-900: #3d3d3d;      --klp-gray-700: #5e5e5e;      --klp-gray-300: #cacaca;      --klp-white: #ffffff;      --klp-green-100: #b8dad6;      --klp-green-600: #569994;      --klp-green-700: #3d7475;      --klp-pink-100: #f5c4ce;      --klp-pink-600: #cc4169;      --bg: #f4f4f4;      --card: #ffffff;      --border: #e3e3e3;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      background: linear-gradient(180deg, #eaf3f1 0%, #f5f9f7 100%);      color: var(--klp-gray-900);      min-height: 100%;      display: flex;      flex-direction: column;    }    .topbar {      background: linear-gradient(135deg, var(--klp-green-600) 0%, var(--klp-green-100) 100%);      color: var(--klp-green-700);      padding: 14px 20px;      display: flex;      justify-content: space-between;      align-items: center;      position: sticky;      top: 0;      z-index: 10;      border-bottom: 3px solid var(--klp-green-600);    }    .brand {      font-size: 18px;      font-weight: 700;      letter-spacing: 0.2px;    }    .brand span { color: var(--klp-white); }    .meta {      color: var(--klp-gray-300);      font-size: 12px;      margin-top: 2px;    }    .btn-reset {      border: 1px solid var(--klp-green-700);      background: rgba(255,255,255,0.6);      color: var(--klp-green-700);      padding: 7px 12px;      border-radius: 8px;      cursor: pointer;      font-size: 13px;      font-weight: 600;    }    .btn-reset:hover {      border-color: var(--klp-green-700);      background: var(--klp-white);    }    .page {      padding: 20px;    }    .flow-board {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 0;      padding-bottom: 24px;    }    .flow-row {      display: flex;      flex-direction: row;      align-items: center;      gap: 10px;      padding: 10px 0;      flex-shrink: 0;    }    .flow-row + .flow-row {      padding-left: 0;    }    .flow-row-sep {      font-size: 22px;      color: var(--klp-gray-300);      padding: 0 12px;      flex-shrink: 0;      user-select: none;    }    .flow-row-label {      flex-shrink: 0;      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.3px;      white-space: nowrap;    }    .flow-row-choices {      display: flex;      flex-wrap: wrap;      gap: 6px;    }    /* Text-style classes still used in detail panel */    .column-step {      font-size: 11px;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.4px;      margin-bottom: 4px;    }    .column-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);      line-height: 1.3;    }    .column-sub {      font-size: 13px;      color: var(--klp-gray-700);      margin-top: 6px;      line-height: 1.5;    }    .option {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      text-align: left;      cursor: pointer;      transition: all 0.18s ease;    }    .option-label {      font-size: 12px;      font-weight: 600;      color: var(--klp-gray-900);      line-height: 1.3;      white-space: nowrap;    }    .option:hover {      border-color: var(--klp-green-600);      background: rgba(86, 153, 148, 0.12);    }    .option.selected {      border-color: var(--klp-green-600);      background: rgba(184, 218, 214, 0.6);    }    .option.current-choice {      border-color: var(--klp-pink-600);      background: var(--klp-pink-100);    }    .option-sub {      font-size: 12px;      color: var(--klp-gray-700);      margin-top: 3px;      line-height: 1.4;    }    .panel {      border: 1px solid var(--border);      border-radius: 10px;      padding: 10px;      background: #fbfbfb;    }    .panel.info {      border-left: 3px solid var(--klp-green-600);    }    .panel.warn {      border-left: 3px solid var(--klp-pink-600);      background: #fff6f8;    }    .panel-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 6px;    }    .panel p,    .panel li {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);    }    .panel ul {      padding-left: 16px;      margin-top: 2px;    }    .panel a {      color: var(--klp-green-700);      font-weight: 500;      text-decoration: underline;      text-underline-offset: 2px;    }    .panel a:hover { color: var(--klp-pink-600); }    .btn-next {      border: none;      border-radius: 10px;      padding: 10px;      font-size: 13px;      font-weight: 700;      cursor: pointer;      background: var(--klp-green-600);      color: #fff;      margin-top: 2px;    }    .btn-next:hover { background: var(--klp-green-700); }    /* \uc0── FANER ─────────────────────────────────────────────── */    .tabs {      display: flex;      gap: 4px;      padding: 12px 20px 0;      border-bottom: 2px solid var(--border);      background: transparent;    }    .tab-btn {      padding: 7px 18px;      font-size: 14px;      font-weight: 600;      border: 1px solid var(--border);      border-bottom: none;      border-radius: 8px 8px 0 0;      background: #ececec;      color: var(--klp-gray-700);      cursor: pointer;      position: relative;      bottom: -2px;      transition: background 0.15s;    }    .tab-btn:hover {      background: #e0e0e0;    }    .tab-btn.active {      background: var(--card);      color: var(--klp-gray-900);      border-color: var(--border);      border-bottom-color: var(--card);    }    .tab-panel { display: none; }    .tab-panel.active { display: block; }    /* \uc0── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */    .flow-board.has-detail {      align-items: stretch;    }    .detail-panel {      flex-basis: 100%;      max-width: 900px;      margin-top: 16px;      background: var(--card);      border: 1px solid var(--klp-green-600);      border-radius: 12px;      box-shadow: 0 4px 16px rgba(86, 153, 148, 0.18);      overflow: hidden;      display: flex;      flex-direction: column;    }    .detail-panel-head {      padding: 14px 18px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;    }    .detail-panel-body {      padding: 16px;      display: flex;      flex-direction: row;      flex-wrap: wrap;      gap: 16px;      align-items: flex-start;      flex: 1;    }    .detail-section {      flex: 1;      min-width: 220px;      background: #fbfbfb;      border: 1px solid var(--border);      border-left: 3px solid var(--klp-green-600);      border-radius: 10px;      padding: 12px 14px;    }    .detail-section-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 10px;    }    .checkbox-item {      display: flex;      align-items: flex-start;      gap: 8px;      margin-bottom: 8px;    }    .checkbox-item input[type="checkbox"] {      margin-top: 2px;      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;    }    .checkbox-item label {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);      cursor: pointer;    }    .checkbox-item input:checked + label {      color: var(--klp-gray-700);      text-decoration: line-through;      text-decoration-color: var(--klp-green-600);    }    .detail-panel-foot {      padding: 12px 16px;      border-top: 1px solid var(--border);      display: flex;      flex-wrap: wrap;      gap: 8px;    }    /* \uc0── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */    .tab-panel.active {      display: flex;      flex-direction: column;      flex: 1;      min-height: 0;      overflow: hidden;    }    .content-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 16px;      flex: 1;      min-height: 0;    }    .content-box {      background: var(--card);      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      display: flex;      flex-direction: column;      overflow: hidden;      min-height: 0;    }    .content-box-head {      padding: 12px 16px;      border-bottom: 2px solid var(--klp-green-600);      background: var(--klp-green-100);      font-size: 15px;      font-weight: 700;      color: var(--klp-green-700);      flex-shrink: 0;    }    .content-box-body {      flex: 1;      display: flex;      flex-direction: column;      min-height: 0;      overflow: hidden;    }    .content-box-main {      flex: 1;      overflow-y: auto;      padding: 14px 16px;      min-height: 0;    }    .content-box-foot {      flex-shrink: 0;      padding: 10px 16px;      border-top: 1px solid var(--klp-green-600);      background: rgba(184, 218, 214, 0.25);    }    .content-box-foot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-green-700); margin-bottom: 6px; }    .content-box-foot-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .content-box-foot-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .content-box-foot-list a:hover { color: var(--klp-pink-600); }    /* \uc0── SAMMENDRAG ─────────────────────────────────────────── */    .summary-box {      flex-shrink: 0;      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      background: var(--card);      display: flex;      flex-direction: column;      height: 150px;      margin-top: 0;    }    .summary-box-head {      padding: 10px 16px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;      font-size: 15px;      font-weight: 700;      color: var(--klp-gray-900);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;    }    .summary-copy-btn {      border: 1px solid var(--klp-green-600);      background: transparent;      color: var(--klp-green-700);      padding: 4px 14px;      border-radius: 8px;      cursor: pointer;      font-size: 12px;      font-weight: 700;      transition: all 0.15s;    }    .summary-copy-btn:hover {      background: var(--klp-green-600);      color: #fff;    }    .summary-textarea {      flex: 1;      padding: 10px 16px;      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      font-size: 12px;      line-height: 1.5;      color: var(--klp-gray-900);      border: none;      resize: none;      background: var(--card);      outline: none;      border-radius: 0 0 12px 12px;    }    .content-placeholder {      color: var(--klp-gray-300);      font-size: 13px;      font-style: italic;    }    .box-filter-area {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 16px;      padding: 10px 16px;      border-bottom: 1px solid var(--klp-green-600);      background: rgba(184,218,214,0.35);    }    .box-filter-row {      display: flex;      align-items: center;      gap: 6px;      flex-wrap: nowrap;    }    .box-filter-label {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.3px;      color: var(--klp-gray-700);      min-width: 40px;      flex-shrink: 0;    }    .box-filter-btn {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 6px;      padding: 4px 10px;      font-size: 12px;      font-weight: 600;      cursor: pointer;      transition: all 0.15s ease;      color: var(--klp-gray-900);    }    .box-filter-btn:hover {      border-color: var(--klp-green-600);      background: rgba(86,153,148,0.12);    }    .box-filter-btn.active {      background: var(--klp-green-600);      color: #fff;      border-color: var(--klp-green-700);    }    /* \uc0── TEMAKORT (inni Hovedregler) ────────────────────────── */    .topic-cards-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 8px;      margin-top: 14px;    }    .topic-card {      display: flex;      flex-direction: column;      gap: 8px;      background: #ecf5f3;      border: 1px solid #cfe3df;      border-radius: 6px;      padding: 12px;      cursor: pointer;      transition: background 0.15s, border-color 0.15s;      min-height: 90px;    }    .topic-card:hover { background: rgba(86,153,148,0.15); border-color: var(--klp-green-600); }    .topic-card.checked {      background: rgba(86,153,148,0.22);      border-color: var(--klp-green-700);    }    .topic-card-top {      display: flex;      align-items: center;      gap: 8px;    }    .topic-card input[type="checkbox"] {      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;      margin: 0;    }    .topic-card-title {      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-900);      flex: 1;    }    .topic-card-desc {      font-size: 12px;      color: var(--klp-gray-700);      line-height: 1.5;    }    .topic-card-chevron {      margin-left: auto;      font-size: 12px;      color: var(--klp-green-700);      opacity: 0.7;    }    .topic-card-details { display: none; }    .topic-cards-grid { align-items: start; }    .card-popup-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.18);      opacity: 0;      pointer-events: none;      transition: opacity 0.2s;      z-index: 999;    }    .card-popup-overlay.open { opacity: 1; pointer-events: auto; }    .card-popup {      position: fixed;      width: 540px;      max-width: 92vw;      background: var(--klp-white);      border: 1px solid var(--klp-green-600);      border-radius: 14px;      padding: 26px 30px;      box-shadow: 0 16px 40px rgba(0,0,0,0.24);      z-index: 1000;      opacity: 0;      pointer-events: none;      transform: scale(0.2);      transform-origin: top left;      transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);    }    .card-popup.open {      opacity: 1;      pointer-events: auto;      transform: translate(28px, 28px) scale(1);    }    .card-popup-close {      position: absolute;      top: 8px;      right: 10px;      background: none;      border: none;      font-size: 22px;      line-height: 1;      cursor: pointer;      color: var(--klp-gray-700);      padding: 4px 8px;      border-radius: 6px;    }    .card-popup-close:hover { background: var(--border); }    .card-popup-title {      font-size: 20px;      font-weight: 700;      color: var(--klp-green-700);      margin-bottom: 14px;      padding-right: 32px;      line-height: 1.3;    }    .card-popup-body { font-size: 15px; line-height: 1.65; color: var(--klp-gray-900); }    .topic-section-divider {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin: 14px 0 6px;    }    .box-link-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }    .box-link-footer-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .box-link-footer-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .box-link-footer-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .box-link-footer-list a:hover { color: var(--klp-pink-600); }    /* \uc0── TEMA-DRAWER ─────────────────────────────────────────── */    .topic-drawer-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.3);      z-index: 199;      opacity: 0;      pointer-events: none;      transition: opacity 0.25s;    }    .topic-drawer-overlay.open {      opacity: 1;      pointer-events: auto;    }    .topic-drawer {      position: fixed;      top: 0;      right: 0;      width: 380px;      max-width: 95vw;      height: 100vh;      background: var(--card);      box-shadow: -4px 0 30px rgba(0,0,0,0.15);      z-index: 200;      display: flex;      flex-direction: column;      transform: translateX(100%);      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);    }    .topic-drawer.open { transform: translateX(0); }    .topic-drawer-head {      padding: 16px 20px;      border-bottom: 1px solid var(--border);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;      background: #fbfbfb;    }    .topic-drawer-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);    }    .topic-drawer-close {      background: none;      border: none;      font-size: 22px;      cursor: pointer;      color: var(--klp-gray-700);      line-height: 1;      padding: 2px 8px;      border-radius: 6px;    }    .topic-drawer-close:hover { background: var(--border); }    .topic-drawer-body {      padding: 16px 20px;      overflow-y: auto;      flex: 1;    }    .topic-drawer-section { margin-bottom: 16px; }    .topic-drawer-section:last-child { margin-bottom: 0; }    .topic-drawer-section-title {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 5px;    }    .topic-drawer-section p {      font-size: 13px;      line-height: 1.6;      color: var(--klp-gray-900);    }    @media (max-width: 720px) {      .page { padding: 12px; }      .content-grid { grid-template-columns: 1fr; }      .summary-box { height: 120px; }    }  </style>
+</head>
+<body>  <header class="topbar">    <div>      <div class="brand"><span>Pensjonskompasset</span></div>    </div>    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>  </header>  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">    <nav class="tabs">      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>    </nav>    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">      <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>      <div class="content-grid">        <div class="content-box">          <div class="content-box-head">Hovedregler</div>          <div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Viktig å huske på</div>          <div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Unntak</div>          <div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>      </div>      <div class="summary-box">        <div class="summary-box-head">          <span>Notatsammendrag</span>          <button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button>        </div>        <textarea id="summary-textarea" class="summary-textarea" readonly placeholder="Velg et alternativ i navigasjonen for å generere et sammendrag."></textarea>      </div>    </div>    <div id="tab-beregninger" class="tab-panel" style="padding:20px">      <p style="color:var(--klp-gray-700);font-size:14px">Beregningsverktøy kommer her.</p>    </div>  </main>
+<div id="card-popup-overlay" class="card-popup-overlay" onclick="closeCardPopup()"></div>
+<div id="card-popup" class="card-popup" role="dialog" aria-modal="true">
+  <button class="card-popup-close" onclick="closeCardPopup()" aria-label="Lukk">×</button>
+  <div id="card-popup-title" class="card-popup-title"></div>
+  <div id="card-popup-body" class="card-popup-body"></div>
+</div>
+<script>
+const ROOT_CHOICES = [
+  { label: "Alderspensjon",     next: "ald_arskull" },
+  { label: "Uførepensjon",      sub: "Start med fødselsår",                next: "ufo_start" },
+  { label: "Etterlattepensjon", sub: "Start med avdødes status",           next: "etl_start" },
+  { label: "Medlemskap",        sub: "Innmelding, utmelding og permisjon", next: "med_start" }
+];
+
+/*
+  ─────────────────────────────────────────────────────────────
+  SKJELETT FOR HVER SLUTTNODE:
+    content: {
+      infos:    [{ list: ["", "", "", "", ""] }],   // Hovedregler
+      warnings: ["", "", "", ""],                   // Viktig å huske på
+      unntak:   ["", "", "", ""]                    // Unntak
+    }
+  Erstatt de tomme strengene med teksten du vil ha i hver
+  avkrysningsboks. Legg til eller fjern rader etter behov.
+  ─────────────────────────────────────────────────────────────
+*/
+function tomtSkjelett() {
+  const fillerKort = {
+    title: "Lorem ipsum",
+    text:  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    details: "Her kan du legge inn utvidet informasjon som vises når kortet ekspanderes. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+  };
+  const seksKort = [fillerKort, fillerKort, fillerKort, fillerKort, fillerKort, fillerKort];
+  const fillerLenker = [
+    { label: "Lenke 1", url: "#" },
+    { label: "Lenke 2", url: "#" }
+  ];
+  return {
+    infos:        [{ list: seksKort }],
+    warnings:     seksKort,
+    unntak:       seksKort,
+    lenkerHoved:  fillerLenker,
+    lenkerViktig: fillerLenker,
+    lenkerUnntak: fillerLenker
+  };
+}
+
+const ALDER_AG_FILTER = [
+  { id: "alder", label: "Alder", options: ["Over 67 år", "Under 67 år"] },
+  { id: "ag",    label: "AG",    options: ["60 år", "65 år", "70 år"] }
+];
+
+const PENSJONSTYPE_FILTER = [
+  { id: "pensjonstype", label: "Pensjonstype", options: ["Tidligpensjon", "Alderspensjon"] }
+];
+
+const AG_FILTER = [
+  { id: "ag", label: "AG", options: ["60 år", "65 år", "70 år"] }
+];
+
+const NODES = {
+
+  root: {
+    id: "root",
+    type: "choice",
+    label: "Ytelse",
+    choices: ROOT_CHOICES
+  },
+
+  // ═══════════════════════════════════════════
+  //  ALDERSPENSJON
+  // ═══════════════════════════════════════════
+  ald_arskull: {
+    id: "ald_arskull",
+    type: "choice",
+    label: "Årskull",
+    choices: [
+      { label: "1953 eller tidligere", next: "ald_1953_vp" },
+      { label: "1954–1962",            next: "ald_1954_vp" },
+      { label: "1963–1964",            next: "ald_6364_vp" },
+      { label: "1965–1969",            next: "ald_6570_vp" },
+      { label: "1970 eller senere",    next: "ald_71_vp"   }
+    ]
+  },
+
+  // --- 1953 eller tidligere ---
+  ald_1953_vp: {
+    id: "ald_1953_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_1953_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_1953_mottar_end" }
+    ]
+  },
+  ald_1953_veil_end:   { id: "ald_1953_veil_end",   type: "end", label: "Veiledning – 1953 eller tidligere",        boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+  ald_1953_mottar_end: { id: "ald_1953_mottar_end", type: "end", label: "Mottar alderspensjon – 1953 eller tidligere", boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+
+  // --- 1954–1962 ---
+  ald_1954_vp: {
+    id: "ald_1954_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_1954_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_1954_mottar_end" }
+    ]
+  },
+  ald_1954_veil_end:   { id: "ald_1954_veil_end",   type: "end", label: "Veiledning – 1954–1962",        boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+  ald_1954_mottar_end: { id: "ald_1954_mottar_end", type: "end", label: "Mottar alderspensjon – 1954–1962", boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+
+  // --- 1963–1964 ---
+  ald_6364_vp: {
+    id: "ald_6364_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_6364_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_6364_mottar_end" }
+    ]
+  },
+  ald_6364_veil_end:   { id: "ald_6364_veil_end",   type: "end", label: "Veiledning – 1963–1964",        boxChoices: AG_FILTER, content: tomtSkjelett() },
+  ald_6364_mottar_end: { id: "ald_6364_mottar_end", type: "end", label: "Mottar alderspensjon – 1963–1964", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+
+  // --- 1965–1969 ---
+  ald_6570_vp: {
+    id: "ald_6570_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_6570_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_6570_mottar_end" }
+    ]
+  },
+  ald_6570_veil_end:   { id: "ald_6570_veil_end",   type: "end", label: "Veiledning – 1965–1969",        boxChoices: AG_FILTER, content: tomtSkjelett() },
+  ald_6570_mottar_end: { id: "ald_6570_mottar_end", type: "end", label: "Mottar alderspensjon – 1965–1969", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+
+  // --- 1970 eller senere ---
+  ald_71_vp: {
+    id: "ald_71_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_71_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_71_mottar_end" }
+    ]
+  },
+  ald_71_veil_end:   { id: "ald_71_veil_end",   type: "end", label: "Veiledning – 1970 eller senere",        boxChoices: AG_FILTER, content: tomtSkjelett() },
+  ald_71_mottar_end: { id: "ald_71_mottar_end", type: "end", label: "Mottar alderspensjon – 1970 eller senere", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+
+  // ═══════════════════════════════════════════
+  //  UFØREPENSJON
+  // ═══════════════════════════════════════════
+  ufo_start: {
+    id: "ufo_start", type: "choice", label: "Velg regelverk",
+    choices: [
+      { label: "1962 eller tidligere", sub: "Gammelt regelverk", next: "ufo_old_end" },
+      { label: "1963 og senere",       sub: "Nytt regelverk",    next: "ufo_new_end" }
+    ]
+  },
+  ufo_old_end: { id: "ufo_old_end", type: "end", label: "Uførepensjon – 1962 eller tidligere", content: tomtSkjelett() },
+  ufo_new_end: { id: "ufo_new_end", type: "end", label: "Uførepensjon – 1963 og senere",       content: tomtSkjelett() },
+
+  // ═══════════════════════════════════════════
+  //  ETTERLATTEPENSJON
+  // ═══════════════════════════════════════════
+  etl_start: {
+    id: "etl_start", type: "choice", label: "Avdødes status",
+    choices: [
+      { label: "Avdøde var aktivt medlem",       sub: "Mottok ikke pensjon",  next: "etl_aktiv_end"   },
+      { label: "Avdøde mottok pensjon fra KLP",                               next: "etl_pensjon_end" },
+      { label: "Avdøde hadde oppsatt rett",      sub: "Tidligere KLP-medlem", next: "etl_oppsatt_end" }
+    ]
+  },
+  etl_aktiv_end:   { id: "etl_aktiv_end",   type: "end", label: "Etterlattepensjon – avdøde var aktivt medlem",      content: tomtSkjelett() },
+  etl_pensjon_end: { id: "etl_pensjon_end", type: "end", label: "Etterlattepensjon – avdøde mottok pensjon",         content: tomtSkjelett() },
+  etl_oppsatt_end: { id: "etl_oppsatt_end", type: "end", label: "Etterlattepensjon – avdøde hadde oppsatt rett",     content: tomtSkjelett() },
+
+  // ═══════════════════════════════════════════
+  //  MEDLEMSKAP
+  // ═══════════════════════════════════════════
+  med_start: {
+    id: "med_start", type: "choice", label: "Tema",
+    choices: [
+      { label: "Innmelding",                         sub: "Fast og midlertidig ansatte",  next: "med_inn_end"  },
+      { label: "Utmelding",                          sub: "Oppsatt rett og videre løp",   next: "med_ut_end"   },
+      { label: "Frivillig medlemskap ved permisjon", sub: "Frister og dekning",           next: "med_perm_end" },
+      { label: "Pensjonistvilkår",                   sub: "Unntak fra innmelding",        next: "med_pens_end" }
+    ]
+  },
+  med_inn_end:  { id: "med_inn_end",  type: "end", label: "Medlemskap – innmelding",        content: tomtSkjelett() },
+  med_ut_end:   { id: "med_ut_end",   type: "end", label: "Medlemskap – utmelding",         content: tomtSkjelett() },
+  med_perm_end: { id: "med_perm_end", type: "end", label: "Medlemskap – permisjon",         content: tomtSkjelett() },
+  med_pens_end: { id: "med_pens_end", type: "end", label: "Medlemskap – pensjonistvilkår",  content: tomtSkjelett() }
+
+};
+
+
+const path = [{ nodeId: "root", selected: null }];
+let boxState = {};
+
+function normalizeText(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
+    .replace(/[☀-➿]/g, "")
+    .replace(/vedtekter/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function esc(str) {
+  return normalizeText(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function truncateFrom(stepIndexInclusive) {
+  path.splice(stepIndexInclusive);
+}
+
+function choose(stepIndex, choiceIndex) {
+  const step = path[stepIndex];
+  const node = NODES[step.nodeId];
+  if (!node || !node.choices || !node.choices[choiceIndex]) return;
+  step.selected = choiceIndex;
+  truncateFrom(stepIndex + 1);
+  boxState = {};
+  const nextId = node.choices[choiceIndex].next;
+  if (nextId && NODES[nextId]) {
+    path.push({ nodeId: nextId, selected: null });
+  }
+  render();
+}
+
+function selectColumn(stepIndex) {
+  truncateFrom(stepIndex + 1);
+  render();
+}
+
+function resetFlow() {
+  path.length = 0;
+  path.push({ nodeId: "root", selected: null });
+  render();
+}
+
+function renderChoices(node, stepIndex, selectedIndex) {
+  if (!node.choices || !node.choices.length) return "";
+  let html = "";
+  node.choices.forEach((choice, idx) => {
+    const isSelected = selectedIndex === idx;
+    const isCurrent = stepIndex === path.length - 1 && isSelected;
+    const cls = isCurrent ? "option current-choice" : isSelected ? "option selected" : "option";
+    html += '<button class="' + cls + '" onclick="choose(' + stepIndex + ',' + idx + ')">';
+    html += '<div class="option-label">' + esc(choice.label) + '</div>';
+    html += '</button>';
+  });
+  return html;
+}
+
+function renderRow(step, index) {
+  const node = NODES[step.nodeId];
+  if (!node) return "";
+  let html = "";
+  if (index > 0) {
+    html += '<span class="flow-row-sep">›</span>';
+  }
+  html += '<div class="flow-row">';
+  if (node.label) {
+    html += '<div class="flow-row-label">' + esc(node.label) + '</div>';
+  }
+  html += '<div class="flow-row-choices">';
+  html += renderChoices(node, index, step.selected);
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function render() {
+  const flow = document.getElementById("flow");
+  let html = "";
+  let endNode = null;
+  for (let i = 0; i < path.length; i++) {
+    const node = NODES[path[i].nodeId];
+    if (!node) continue;
+    if (node.type === "end") {
+      endNode = node;
+    } else {
+      html += renderRow(path[i], i);
+    }
+  }
+  flow.innerHTML = html;
+  renderContentBoxes(endNode);
+}
+
+function renderCheckboxCard(cbId, item) {
+  const title   = (item && typeof item === 'object') ? (item.title   || '') : (item || '');
+  const text    = (item && typeof item === 'object') ? (item.text    || '') : '';
+  const details = (item && typeof item === 'object') ? (item.details || '') : '';
+  const cardId = 'card_' + cbId;
+  return '<div class="topic-card" id="' + cardId + '" onclick="toggleCardExpand(event, \'' + cardId + '\')">'
+    + '<div class="topic-card-top">'
+    + '<input type="checkbox" id="' + cbId + '" onchange="updateSummary()" onclick="event.stopPropagation()">'
+    + '<label for="' + cbId + '" class="topic-card-title" onclick="event.stopPropagation()">'
+    + esc(title)
+    + '</label>'
+    + (details ? '<span class="topic-card-chevron" aria-hidden="true">▾</span>' : '')
+    + '</div>'
+    + (text ? '<div class="topic-card-desc">' + esc(text) + '</div>' : '')
+    + (details ? '<div class="topic-card-details"><p>' + esc(details) + '</p></div>' : '')
+    + '</div>';
+}
+
+function toggleCardExpand(event, cardId) {
+  if (event.target.tagName === 'INPUT') return;
+  if (event.target.tagName === 'LABEL') return;
+  if (event.target.tagName === 'A') return;
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const popup = document.getElementById('card-popup');
+  const overlay = document.getElementById('card-popup-overlay');
+
+  // Toggle: samme kort klikket igjen → lukk
+  if (popup.dataset.activeCard === cardId && popup.classList.contains('open')) {
+    closeCardPopup();
+    return;
+  }
+
+  const titleEl   = card.querySelector('.topic-card-title');
+  const detailsEl = card.querySelector('.topic-card-details p');
+  document.getElementById('card-popup-title').textContent = titleEl ? titleEl.textContent : '';
+  document.getElementById('card-popup-body').textContent  = detailsEl ? detailsEl.textContent : '';
+
+  // Posisjoner popup-en oppå kortets posisjon — animasjonen vil flytte diagonalt og skalere opp
+  const rect = card.getBoundingClientRect();
+  popup.style.left = rect.left + 'px';
+  popup.style.top  = rect.top  + 'px';
+
+  // Lukk eventuell forrige først for å nullstille animasjonen
+  popup.classList.remove('open');
+  overlay.classList.remove('open');
+  void popup.offsetWidth; // tving reflow
+
+  popup.classList.add('open');
+  overlay.classList.add('open');
+  popup.dataset.activeCard = cardId;
+}
+
+function closeCardPopup() {
+  const popup = document.getElementById('card-popup');
+  const overlay = document.getElementById('card-popup-overlay');
+  popup.classList.remove('open');
+  overlay.classList.remove('open');
+  delete popup.dataset.activeCard;
+}
+
+function wrapGrid(html) {
+  if (!html) return '';
+  return '<div class="topic-cards-grid" style="margin-top:18px">' + html + '</div>';
+}
+
+function renderFilterSpacer(node) {
+  // Usynlig plassholder med samme høyde som filterknappene, slik at kortene
+  // i Viktig å huske på og Unntak ligger på samme høyde som kortene i Hovedregler.
+  if (!node.boxChoices || !node.boxChoices.length) return '';
+  return '<div class="box-filter-area" style="visibility:hidden" aria-hidden="true">'
+    + '<div class="box-filter-row">'
+    + '<span class="box-filter-label">.</span>'
+    + '<button class="box-filter-btn">.</button>'
+    + '</div></div>';
+}
+
+function renderLinkFooter(links) {
+  if (!links || !links.length) return '<div class="content-box-foot" style="visibility:hidden" aria-hidden="true"><div class="content-box-foot-title">.</div></div>';
+  let html = '<div class="content-box-foot">';
+  html += '<div class="content-box-foot-title">Relevante lenker</div>';
+  html += '<div class="content-box-foot-list">';
+  links.forEach(function(link) {
+    html += '<a href="' + (link.url || '#') + '" target="_blank" rel="noopener noreferrer">' + esc(link.label) + '</a>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function wrapBoxContent(mainHtml, footerHtml) {
+  return '<div class="content-box-main">' + mainHtml + '</div>' + footerHtml;
+}
+
+function renderFilterArea(node) {
+  if (!node.boxChoices || !node.boxChoices.length) return '';
+  let html = '<div class="box-filter-area">';
+  node.boxChoices.forEach(function(group) {
+    html += '<div class="box-filter-row">';
+    html += '<span class="box-filter-label">' + esc(group.label) + '</span>';
+    group.options.forEach(function(opt) {
+      const isActive = boxState[group.id] === opt;
+      html += '<button class="box-filter-btn' + (isActive ? ' active' : '') + '" onclick="chooseBox(\'' + group.id + '\',\'' + opt + '\')">'
+        + esc(opt) + '</button>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function chooseBox(groupId, val) {
+  if (boxState[groupId] === val) {
+    delete boxState[groupId];
+  } else {
+    boxState[groupId] = val;
+  }
+  let endNode = null;
+  for (let i = 0; i < path.length; i++) {
+    const n = NODES[path[i].nodeId];
+    if (n && n.type === "end") { endNode = n; break; }
+  }
+  renderContentBoxes(endNode);
+}
+
+function alleFiltreValgt(node) {
+  if (!node.boxChoices || !node.boxChoices.length) return false;
+  return node.boxChoices.every(function(group) {
+    return boxState[group.id];
+  });
+}
+
+function ventPaaFilterMelding(node) {
+  if (!node.boxChoices || !node.boxChoices.length) return '';
+  const navn = node.boxChoices.map(function(g) { return g.label; }).join(' og ');
+  return '<p class="content-placeholder" style="padding:18px 0;text-align:center">Velg ' + esc(navn) + ' over for å se innhold.</p>';
+}
+
+function renderContentBoxes(node) {
+  const emptyPlaceholder = '<p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p>';
+  const hoofdBody  = document.getElementById("box-hoved-body");
+  const viktigBody = document.getElementById("box-viktig-body");
+  const unntakBody = document.getElementById("box-unntak-body");
+  if (!node) {
+    hoofdBody.innerHTML  = emptyPlaceholder;
+    viktigBody.innerHTML = emptyPlaceholder;
+    unntakBody.innerHTML = emptyPlaceholder;
+    return;
+  }
+  const content = node.content || {};
+  const filterHtml = renderFilterArea(node);
+  const visKort = alleFiltreValgt(node);
+  const ventMelding = ventPaaFilterMelding(node);
+
+  // Hovedregler: infos
+  let hoofdSection;
+  if (!visKort && node.boxChoices && node.boxChoices.length) {
+    hoofdSection = ventMelding;
+  } else {
+    let infoHtml = "";
+    (content.infos || []).forEach(function(info, sIdx) {
+      (info.list || []).forEach(function(item, iIdx) {
+        const cbId = 'cbh_' + esc(node.id) + '_s' + sIdx + '_i' + iIdx;
+        infoHtml += renderCheckboxCard(cbId, item);
+      });
+    });
+    hoofdSection = wrapGrid(infoHtml) || emptyPlaceholder;
+  }
+  hoofdBody.innerHTML = wrapBoxContent(filterHtml + hoofdSection, renderLinkFooter(content.lenkerHoved));
+
+  // Viktig å huske på: warnings
+  let viktigSection;
+  if (!visKort && node.boxChoices && node.boxChoices.length) {
+    viktigSection = ventMelding;
+  } else {
+    let viktigHtml = "";
+    (content.warnings || []).forEach(function(w, wIdx) {
+      const cbId = 'cbv_' + esc(node.id) + '_w' + wIdx;
+      viktigHtml += renderCheckboxCard(cbId, w);
+    });
+    viktigSection = wrapGrid(viktigHtml) || emptyPlaceholder;
+  }
+  viktigBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + viktigSection, renderLinkFooter(content.lenkerViktig));
+
+  // Unntak: plain text checkboxes
+  let unntakSection;
+  if (!visKort && node.boxChoices && node.boxChoices.length) {
+    unntakSection = ventMelding;
+  } else {
+    let unntakHtml = "";
+    (content.unntak || []).forEach(function(u, uIdx) {
+      const cbId = 'cbu_' + esc(node.id) + '_u' + uIdx;
+      unntakHtml += renderCheckboxCard(cbId, u);
+    });
+    unntakSection = wrapGrid(unntakHtml) || emptyPlaceholder;
+  }
+  unntakBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + unntakSection, renderLinkFooter(content.lenkerUnntak));
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const ta = document.getElementById('summary-textarea');
+  if (!ta) return;
+  const labels = [];
+  const allChecked = document.querySelectorAll(
+    '#box-hoved-body input[type="checkbox"]:checked, ' +
+    '#box-viktig-body input[type="checkbox"]:checked, ' +
+    '#box-unntak-body input[type="checkbox"]:checked'
+  );
+  allChecked.forEach(function(cb) {
+    if (cb.id && cb.id.startsWith('tcb_')) return;
+    const lbl = document.querySelector('label[for="' + cb.id + '"]');
+    if (lbl) {
+      let txt = lbl.textContent.trim().replace(/\.$/, '');
+      if (txt) labels.push(txt.charAt(0).toUpperCase() + txt.slice(1));
+    }
+  });
+  if (!labels.length) { ta.value = ''; return; }
+  let text;
+  if (labels.length === 1) {
+    text = 'Innhold i samtalen: ' + labels[0] + '.';
+  } else {
+    const last = labels.pop();
+    text = 'Innhold i samtalen: ' + labels.join('. ') + '. ' + last + '.';
+  }
+  ta.value = text;
+}
+
+function copySummary() {
+  const ta = document.getElementById('summary-textarea');
+  const btn = document.getElementById('summary-copy-btn');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(function() { showCopied(btn); }).catch(function() { fallbackCopy(ta, btn); });
+  } else {
+    fallbackCopy(ta, btn);
+  }
+}
+
+function fallbackCopy(ta, btn) {
+  ta.removeAttribute('readonly');
+  ta.select();
+  document.execCommand('copy');
+  ta.setAttribute('readonly', '');
+  showCopied(btn);
+}
+
+function showCopied(btn) {
+  btn.textContent = 'Kopiert!';
+  setTimeout(function() { btn.textContent = 'Kopier'; }, 2000);
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + name).classList.add("active");
+  btn.classList.add("active");
+}
+
+render();
+
+</script>
+</body>
+</html>
