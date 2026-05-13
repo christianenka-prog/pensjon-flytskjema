@@ -4,2677 +4,1087 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pensjonskompasset</title>
-  <style>
-    :root {
-      --klp-gray-900: #3d3d3d;
-      --klp-gray-700: #5e5e5e;
-      --klp-gray-300: #cacaca;
-      --klp-white: #ffffff;
-      --klp-green-100: #b8dad6;
-      --klp-green-600: #569994;
-      --klp-green-700: #3d7475;
-      --klp-pink-100: #f5c4ce;
-      --klp-pink-600: #cc4169;
-      --bg: #f4f4f4;
-      --card: #ffffff;
-      --border: #e3e3e3;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body { height: 100%; }
-
-    body {
-      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(180deg, #f7f7f7 0%, #f2f4f3 100%);
-      color: var(--klp-gray-900);
-      min-height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .topbar {
-      background: var(--klp-gray-900);
-      color: var(--klp-white);
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 3px solid var(--klp-green-600);
-    }
-
-    .brand {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-
-    .brand span { color: var(--klp-green-100); }
-
-    .meta {
-      color: var(--klp-gray-300);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .btn-reset {
-      border: 1px solid var(--klp-gray-300);
-      background: transparent;
-      color: var(--klp-white);
-      padding: 7px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .btn-reset:hover {
-      border-color: var(--klp-green-600);
-      background: rgba(86, 153, 148, 0.15);
-    }
-
-    .page {
-      padding: 20px;
-    }
-
-    .flow-board {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0;
-      padding-bottom: 24px;
-    }
-
-    .flow-row {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      flex-shrink: 0;
-    }
-
-    .flow-row + .flow-row {
-      padding-left: 0;
-    }
-
-    .flow-row-sep {
-      font-size: 22px;
-      color: var(--klp-gray-300);
-      padding: 0 12px;
-      flex-shrink: 0;
-      user-select: none;
-    }
-
-    .flow-row-label {
-      flex-shrink: 0;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--klp-gray-700);
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      white-space: nowrap;
-    }
-
-    .flow-row-choices {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    /* Text-style classes still used in detail panel */
-    .column-step {
-      font-size: 11px;
-      color: var(--klp-gray-700);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 4px;
-    }
-
-    .column-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--klp-gray-900);
-      line-height: 1.3;
-    }
-
-    .column-sub {
-      font-size: 13px;
-      color: var(--klp-gray-700);
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    .option {
-      border: 1px solid var(--border);
-      background: var(--klp-white);
-      border-radius: 8px;
-      padding: 5px 10px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.18s ease;
-    }
-
-    .option-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--klp-gray-900);
-      line-height: 1.3;
-      white-space: nowrap;
-    }
-
-    .option:hover {
-      border-color: var(--klp-green-600);
-      background: rgba(86, 153, 148, 0.06);
-    }
-
-    .option.selected {
-      border-color: var(--klp-green-600);
-      background: rgba(184, 218, 214, 0.5);
-    }
-
-    .option.current-choice {
-      border-color: var(--klp-pink-600);
-      background: rgba(245, 196, 206, 0.45);
-    }
-
-    .option-sub {
-      font-size: 12px;
-      color: var(--klp-gray-700);
-      margin-top: 3px;
-      line-height: 1.4;
-    }
-
-    .panel {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
-      background: #fbfbfb;
-    }
-
-    .panel.info {
-      border-left: 3px solid var(--klp-green-600);
-    }
-
-    .panel.warn {
-      border-left: 3px solid var(--klp-pink-600);
-      background: #fff6f8;
-    }
-
-    .panel-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--klp-gray-700);
-      margin-bottom: 6px;
-    }
-
-    .panel p,
-    .panel li {
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--klp-gray-900);
-    }
-
-    .panel ul {
-      padding-left: 16px;
-      margin-top: 2px;
-    }
-
-    .panel a {
-      color: var(--klp-green-700);
-      font-weight: 500;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-    .panel a:hover { color: var(--klp-pink-600); }
-
-    .btn-next {
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      background: var(--klp-green-600);
-      color: #fff;
-      margin-top: 2px;
-    }
-
-    .btn-next:hover { background: var(--klp-green-700); }
-
-    /* ── FANER ─────────────────────────────────────────────── */
-
-    .tabs {
-      display: flex;
-      gap: 4px;
-      padding: 12px 20px 0;
-      border-bottom: 2px solid var(--border);
-      background: transparent;
-    }
-
-    .tab-btn {
-      padding: 7px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      border-bottom: none;
-      border-radius: 8px 8px 0 0;
-      background: #ececec;
-      color: var(--klp-gray-700);
-      cursor: pointer;
-      position: relative;
-      bottom: -2px;
-      transition: background 0.15s;
-    }
-
-    .tab-btn:hover {
-      background: #e0e0e0;
-    }
-
-    .tab-btn.active {
-      background: var(--card);
-      color: var(--klp-gray-900);
-      border-color: var(--border);
-      border-bottom-color: var(--card);
-    }
-
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* ── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */
-
-    .flow-board.has-detail {
-      align-items: stretch;
-    }
-
-    .detail-panel {
-      flex-basis: 100%;
-      max-width: 900px;
-      margin-top: 16px;
-      background: var(--card);
-      border: 1px solid var(--klp-green-600);
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(86, 153, 148, 0.18);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .detail-panel-head {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      background: #fbfbfb;
-    }
-
-    .detail-panel-body {
-      padding: 16px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: flex-start;
-      flex: 1;
-    }
-
-    .detail-section {
-      flex: 1;
-      min-width: 220px;
-      background: #fbfbfb;
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--klp-green-600);
-      border-radius: 10px;
-      padding: 12px 14px;
-    }
-
-    .detail-section-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--klp-gray-700);
-      margin-bottom: 10px;
-    }
-
-    .checkbox-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .checkbox-item input[type="checkbox"] {
-      margin-top: 2px;
-      flex-shrink: 0;
-      width: 15px;
-      height: 15px;
-      accent-color: var(--klp-green-600);
-      cursor: pointer;
-    }
-
-    .checkbox-item label {
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--klp-gray-900);
-      cursor: pointer;
-    }
-
-    .checkbox-item input:checked + label {
-      color: var(--klp-gray-700);
-      text-decoration: line-through;
-      text-decoration-color: var(--klp-green-600);
-    }
-
-    .detail-panel-foot {
-      padding: 12px 16px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    /* ── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */
-
-    .tab-panel.active {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      flex: 1;
-      min-height: 0;
-    }
-
-    .content-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      min-height: 0;
-    }
-
-    .content-box-head {
-      padding: 12px 16px;
-      border-bottom: 2px solid var(--border);
-      background: #fbfbfb;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--klp-gray-900);
-      flex-shrink: 0;
-    }
-
-    .content-box-body {
-      padding: 14px 16px;
-      flex: 1;
-      overflow-y: auto;
-      min-height: 0;
-    }
-
-    /* ── SAMMENDRAG ─────────────────────────────────────────── */
-
-    .summary-box {
-      flex-shrink: 0;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-      background: var(--card);
-      display: flex;
-      flex-direction: column;
-      height: 150px;
-      margin-top: 0;
-    }
-
-    .summary-box-head {
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border);
-      background: #fbfbfb;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--klp-gray-900);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-
-    .summary-copy-btn {
-      border: 1px solid var(--klp-green-600);
-      background: transparent;
-      color: var(--klp-green-700);
-      padding: 4px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-      transition: all 0.15s;
-    }
-
-    .summary-copy-btn:hover {
-      background: rgba(86,153,148,0.1);
-    }
-
-    .summary-textarea {
-      flex: 1;
-      padding: 10px 16px;
-      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--klp-gray-900);
-      border: none;
-      resize: none;
-      background: var(--card);
-      outline: none;
-      border-radius: 0 0 12px 12px;
-    }
-
-    .content-placeholder {
-      color: var(--klp-gray-300);
-      font-size: 13px;
-      font-style: italic;
-    }
-
-    .box-filter-area {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 16px;
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border);
-      background: #f9f9f9;
-    }
-
-    .box-filter-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: nowrap;
-    }
-
-    .box-filter-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      color: var(--klp-gray-700);
-      min-width: 40px;
-      flex-shrink: 0;
-    }
-
-    .box-filter-btn {
-      border: 1px solid var(--border);
-      background: var(--klp-white);
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      color: var(--klp-gray-900);
-    }
-
-    .box-filter-btn:hover {
-      border-color: var(--klp-green-600);
-      background: rgba(86,153,148,0.06);
-    }
-
-    .box-filter-btn.active {
-      border-color: var(--klp-green-600);
-      background: rgba(184,218,214,0.5);
-    }
-
-    /* ── TEMAKORT (inni Hovedregler) ────────────────────────── */
-
-    .topic-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .topic-card {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      background: #f7faf9;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-      min-height: 90px;
-    }
-
-    .topic-card:hover { background: rgba(86,153,148,0.08); }
-
-    .topic-card.checked {
-      background: rgba(184,218,214,0.25);
-      border-color: var(--klp-green-600);
-    }
-
-    .topic-card-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .topic-card input[type="checkbox"] {
-      flex-shrink: 0;
-      width: 15px;
-      height: 15px;
-      accent-color: var(--klp-green-600);
-      cursor: pointer;
-      margin: 0;
-    }
-
-    .topic-card-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--klp-gray-900);
-      flex: 1;
-    }
-
-    .topic-card-desc {
-      font-size: 12px;
-      color: var(--klp-gray-700);
-      line-height: 1.5;
-    }
-
-    .topic-section-divider {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--klp-gray-700);
-      margin: 14px 0 6px;
-    }
-
-    /* ── TEMA-DRAWER ─────────────────────────────────────────── */
-
-    .topic-drawer-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      z-index: 199;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-
-    .topic-drawer-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .topic-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 380px;
-      max-width: 95vw;
-      height: 100vh;
-      background: var(--card);
-      box-shadow: -4px 0 30px rgba(0,0,0,0.15);
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .topic-drawer.open { transform: translateX(0); }
-
-    .topic-drawer-head {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      background: #fbfbfb;
-    }
-
-    .topic-drawer-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--klp-gray-900);
-    }
-
-    .topic-drawer-close {
-      background: none;
-      border: none;
-      font-size: 22px;
-      cursor: pointer;
-      color: var(--klp-gray-700);
-      line-height: 1;
-      padding: 2px 8px;
-      border-radius: 6px;
-    }
-
-    .topic-drawer-close:hover { background: var(--border); }
-
-    .topic-drawer-body {
-      padding: 16px 20px;
-      overflow-y: auto;
-      flex: 1;
-    }
-
-    .topic-drawer-section { margin-bottom: 16px; }
-    .topic-drawer-section:last-child { margin-bottom: 0; }
-
-    .topic-drawer-section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      color: var(--klp-gray-700);
-      margin-bottom: 5px;
-    }
-
-    .topic-drawer-section p {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--klp-gray-900);
-    }
-
-    @media (max-width: 720px) {
-      .page { padding: 12px; }
-      .content-grid { grid-template-columns: 1fr; }
-      .summary-box { height: 120px; }
-    }
-  </style>
+  <style>    :root {      --klp-gray-900: #3d3d3d;      --klp-gray-700: #5e5e5e;      --klp-gray-300: #cacaca;      --klp-white: #ffffff;      --klp-green-100: #3d7460;      --klp-green-600: #3d7460;      --klp-green-700: #2d5a48;      --klp-pink-100: #f5c4ce;      --klp-pink-600: #cc4169;      --bg: #f4f4f4;      --card: #ffffff;      --border: #e3e3e3;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      background: #f0f0f0;      color: var(--klp-gray-900);      min-height: 100%;      display: flex;      flex-direction: column;    }    .topbar {      background: #4a4a4a;      color: #ffffff;      padding: 14px 20px;      display: flex;      justify-content: space-between;      align-items: center;      position: sticky;      top: 0;      z-index: 10;      border-bottom: 3px solid #3d3d3d;    }    .brand {      font-size: 18px;      font-weight: 700;      letter-spacing: 0.2px;    }    .brand span { color: var(--klp-white); }    .meta {      color: var(--klp-gray-300);      font-size: 12px;      margin-top: 2px;    }    .btn-reset {      border: 1px solid rgba(255,255,255,0.6);      background: rgba(255,255,255,0.15);      color: #ffffff;      padding: 7px 12px;      border-radius: 8px;      cursor: pointer;      font-size: 13px;      font-weight: 600;    }    .btn-reset:hover {      border-color: var(--klp-green-700);      background: var(--klp-white);    }    .page {      padding: 20px;    }    .flow-board {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 0;      padding-bottom: 24px;    }    .flow-row {      display: flex;      flex-direction: row;      align-items: center;      gap: 10px;      padding: 10px 0;      flex-shrink: 0;    }    .flow-row + .flow-row {      padding-left: 0;    }    .flow-row-sep {      font-size: 22px;      color: var(--klp-gray-300);      padding: 0 12px;      flex-shrink: 0;      user-select: none;    }    .flow-row-label {      flex-shrink: 0;      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.3px;      white-space: nowrap;    }    .flow-row-choices {      display: flex;      flex-wrap: wrap;      gap: 6px;    }    /* Text-style classes still used in detail panel */    .column-step {      font-size: 11px;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.4px;      margin-bottom: 4px;    }    .column-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);      line-height: 1.3;    }    .column-sub {      font-size: 13px;      color: var(--klp-gray-700);      margin-top: 6px;      line-height: 1.5;    }    .option {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      text-align: left;      cursor: pointer;      transition: all 0.18s ease;    }    .option-label {      font-size: 12px;      font-weight: 600;      color: var(--klp-gray-900);      line-height: 1.3;      white-space: nowrap;    }    .option:hover {      border-color: var(--klp-green-600);      background: rgba(86, 153, 148, 0.12);    }    .option.selected {      border-color: var(--klp-green-600);      background: rgba(184, 218, 214, 0.6);    }    .option.current-choice {      border-color: var(--klp-pink-600);      background: var(--klp-pink-100);    }    .option-sub {      font-size: 12px;      color: var(--klp-gray-700);      margin-top: 3px;      line-height: 1.4;    }    .panel {      border: 1px solid var(--border);      border-radius: 10px;      padding: 10px;      background: #fbfbfb;    }    .panel.info {      border-left: 3px solid var(--klp-green-600);    }    .panel.warn {      border-left: 3px solid var(--klp-pink-600);      background: #fff6f8;    }    .panel-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 6px;    }    .panel p,    .panel li {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);    }    .panel ul {      padding-left: 16px;      margin-top: 2px;    }    .panel a {      color: var(--klp-green-700);      font-weight: 500;      text-decoration: underline;      text-underline-offset: 2px;    }    .panel a:hover { color: var(--klp-pink-600); }    .btn-next {      border: none;      border-radius: 10px;      padding: 10px;      font-size: 13px;      font-weight: 700;      cursor: pointer;      background: var(--klp-pink-600);      color: #fff;      margin-top: 2px;    }    .btn-next:hover { background: #a83255; }    /* \uc0── FANER ─────────────────────────────────────────────── */    .tabs {      display: flex;      gap: 4px;      padding: 12px 20px 0;      border-bottom: 2px solid var(--border);      background: transparent;    }    .tab-btn {      padding: 7px 18px;      font-size: 14px;      font-weight: 600;      border: 1px solid var(--border);      border-bottom: none;      border-radius: 8px 8px 0 0;      background: #ececec;      color: var(--klp-gray-700);      cursor: pointer;      position: relative;      bottom: -2px;      transition: background 0.15s;    }    .tab-btn:hover {      background: #e0e0e0;    }    .tab-btn.active {      background: var(--card);      color: var(--klp-gray-900);      border-color: var(--border);      border-bottom-color: var(--card);    }    .tab-panel { display: none; }    .tab-panel.active { display: block; }    /* \uc0── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */    .flow-board.has-detail {      align-items: stretch;    }    .detail-panel {      flex-basis: 100%;      max-width: 900px;      margin-top: 16px;      background: var(--card);      border: 1px solid var(--klp-green-600);      border-radius: 12px;      box-shadow: 0 4px 16px rgba(0,0,0,0.10);      overflow: hidden;      display: flex;      flex-direction: column;    }    .detail-panel-head {      padding: 14px 18px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;    }    .detail-panel-body {      padding: 16px;      display: flex;      flex-direction: row;      flex-wrap: wrap;      gap: 16px;      align-items: flex-start;      flex: 1;    }    .detail-section {      flex: 1;      min-width: 220px;      background: #fbfbfb;      border: 1px solid var(--border);      border-left: 3px solid var(--klp-green-600);      border-radius: 10px;      padding: 12px 14px;    }    .detail-section-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 10px;    }    .checkbox-item {      display: flex;      align-items: flex-start;      gap: 8px;      margin-bottom: 8px;    }    .checkbox-item input[type="checkbox"] {      margin-top: 2px;      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;    }    .checkbox-item label {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);      cursor: pointer;    }    .checkbox-item input:checked + label {      color: var(--klp-gray-700);      text-decoration: line-through;      text-decoration-color: var(--klp-green-600);    }    .detail-panel-foot {      padding: 12px 16px;      border-top: 1px solid var(--border);      display: flex;      flex-wrap: wrap;      gap: 8px;    }    /* \uc0── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */    .tab-panel.active {      display: flex;      flex-direction: column;      flex: 1;      min-height: 0;      overflow: hidden;    }    .content-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 16px;      flex: 1;      min-height: 0;    }    .content-box {      background: var(--card);      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      display: flex;      flex-direction: column;      overflow: hidden;      min-height: 0;    }    .content-box-head {      padding: 12px 16px;      border-bottom: 2px solid #4a4a4a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      flex-shrink: 0;    }    .content-box-body {      flex: 1;      display: flex;      flex-direction: column;      min-height: 0;      overflow: hidden;    }    .content-box-main {      flex: 1;      overflow-y: auto;      padding: 14px 16px;      min-height: 0;    }    .content-box-foot {      flex-shrink: 0;      padding: 10px 16px;      border-top: 1px solid #d8d8d8;      background: #f0f0f0;    }    .content-box-foot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .content-box-foot-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .content-box-foot-list a { font-size: 12px; color: var(--klp-pink-600); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .content-box-foot-list a:hover { color: #f5c4ce; }    /* \uc0── SAMMENDRAG ─────────────────────────────────────────── */    .summary-box {      flex-shrink: 0;      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      background: var(--card);      display: flex;      flex-direction: column;      height: 90px;      margin-top: 0;    }    .summary-box-head {      padding: 10px 16px;      border-bottom: 1px solid #3a3a3a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;    }    .summary-copy-btn {      border: none;      background: var(--klp-pink-600);      color: #fff;      padding: 4px 14px;      border-radius: 8px;      cursor: pointer;      font-size: 12px;      font-weight: 700;      transition: all 0.15s;    }    .summary-copy-btn:hover {      background: #a83255;    }    .summary-textarea {      flex: 1;      padding: 10px 16px;      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      font-size: 12px;      line-height: 1.5;      color: var(--klp-gray-900);      border: none;      resize: none;      background: var(--card);      outline: none;      border-radius: 0 0 12px 12px;    }    .content-placeholder {      color: var(--klp-gray-300);      font-size: 13px;      font-style: italic;    }    .box-filter-area {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 16px;      padding: 10px 16px;      border-bottom: 1px solid var(--klp-green-600);      background: rgba(61,116,96,0.12);    }    .box-filter-row {      display: flex;      align-items: center;      gap: 6px;      flex-wrap: nowrap;    }    .box-filter-label {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.3px;      color: var(--klp-gray-700);      min-width: 40px;      flex-shrink: 0;    }    .box-filter-btn {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      font-size: 12px;      font-weight: 600;      cursor: pointer;      transition: all 0.18s ease;      color: var(--klp-gray-900);    }    .box-filter-btn:hover {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.08);    }    .box-filter-btn.active {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.15);      color: var(--klp-gray-900);    }    /* \uc0── TEMAKORT (inni Hovedregler) ────────────────────────── */    .topic-cards-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 8px;      margin-top: 14px;    }    .topic-card {      display: flex;      flex-direction: column;      gap: 8px;      background: #f0f0f0;      border: 1px solid #d8d8d8;      border-radius: 6px;      padding: 12px;      cursor: pointer;      transition: background 0.15s, border-color 0.15s;      min-height: 90px;    }    .topic-card:hover { background: #e4e4e4; border-color: #cacaca; }    .topic-card.checked {      background: #dcdcdc;      border-color: #b0b0b0;    }    .topic-card-top {      display: flex;      align-items: center;      gap: 8px;    }    .topic-card input[type="checkbox"] {      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;      margin: 0;    }    .topic-card-title {      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-900);      flex: 1;    }    .topic-card-desc {      font-size: 12px;      color: var(--klp-gray-700);      line-height: 1.5;    }    .topic-card-chevron {      margin-left: auto;      font-size: 12px;      color: var(--klp-green-700);      opacity: 0.7;    }    .topic-card-details { display: none; }    .topic-cards-grid { align-items: start; }    .card-popup-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.18);      opacity: 0;      pointer-events: none;      transition: opacity 0.2s;      z-index: 999;    }    .card-popup-overlay.open { opacity: 1; pointer-events: auto; }    .card-popup {      position: fixed;      width: 540px;      max-width: 92vw;      background: var(--klp-white);      border: 1px solid var(--klp-green-600);      border-radius: 14px;      padding: 26px 30px;      box-shadow: 0 16px 40px rgba(0,0,0,0.24);      z-index: 1000;      opacity: 0;      pointer-events: none;      transform: scale(0.2);      transform-origin: top left;      transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);    }    .card-popup.open {      opacity: 1;      pointer-events: auto;      transform: scale(1);    }    .card-popup-close {      position: absolute;      top: 8px;      right: 10px;      background: none;      border: none;      font-size: 22px;      line-height: 1;      cursor: pointer;      color: var(--klp-gray-700);      padding: 4px 8px;      border-radius: 6px;    }    .card-popup-close:hover { background: var(--border); }    .card-popup-title {      font-size: 20px;      font-weight: 700;      color: var(--klp-green-700);      margin-bottom: 14px;      padding-right: 32px;      line-height: 1.3;    }    .card-popup-body { font-size: 15px; line-height: 1.65; color: var(--klp-gray-900); max-height: 55vh; overflow-y: auto; }    .topic-section-divider {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin: 14px 0 6px;    }    .box-link-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }    .box-link-footer-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .box-link-footer-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .box-link-footer-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .box-link-footer-list a:hover { color: var(--klp-pink-600); }    /* \uc0── TEMA-DRAWER ─────────────────────────────────────────── */    .topic-drawer-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.3);      z-index: 199;      opacity: 0;      pointer-events: none;      transition: opacity 0.25s;    }    .topic-drawer-overlay.open {      opacity: 1;      pointer-events: auto;    }    .topic-drawer {      position: fixed;      top: 0;      right: 0;      width: 380px;      max-width: 95vw;      height: 100vh;      background: var(--card);      box-shadow: -4px 0 30px rgba(0,0,0,0.15);      z-index: 200;      display: flex;      flex-direction: column;      transform: translateX(100%);      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);    }    .topic-drawer.open { transform: translateX(0); }    .topic-drawer-head {      padding: 16px 20px;      border-bottom: 1px solid var(--border);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;      background: #fbfbfb;    }    .topic-drawer-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);    }    .topic-drawer-close {      background: none;      border: none;      font-size: 22px;      cursor: pointer;      color: var(--klp-gray-700);      line-height: 1;      padding: 2px 8px;      border-radius: 6px;    }    .topic-drawer-close:hover { background: var(--border); }    .topic-drawer-body {      padding: 16px 20px;      overflow-y: auto;      flex: 1;    }    .topic-drawer-section { margin-bottom: 16px; }    .topic-drawer-section:last-child { margin-bottom: 0; }    .topic-drawer-section-title {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 5px;    }    .topic-drawer-section p {      font-size: 13px;      line-height: 1.6;      color: var(--klp-gray-900);    }    @media (max-width: 720px) {      .page { padding: 12px; }      .content-grid { grid-template-columns: 1fr; }      .summary-box { height: 120px; }    }    .summary-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; }    .flow-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; padding: 2px 0 6px; flex-basis: 100%; }    /* ── SØKEFELT ────────────────────────────────────────────── */    .search-wrap { position: relative; max-width: 200px; }    .search-input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s, width 0.2s; width: 140px; }    .search-input:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.12); width: 200px; }    .search-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--klp-white); border: 1px solid var(--klp-green-600); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 50; max-height: 260px; overflow-y: auto; display: none; }    .search-results.open { display: block; }    .search-result-item { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--klp-gray-900); border-bottom: 1px solid var(--border); }    .search-result-item:last-child { border-bottom: none; }    .search-result-item:hover { background: rgba(86,153,148,0.1); color: var(--klp-green-700); }    .search-result-item strong { color: var(--klp-green-700); }    .search-result-path { font-size: 11px; color: var(--klp-gray-300); margin-top: 1px; }    .search-result-kort { display: inline-block; margin-right: 6px; }    .search-result-kort::before { content: '→ '; }    /* ── ADMIN REDIGERINGSMODUS ──────────────────────────────── */    .admin-tab-icon { background: none; border: none; cursor: pointer; color: var(--klp-gray-300); font-size: 13px; padding: 7px 10px; opacity: 0.35; position: relative; bottom: -2px; border-radius: 8px 8px 0 0; transition: opacity 0.2s; line-height: 1; }    .admin-tab-icon:hover { opacity: 0.9; color: var(--klp-gray-700); }    .admin-tab-icon.active { opacity: 1; color: var(--klp-gray-700); background: var(--card); border: 1px solid var(--border); border-bottom-color: var(--card); }    .admin-layout { display: flex; flex-direction: row; flex: 1; min-height: 0; gap: 0; }    .admin-tree { width: 240px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; background: #fafafa; }    .admin-tree-item { display: flex; align-items: center; gap: 6px; padding: 6px 12px 6px 10px; cursor: pointer; font-size: 12px; color: var(--klp-gray-700); border-left: 3px solid transparent; transition: background 0.12s; user-select: none; }    .admin-tree-item:hover { background: rgba(86,153,148,0.08); }    .admin-tree-item.selected { background: rgba(86,153,148,0.15); border-left-color: var(--klp-green-600); color: var(--klp-gray-900); font-weight: 600; }    .node-type-badge { font-size: 10px; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }    .badge-choice { background: #dbeafe; color: #1e40af; }    .badge-end { background: #d1fae5; color: #065f46; }    .admin-tree-group { padding: 8px 12px 2px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-300); }    .admin-editor { flex: 1; overflow-y: auto; padding: 20px 24px; }    .admin-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--klp-green-100); }    .admin-editor-title { font-size: 16px; font-weight: 700; color: var(--klp-gray-900); }    .admin-export-btn { background: var(--klp-pink-600); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }    .admin-export-btn:hover { background: #a83255; }    .admin-section { margin-bottom: 24px; }    .admin-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-700); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }    .admin-field { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s; }    .admin-field:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.15); }    .admin-field.ta { resize: vertical; min-height: 58px; }    .admin-field-label { font-size: 11px; font-weight: 600; color: var(--klp-gray-700); margin-bottom: 3px; display: block; }    .admin-field-group { margin-bottom: 8px; }    .admin-card-row { background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }    .admin-card-row-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }    .admin-card-num { font-size: 11px; font-weight: 700; color: var(--klp-gray-300); }    .admin-btn-del { background: none; border: 1px solid #fca5a5; color: #dc2626; border-radius: 6px; padding: 2px 8px; font-size: 12px; cursor: pointer; transition: all 0.12s; }    .admin-btn-del:hover { background: #fef2f2; }    .admin-btn-add { background: none; border: 1px dashed var(--klp-green-600); color: var(--klp-green-700); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; transition: all 0.12s; }    .admin-btn-add:hover { background: rgba(86,153,148,0.08); }    .admin-choice-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; }    .admin-link-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }    #admin-export-dialog { border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: min(720px, 95vw); box-shadow: 0 16px 48px rgba(0,0,0,0.2); }    #admin-export-dialog::backdrop { background: rgba(0,0,0,0.45); }    .admin-export-dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; }    .admin-export-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--klp-gray-700); padding: 2px 8px; border-radius: 6px; line-height: 1; }    .admin-export-close:hover { background: var(--border); }    .admin-export-copy { background: var(--klp-green-600); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 12px; }    .admin-export-copy:hover { background: var(--klp-green-700); }    #admin-export-textarea { width: 100%; height: 55vh; font-family: monospace; font-size: 11px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; resize: none; display: block; }  </style>
 </head>
-<body>
-  <header class="topbar">
-    <div>
-      <div class="brand"><span>Pensjonskompasset</span></div>
-    </div>
-    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>
-  </header>
-
-  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">
-    <nav class="tabs">
-      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>
-      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>
-    </nav>
-    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">
-      <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>
-      <div class="content-grid">
-        <div class="content-box">
-          <div class="content-box-head">Hovedregler</div>
-          <div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>
-        </div>
-        <div class="content-box">
-          <div class="content-box-head">Viktig å huske på</div>
-          <div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>
-        </div>
-        <div class="content-box">
-          <div class="content-box-head">Unntak</div>
-          <div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>
-        </div>
-      </div>
-      <div class="summary-box">
-        <div class="summary-box-head">
-          <span>Notatsammendrag</span>
-          <button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button>
-        </div>
-        <textarea id="summary-textarea" class="summary-textarea" readonly placeholder="Velg et alternativ i navigasjonen for å generere et sammendrag."></textarea>
-      </div>
-    </div>
-    <div id="tab-beregninger" class="tab-panel" style="padding:20px">
-      <p style="color:var(--klp-gray-700);font-size:14px">Beregningsverktøy kommer her.</p>
-    </div>
-  </main>
-
-  <div id="topic-drawer-overlay" class="topic-drawer-overlay" onclick="closeTopicDrawer()"></div>
-  <div id="topic-drawer" class="topic-drawer">
-    <div class="topic-drawer-head">
-      <span class="topic-drawer-title" id="topic-drawer-title"></span>
-      <button class="topic-drawer-close" onclick="closeTopicDrawer()">&#215;</button>
-    </div>
-    <div class="topic-drawer-body" id="topic-drawer-body"></div>
+<body>  <header class="topbar">    <div>      <div class="brand"><span>Pensjonskompasset</span></div>    </div>    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>  </header>  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">    <nav class="tabs">      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-bottom:2px"><div class="search-wrap" style="margin-bottom:0"><input id="search-input" class="search-input" type="text" placeholder="Søk…" oninput="handleSearch(this.value)" onblur="setTimeout(function(){closeSearch()},150)" autocomplete="off"><ul id="search-results" class="search-results"></ul></div><button id="admin-tab-btn" class="admin-tab-icon" onclick="openAdminTab()" title="Redigeringsmodus">✎</button></div>    </nav>    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">      <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>      <div class="content-grid">        <div class="content-box">          <div class="content-box-head">Hovedregler</div>          <div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Viktig å huske på</div>          <div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Unntak</div>          <div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>      </div>      <div class="summary-box">        <div class="summary-box-head">          <span>Notatsammendrag</span>          <button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button>        </div>        <textarea id="summary-textarea" class="summary-textarea" placeholder="Hak av bokser over, eller skriv her..."></textarea>      </div>    </div>    <div id="tab-beregninger" class="tab-panel" style="padding:20px">      <p style="color:var(--klp-gray-700);font-size:14px">Beregningsverktøy kommer her.</p>    </div>    <div id="tab-rediger" class="tab-panel" style="padding:0;gap:0"><div class="admin-layout"><div id="admin-tree" class="admin-tree"></div><div id="admin-editor" class="admin-editor"><div class="admin-editor-header"><span class="admin-editor-title">Rediger flytskjema</span><button class="admin-export-btn" onclick="openExportModal()">Generer kode</button></div><p style="color:var(--klp-gray-700);font-size:13px">Velg et element i menyen til venstre for å redigere det.</p></div></div></div>  </main>
+<div id="card-popup-overlay" class="card-popup-overlay" onclick="closeCardPopup()"></div>
+<div id="card-popup" class="card-popup" role="dialog" aria-modal="true">
+  <button class="card-popup-close" onclick="closeCardPopup()" aria-label="Lukk">×</button>
+  <div id="card-popup-title" class="card-popup-title"></div>
+  <div id="card-popup-body" class="card-popup-body"></div>
+</div>
+<dialog id="admin-export-dialog">
+  <div class="admin-export-dialog-head">
+    <strong>Ferdig HTML — kopier og lim inn i GitHub</strong>
+    <button class="admin-export-close" onclick="document.getElementById('admin-export-dialog').close()">×</button>
   </div>
+  <button class="admin-export-copy" onclick="copyExportCode()">Kopier alt</button>
+  <textarea id="admin-export-textarea" readonly></textarea>
+</dialog>
+<script>
+// @@ADMIN_ROOT_CHOICES_START@@
+const ROOT_CHOICES = [
+  { label: "Alderspensjon",     next: "ald_arskull" },
+  { label: "Uførepensjon",      sub: "Start med fødselsår",                next: "ufo_start" },
+  { label: "Etterlattepensjon", sub: "Start med avdødes status",           next: "etl_start" },
+  { label: "Medlemskap",        sub: "Innmelding, utmelding og permisjon", next: "med_start" }
+];
+// @@ADMIN_ROOT_CHOICES_END@@
 
-  <script>
-    const TOPIC_CARDS = [
-      {
-        id: "topic_inntekt",
-        label: "Inntekt",
-        summary: "Alderspensjon påvirkes dersom medlemmet meldes inn igjen i KLP.",
-        sections: [
-          { heading: "Pensjonistlønn", text: "Arbeid på pensjonistlønn påvirker ikke alderspensjonen fra KLP. Pensjonistlønn er en lavere lønnssats fastsatt i tariffavtale, og brukes av pensjonister som jobber litt ved siden av pensjonen." },
-          { heading: "Ny innmelding i KLP", text: "Dersom pensjonisten meldes inn i KLP i en ny stilling, vil alderspensjonen bli justert. Det er viktig å avklare om ny stilling medfører innmelding i KLP." },
-          { heading: "Regler for sykepleiere", text: "Sykepleiere som jobber på pensjonistvilkår kan jobbe inntil 19,9\u00a0% per kalenderkvartal uten at alderspensjonen påvirkes." },
-          { heading: "Regler for sykehusleger", text: "Sykehusleger som jobber på pensjonistvilkår kan jobbe inntil 168 timer per kalenderkvartal uten at alderspensjonen påvirkes." },
-          { heading: "Jobb i privat sektor", text: "Arbeid i privat sektor påvirker ikke alderspensjonen fra KLP, uavhengig av stillingsprosent eller inntekt." }
-        ]
-      },
-      {
-        id: "topic_endringer",
-        label: "Endringer i pensjon",
-        summary: "Samordning med NAV og ny innmelding i stillingsprosent kan endre pensjonsutbetalingen.",
-        sections: [
-          { heading: "Samordning med NAV", text: "Alderspensjonen fra KLP samordnes med alderspensjon fra NAV. Dersom NAV-pensjonen endres – for eksempel ved utsatt uttak eller ny opptjening – kan dette påvirke utbetalingen fra KLP." },
-          { heading: "Innmelding i ny stillingsprosent", text: "Dersom pensjonisten meldes inn i KLP igjen i en stillingsprosent, vil pensjonen bli omberegnet med utgangspunkt i ny sluttlønn og tjenestetid. Dette kan endre samlet pensjonsnivå." }
-        ]
-      },
-      {
-        id: "topic_regulering",
-        label: "Regulering av pensjon",
-        summary: "Pensjonen reguleres hvert år per 1. mai, og påvirkes av lønnsvekst og G-regulering.",
-        sections: [
-          { heading: "Regulering under utbetaling", text: "Pensjon under utbetaling reguleres hvert år per 1. mai. Fra 2022 reguleres pensjonen med lønnsveksten fratrukket 0,75 prosentpoeng. For pensjonister under 67 år gjelder noe andre regler." },
-          { heading: "Individuell garanti", text: "Pensjonister som hadde opptjente rettigheter i det gamle regelverket kan ha en individuell garanti. Garantien sikrer at pensjonen ikke faller under et bestemt nivå etter levealdersjustering." },
-          { heading: "G-regulering", text: "Grunnbeløpet (G) i Folketrygden reguleres hvert år og påvirker blant annet samordningen mellom KLP og NAV. Endringer i G kan dermed indirekte påvirke KLP-pensjonen." }
-        ]
-      }
-    ];
+/*
+  ─────────────────────────────────────────────────────────────
+  SKJELETT FOR HVER SLUTTNODE:
+    content: {
+      infos:    [{ list: ["", "", "", "", ""] }],   // Hovedregler
+      warnings: ["", "", "", ""],                   // Viktig å huske på
+      unntak:   ["", "", "", ""]                    // Unntak
+    }
+  Erstatt de tomme strengene med teksten du vil ha i hver
+  avkrysningsboks. Legg til eller fjern rader etter behov.
+  ─────────────────────────────────────────────────────────────
+*/
+function tomtSkjelett() {
+  const fillerKort = {
+    title: "Lorem ipsum",
+    text:  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    details: "Her kan du legge inn utvidet informasjon som vises når kortet ekspanderes. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore."
+  };
+  const seksKort = [fillerKort, fillerKort, fillerKort, fillerKort, fillerKort, fillerKort];
+  const fillerLenker = [
+    { label: "Lenke 1", url: "#" },
+    { label: "Lenke 2", url: "#" }
+  ];
+  return {
+    infos:        [{ list: seksKort }],
+    warnings:     seksKort,
+    unntak:       seksKort,
+    lenkerHoved:  fillerLenker,
+    lenkerViktig: fillerLenker,
+    lenkerUnntak: fillerLenker
+  };
+}
 
-    function renderTopicCards(nodeId) {
-      if (!nodeId || nodeId.indexOf('1953') !== -1) return '';
-      let html = '<div class="topic-section-divider">Faste tema</div><div class="topic-cards-grid">';
-      TOPIC_CARDS.forEach(function(card) {
-        const prevCb = document.getElementById('tcb_' + card.id);
-        const isChecked = prevCb && prevCb.checked;
-        html += '<div class="topic-card' + (isChecked ? ' checked' : '') + '" id="tc_' + card.id + '" onclick="openTopicDrawer(\'' + card.id + '\')">'
-          + '<div class="topic-card-top">'
-          + '<input type="checkbox" id="tcb_' + card.id + '" onclick="event.stopPropagation()" onchange="topicChanged(\'' + card.id + '\')"' + (isChecked ? ' checked' : '') + '>'
-          + '<span class="topic-card-title">' + esc(card.label) + '</span>'
-          + '</div>'
-          + '<div class="topic-card-desc">' + esc(card.summary) + '</div>'
-          + '</div>';
+const ALDER_AG_FILTER = [
+  { id: "alder", label: "Alder", options: ["Over 67 år", "Under 67 år"] },
+  { id: "ag",    label: "AG",    options: ["60 år", "65 år", "70 år"] }
+];
+
+const PENSJONSTYPE_FILTER = [
+  { id: "pensjonstype", label: "Pensjonstype", options: ["Tidligpensjon", "Alderspensjon"] }
+];
+
+const AG_FILTER = [
+  { id: "ag", label: "AG", options: ["60 år", "65 år", "70 år"] }
+];
+
+// @@ADMIN_NODES_START@@
+const NODES = {
+
+  root: {
+    id: "root",
+    type: "choice",
+    label: "Ytelse",
+    choices: ROOT_CHOICES
+  },
+
+  // ═══════════════════════════════════════════
+  //  ALDERSPENSJON
+  // ═══════════════════════════════════════════
+  ald_arskull: {
+    id: "ald_arskull",
+    type: "choice",
+    label: "Årskull",
+    choices: [
+      { label: "1953 eller tidligere", next: "ald_1953_vp" },
+      { label: "1954–1962",            next: "ald_1954_vp" },
+      { label: "1963–1964",            next: "ald_6364_vp" },
+      { label: "1965–1969",            next: "ald_6570_vp" },
+      { label: "1970 eller senere",    next: "ald_71_vp"   }
+    ]
+  },
+
+  // --- 1953 eller tidligere ---
+  ald_1953_vp: {
+    id: "ald_1953_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_1953_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_1953_mottar_end" }
+    ]
+  },
+  ald_1953_veil_end:   { id: "ald_1953_veil_end",   type: "end", label: "Veiledning – 1953 eller tidligere",        boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+  ald_1953_mottar_end: { id: "ald_1953_mottar_end", type: "end", label: "Mottar alderspensjon – 1953 eller tidligere", boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+
+  // --- 1954–1962 ---
+  ald_1954_vp: {
+    id: "ald_1954_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_1954_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_1954_mottar_end" }
+    ]
+  },
+  ald_1954_veil_end:   { id: "ald_1954_veil_end",   type: "end", label: "Veiledning – 1954–1962",        boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+  ald_1954_mottar_end: { id: "ald_1954_mottar_end", type: "end", label: "Mottar alderspensjon – 1954–1962", boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+
+  // --- 1963–1964 ---
+  ald_6364_vp: {
+    id: "ald_6364_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_6364_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_6364_mottar_end" }
+    ]
+  },
+  ald_6364_veil_end:   { id: "ald_6364_veil_end",   type: "end", label: "Veiledning – 1963–1964",        boxChoices: AG_FILTER, content: tomtSkjelett() },
+  ald_6364_mottar_end: { id: "ald_6364_mottar_end", type: "end", label: "Mottar alderspensjon – 1963–1964", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+
+  // --- 1965–1969 ---
+  ald_6570_vp: {
+    id: "ald_6570_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_6570_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_6570_mottar_end" }
+    ]
+  },
+  ald_6570_veil_end:   { id: "ald_6570_veil_end",   type: "end", label: "Veiledning – 1965–1969",        boxChoices: AG_FILTER, content: tomtSkjelett() },
+  ald_6570_mottar_end: { id: "ald_6570_mottar_end", type: "end", label: "Mottar alderspensjon – 1965–1969", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+
+  // --- 1970 eller senere ---
+  ald_71_vp: {
+    id: "ald_71_vp", type: "choice", label: "",
+    choices: [
+      { label: "Veiledning",     next: "ald_71_veil_end"   },
+      { label: "Mottar pensjon", next: "ald_71_mottar_end" }
+    ]
+  },
+  ald_71_veil_end:   { id: "ald_71_veil_end",   type: "end", label: "Veiledning – 1970 eller senere",        boxChoices: AG_FILTER, content: tomtSkjelett() },
+  ald_71_mottar_end: { id: "ald_71_mottar_end", type: "end", label: "Mottar alderspensjon – 1970 eller senere", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+
+  // ═══════════════════════════════════════════
+  //  UFØREPENSJON
+  // ═══════════════════════════════════════════
+  ufo_start: {
+    id: "ufo_start", type: "choice", label: "Velg regelverk",
+    choices: [
+      { label: "1962 eller tidligere", sub: "Gammelt regelverk", next: "ufo_old_end" },
+      { label: "1963 og senere",       sub: "Nytt regelverk",    next: "ufo_new_end" }
+    ]
+  },
+  ufo_old_end: { id: "ufo_old_end", type: "end", label: "Uførepensjon – 1962 eller tidligere", content: tomtSkjelett() },
+  ufo_new_end: { id: "ufo_new_end", type: "end", label: "Uførepensjon – 1963 og senere",       content: tomtSkjelett() },
+
+  // ═══════════════════════════════════════════
+  //  ETTERLATTEPENSJON
+  // ═══════════════════════════════════════════
+  etl_start: {
+    id: "etl_start", type: "choice", label: "Avdødes status",
+    choices: [
+      { label: "Avdøde var aktivt medlem",       sub: "Mottok ikke pensjon",  next: "etl_aktiv_end"   },
+      { label: "Avdøde mottok pensjon fra KLP",                               next: "etl_pensjon_end" },
+      { label: "Avdøde hadde oppsatt rett",      sub: "Tidligere KLP-medlem", next: "etl_oppsatt_end" }
+    ]
+  },
+  etl_aktiv_end:   { id: "etl_aktiv_end",   type: "end", label: "Etterlattepensjon – avdøde var aktivt medlem",      content: tomtSkjelett() },
+  etl_pensjon_end: { id: "etl_pensjon_end", type: "end", label: "Etterlattepensjon – avdøde mottok pensjon",         content: tomtSkjelett() },
+  etl_oppsatt_end: { id: "etl_oppsatt_end", type: "end", label: "Etterlattepensjon – avdøde hadde oppsatt rett",     content: tomtSkjelett() },
+
+  // ═══════════════════════════════════════════
+  //  MEDLEMSKAP
+  // ═══════════════════════════════════════════
+  med_start: {
+    id: "med_start", type: "choice", label: "Tema",
+    choices: [
+      { label: "Innmelding",                         sub: "Fast og midlertidig ansatte",  next: "med_inn_end"  },
+      { label: "Utmelding",                          sub: "Oppsatt rett og videre løp",   next: "med_ut_end"   },
+      { label: "Frivillig medlemskap ved permisjon", sub: "Frister og dekning",           next: "med_perm_end" },
+      { label: "Pensjonistvilkår",                   sub: "Unntak fra innmelding",        next: "med_pens_end" }
+    ]
+  },
+  med_inn_end:  { id: "med_inn_end",  type: "end", label: "Medlemskap – innmelding",        content: tomtSkjelett() },
+  med_ut_end:   { id: "med_ut_end",   type: "end", label: "Medlemskap – utmelding",         content: tomtSkjelett() },
+  med_perm_end: { id: "med_perm_end", type: "end", label: "Medlemskap – permisjon",         content: tomtSkjelett() },
+  med_pens_end: { id: "med_pens_end", type: "end", label: "Medlemskap – pensjonistvilkår",  content: tomtSkjelett() }
+
+};
+// @@ADMIN_NODES_END@@
+
+
+const path = [{ nodeId: "root", selected: null }];
+let boxState = {};
+let lastAutoSummary = '';
+
+
+function normalizeText(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
+    .replace(/[☀-➿]/g, "")
+    .replace(/vedtekter/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function esc(str) {
+  return normalizeText(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function truncateFrom(stepIndexInclusive) {
+  path.splice(stepIndexInclusive);
+}
+
+function choose(stepIndex, choiceIndex) {
+  const step = path[stepIndex];
+  const node = NODES[step.nodeId];
+  if (!node || !node.choices || !node.choices[choiceIndex]) return;
+  step.selected = choiceIndex;
+  truncateFrom(stepIndex + 1);
+  boxState = {};
+  const nextId = node.choices[choiceIndex].next;
+  if (nextId && NODES[nextId]) {
+    path.push({ nodeId: nextId, selected: null });
+  }
+  render();
+}
+
+function selectColumn(stepIndex) {
+  truncateFrom(stepIndex + 1);
+  render();
+}
+
+function resetFlow() {
+  if (path.length > 1 && !confirm('Er du sikker på at du vil starte på nytt?')) return;
+  path.length = 0;
+  path.push({ nodeId: "root", selected: null });
+  render();
+}
+
+function renderChoices(node, stepIndex, selectedIndex) {
+  if (!node.choices || !node.choices.length) return "";
+  let html = "";
+  node.choices.forEach((choice, idx) => {
+    const isSelected = selectedIndex === idx;
+    const leadsToEnd = isSelected && choice.next && NODES[choice.next] && NODES[choice.next].type === 'end';
+    const isCurrent = (stepIndex === path.length - 1 && isSelected) || (leadsToEnd && stepIndex === path.length - 2);
+    const cls = isCurrent ? "option current-choice" : isSelected ? "option selected" : "option";
+    html += '<button class="' + cls + '" onclick="choose(' + stepIndex + ',' + idx + ')">';
+    html += '<div class="option-label">' + esc(choice.label) + '</div>';
+    html += '</button>';
+  });
+  return html;
+}
+
+function renderRow(step, index) {
+  const node = NODES[step.nodeId];
+  if (!node) return "";
+  let html = "";
+  if (index > 0) {
+    html += '<span class="flow-row-sep">›</span>';
+  }
+  html += '<div class="flow-row">';
+  if (node.label) {
+    html += '<div class="flow-row-label">' + esc(node.label) + '</div>';
+  }
+  html += '<div class="flow-row-choices">';
+  html += renderChoices(node, index, step.selected);
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function render() {
+  const flow = document.getElementById("flow");
+  let html = "";
+  let endNode = null;
+  for (let i = 0; i < path.length; i++) {
+    const node = NODES[path[i].nodeId];
+    if (!node) continue;
+    if (node.type === "end") {
+      endNode = node;
+    } else {
+      html += renderRow(path[i], i);
+    }
+  }
+  if (endNode && !sessionStorage.getItem('hintSett')) {
+    html += '<p class="flow-hint">← Klikk et tidligere valg for å endre</p>';
+    sessionStorage.setItem('hintSett', '1');
+  }
+  flow.innerHTML = html;
+  renderContentBoxes(endNode);
+}
+
+function renderCheckboxCard(cbId, item) {
+  const title   = (item && typeof item === 'object') ? (item.title   || '') : (item || '');
+  const text    = (item && typeof item === 'object') ? (item.text    || '') : '';
+  const details = (item && typeof item === 'object') ? (item.details || '') : '';
+  const cardId = 'card_' + cbId;
+  return '<div class="topic-card" id="' + cardId + '" onclick="toggleCardExpand(event, \'' + cardId + '\')">'
+    + '<div class="topic-card-top">'
+    + '<input type="checkbox" id="' + cbId + '" onchange="updateSummary()" onclick="event.stopPropagation()">'
+    + '<label for="' + cbId + '" class="topic-card-title" onclick="event.stopPropagation()">'
+    + esc(title)
+    + '</label>'
+    + (details ? '<span class="topic-card-chevron" aria-hidden="true">▾</span>' : '')
+    + '</div>'
+    + (text ? '<div class="topic-card-desc">' + esc(text) + '</div>' : '')
+    + (details ? '<div class="topic-card-details"><p>' + esc(details) + '</p></div>' : '')
+    + '</div>';
+}
+
+function toggleCardExpand(event, cardId) {
+  if (event.target.tagName === 'INPUT') return;
+  if (event.target.tagName === 'LABEL') return;
+  if (event.target.tagName === 'A') return;
+  const card = document.getElementById(cardId);
+  if (!card) return;
+  const popup = document.getElementById('card-popup');
+  const overlay = document.getElementById('card-popup-overlay');
+
+  // Toggle: samme kort klikket igjen → lukk
+  if (popup.dataset.activeCard === cardId && popup.classList.contains('open')) {
+    closeCardPopup();
+    return;
+  }
+
+  const titleEl   = card.querySelector('.topic-card-title');
+  const detailsEl = card.querySelector('.topic-card-details p');
+  document.getElementById('card-popup-title').textContent = titleEl ? titleEl.textContent : '';
+  document.getElementById('card-popup-body').textContent  = detailsEl ? detailsEl.textContent : '';
+
+  // Posisjoner popup-en oppå kortets posisjon — animasjonen vil flytte diagonalt og skalere opp
+  const rect = card.getBoundingClientRect();
+  const popupWidth = Math.min(540, window.innerWidth * 0.92);
+  const margin = 12;
+  let left = rect.left + 20;
+  let origin = 'top left';
+  if (left + popupWidth > window.innerWidth - margin) {
+    left = rect.right - popupWidth - 20;
+    if (left < margin) left = margin;
+    origin = 'top right';
+  }
+  let top = Math.max(margin, rect.top + 20);
+  popup.style.left = left + 'px';
+  popup.style.top  = top + 'px';
+  popup.style.transformOrigin = origin;
+
+  // Lukk eventuell forrige først for å nullstille animasjonen
+  popup.classList.remove('open');
+  overlay.classList.remove('open');
+  void popup.offsetWidth; // tving reflow
+
+  popup.classList.add('open');
+  overlay.classList.add('open');
+  popup.dataset.activeCard = cardId;
+
+  // Etter at popup er rendret: sjekk om den stikker utenfor nedre kant og juster
+  requestAnimationFrame(() => {
+    const pr = popup.getBoundingClientRect();
+    if (pr.bottom > window.innerHeight - margin) {
+      const adjusted = Math.max(margin, window.innerHeight - pr.height - margin);
+      popup.style.top = adjusted + 'px';
+    }
+  });
+}
+
+function closeCardPopup() {
+  const popup = document.getElementById('card-popup');
+  const overlay = document.getElementById('card-popup-overlay');
+  popup.classList.remove('open');
+  overlay.classList.remove('open');
+  delete popup.dataset.activeCard;
+}
+
+function wrapGrid(html) {
+  if (!html) return '';
+  return '<div class="topic-cards-grid" style="margin-top:18px">' + html + '</div>';
+}
+
+function renderFilterSpacer(node) {
+  // Usynlig plassholder med samme høyde som filterknappene, slik at kortene
+  // i Viktig å huske på og Unntak ligger på samme høyde som kortene i Hovedregler.
+  if (!node.boxChoices || !node.boxChoices.length) return '';
+  return '<div class="box-filter-area" style="visibility:hidden" aria-hidden="true">'
+    + '<div class="box-filter-row">'
+    + '<span class="box-filter-label">.</span>'
+    + '<button class="box-filter-btn">.</button>'
+    + '</div></div>';
+}
+
+function renderLinkFooter(links) {
+  if (!links || !links.length) return '<div class="content-box-foot" style="visibility:hidden" aria-hidden="true"><div class="content-box-foot-title">.</div></div>';
+  let html = '<div class="content-box-foot">';
+  html += '<div class="content-box-foot-title">Lenker</div>';
+  html += '<div class="content-box-foot-list">';
+  links.forEach(function(link) {
+    html += '<a href="' + (link.url || '#') + '" target="_blank" rel="noopener noreferrer">' + esc(link.label) + '</a>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function wrapBoxContent(mainHtml, footerHtml) {
+  return '<div class="content-box-main">' + mainHtml + '</div>' + footerHtml;
+}
+
+function renderFilterArea(node) {
+  if (!node.boxChoices || !node.boxChoices.length) return '';
+  let html = '<div class="box-filter-area">';
+  node.boxChoices.forEach(function(group) {
+    html += '<div class="box-filter-row">';
+    html += '<span class="box-filter-label">' + esc(group.label) + '</span>';
+    group.options.forEach(function(opt) {
+      const isActive = boxState[group.id] === opt;
+      html += '<button class="box-filter-btn' + (isActive ? ' active' : '') + '" onclick="chooseBox(\'' + group.id + '\',\'' + opt + '\')">'
+        + esc(opt) + '</button>';
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function chooseBox(groupId, val) {
+  if (boxState[groupId] === val) {
+    delete boxState[groupId];
+  } else {
+    boxState[groupId] = val;
+  }
+  let endNode = null;
+  for (let i = 0; i < path.length; i++) {
+    const n = NODES[path[i].nodeId];
+    if (n && n.type === "end") { endNode = n; break; }
+  }
+  renderContentBoxes(endNode);
+}
+
+function alleFiltreValgt(node) {
+  if (!node.boxChoices || !node.boxChoices.length) return false;
+  return node.boxChoices.every(function(group) {
+    return boxState[group.id];
+  });
+}
+
+function ventPaaFilterMelding(node) {
+  if (!node.boxChoices || !node.boxChoices.length) return '';
+  const mangler = node.boxChoices.filter(function(g) { return !boxState[g.id]; });
+  return mangler.length ? '' : '';
+}
+
+function renderContentBoxes(node) {
+  const emptyPlaceholder = '';
+  const hoofdBody  = document.getElementById("box-hoved-body");
+  const viktigBody = document.getElementById("box-viktig-body");
+  const unntakBody = document.getElementById("box-unntak-body");
+  if (!node) {
+    hoofdBody.innerHTML  = emptyPlaceholder;
+    viktigBody.innerHTML = emptyPlaceholder;
+    unntakBody.innerHTML = emptyPlaceholder;
+    return;
+  }
+  const content = node.content || {};
+  const filterHtml = renderFilterArea(node);
+  const visKort = alleFiltreValgt(node);
+  const ventMelding = ventPaaFilterMelding(node);
+  const harFilter = !!(node.boxChoices && node.boxChoices.length);
+  const visLenker = !harFilter || visKort;
+
+  // Hovedregler: infos
+  let hoofdSection;
+  if (!visKort && node.boxChoices && node.boxChoices.length) {
+    hoofdSection = ventMelding;
+  } else {
+    let infoHtml = "";
+    (content.infos || []).forEach(function(info, sIdx) {
+      (info.list || []).forEach(function(item, iIdx) {
+        const cbId = 'cbh_' + esc(node.id) + '_s' + sIdx + '_i' + iIdx;
+        infoHtml += renderCheckboxCard(cbId, item);
       });
-      html += '</div>';
-      return html;
+    });
+    hoofdSection = wrapGrid(infoHtml) || emptyPlaceholder;
+  }
+  hoofdBody.innerHTML = wrapBoxContent(filterHtml + hoofdSection, visLenker ? renderLinkFooter(content.lenkerHoved) : '');
+
+  // Viktig å huske på: warnings
+  let viktigSection;
+  if (!visKort && node.boxChoices && node.boxChoices.length) {
+    viktigSection = ventMelding;
+  } else {
+    let viktigHtml = "";
+    (content.warnings || []).forEach(function(w, wIdx) {
+      const cbId = 'cbv_' + esc(node.id) + '_w' + wIdx;
+      viktigHtml += renderCheckboxCard(cbId, w);
+    });
+    viktigSection = wrapGrid(viktigHtml) || emptyPlaceholder;
+  }
+  viktigBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + viktigSection, visLenker ? renderLinkFooter(content.lenkerViktig) : '');
+
+  // Unntak: plain text checkboxes
+  let unntakSection;
+  if (!visKort && node.boxChoices && node.boxChoices.length) {
+    unntakSection = ventMelding;
+  } else {
+    let unntakHtml = "";
+    (content.unntak || []).forEach(function(u, uIdx) {
+      const cbId = 'cbu_' + esc(node.id) + '_u' + uIdx;
+      unntakHtml += renderCheckboxCard(cbId, u);
+    });
+    unntakSection = wrapGrid(unntakHtml) || emptyPlaceholder;
+  }
+  unntakBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + unntakSection, visLenker ? renderLinkFooter(content.lenkerUnntak) : '');
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const ta = document.getElementById('summary-textarea');
+  if (!ta) return;
+  const labels = [];
+  const allChecked = document.querySelectorAll(
+    '#box-hoved-body input[type="checkbox"]:checked, ' +
+    '#box-viktig-body input[type="checkbox"]:checked, ' +
+    '#box-unntak-body input[type="checkbox"]:checked'
+  );
+  allChecked.forEach(function(cb) {
+    if (cb.id && cb.id.startsWith('tcb_')) return;
+    const lbl = document.querySelector('label[for="' + cb.id + '"]');
+    if (lbl) {
+      let txt = lbl.textContent.trim().replace(/\.$/, '');
+      if (txt) labels.push(txt.charAt(0).toUpperCase() + txt.slice(1));
     }
-
-    const ROOT_CHOICES = [
-      { label: "Alderspensjon", next: "ald_arskull" },
-      { label: "Uførepensjon", sub: "Start med fødselsår", next: "ufo_start" },
-      { label: "Etterlattepensjon", sub: "Start med avdødes status", next: "etl_start" },
-      { label: "Medlemskap", sub: "Innmelding, utmelding og permisjon", next: "med_start" }
-    ];
-
-    const NODES = {
-      root: {
-        id: "root",
-        type: "choice",
-        label: "Ytelse",
-        choices: ROOT_CHOICES
-      },
-
-      ald_arskull: {
-        id: "ald_arskull",
-        type: "choice",
-        label: "Årskull",
-        choices: [
-          { label: "1953 eller tidligere", next: "ald_1953_vp" },
-          { label: "1954–1962", next: "ald_1954_vp" },
-          { label: "1963–1964", next: "ald_6364_vp" },
-          { label: "1965–1969", next: "ald_6570_vp" },
-          { label: "1970 eller senere", next: "ald_71_vp" }
-        ]
-      },
-
-      ald_1953_vp: {
-        id: "ald_1953_vp",
-        type: "choice",
-        label: "",
-        choices: [
-          { label: "Veiledning", next: "ald_1953_veil_end" },
-          { label: "Mottar pensjon", next: "ald_1953_full" }
-        ]
-      },
-
-      ald_1953_veil_end: {
-        id: "ald_1953_veil_end",
-        type: "end",
-        label: "Veiledning – 1953 eller tidligere",
-        content: {
-          infos: [
-            {
-              heading: "Merk",
-              text: "De fleste i denne gruppen er godt over 67 år og mottar allerede alderspensjon fra KLP. Dersom vedkommende mottar pensjon, bruk «Mottar pensjon»-sporet."
-            }
-          ]
-        }
-      },
-
-      ald_1954_vp: {
-        id: "ald_1954_vp",
-        type: "choice",
-        label: "",
-        choices: [
-          { label: "Veiledning", next: "ald_1954_veil_end" },
-          { label: "Mottar pensjon", next: "ald_1954_mottar2_end" }
-        ]
-      },
-
-      ald_1954_veil_end: {
-        id: "ald_1954_veil_end",
-        type: "end",
-        label: "Veiledning – 1954–1962",
-        boxChoices: [
-          { id: "alder_1954", label: "Alder", options: ["Over 67 år", "Under 67 år"] },
-          { id: "ag_1954",    label: "AG",    options: ["60 år", "65 år", "70 år"] }
-        ],
-        contentByKey: {
-          "Over 67 år|60 år": { infos: [{ heading: "Over 67 år – AG 60 år", list: ["Regler for alderspensjon etter 67 med særaldersgrense 60 år", "Levealdersjustering og overgangsregler", "Samordning med NAV"] }, { heading: "Foreløpig plassholdertekst", text: "Innhold er under utarbeidelse." }] },
-          "Over 67 år|65 år": { infos: [{ heading: "Over 67 år – AG 65 år", list: ["Regler for alderspensjon etter 67 med særaldersgrense 65 år", "Levealdersjustering og overgangsregler", "Samordning med NAV"] }, { heading: "Foreløpig plassholdertekst", text: "Innhold er under utarbeidelse." }] },
-          "Over 67 år|70 år": { infos: [{ heading: "Over 67 år – AG 70 år", list: ["Ordinær alderspensjon etter 67 år", "Levealdersjustering og individuell garanti", "Samordning med NAV"] }, { heading: "Foreløpig plassholdertekst", text: "Innhold er under utarbeidelse." }] },
-          "Under 67 år|60 år": { infos: [{ heading: "Under 67 år – AG 60 år", list: ["Tidliguttak ved særaldersgrense 60 år", "Valg mellom AFP og alderspensjon", "85-årsregelen og vilkår"] }, { heading: "Foreløpig plassholdertekst", text: "Innhold er under utarbeidelse." }] },
-          "Under 67 år|65 år": { infos: [{ heading: "Under 67 år – AG 65 år", list: ["Tidliguttak ved særaldersgrense 65 år", "Valg mellom AFP og alderspensjon", "85-årsregelen og vilkår"] }, { heading: "Foreløpig plassholdertekst", text: "Innhold er under utarbeidelse." }] },
-          "Under 67 år|70 år": { infos: [{ heading: "Under 67 år – AG 70 år", list: ["Tidlig uttak (AFP) uten særaldersgrense", "Vilkår for AFP for årskull 1954–1962", "Muligheter før 67 år"] }, { heading: "Foreløpig plassholdertekst", text: "Innhold er under utarbeidelse." }] }
-        },
-        content: {}
-      },
-
-      ald_1954_mottar2_end: {
-        id: "ald_1954_mottar2_end",
-        type: "end",
-        label: "Mottar pensjon – 1954–1962",
-        content: {
-          infos: [{
-            heading: "Her bør det stå informasjon om",
-            list: [
-              "Hva påvirker ikke pensjonen (pensjonistlønn, privat sektor)",
-              "Hva kan påvirke pensjonen (ny innmelding, endringer fra NAV)",
-              "Meldeplikt ved endringer"
-            ]
-          }, {
-            heading: "Foreløpig plassholdertekst",
-            text: "Innhold for mottakere av pensjon (1954–1962) er under utarbeidelse."
-          }]
-        }
-      },
-
-      ald_1954_o67_saer: {
-        id: "ald_1954_o67_saer",
-        type: "choice",
-        label: "AG",
-        choices: [
-          { label: "60 år", next: "ald_1954_o67_saer_ja" },
-          { label: "65 år", next: "ald_1954_o67_saer_ja" },
-          { label: "70 år", next: "ald_1954_o67_saer_nei" }
-        ]
-      },
-
-      ald_1954_o67_saer_ja: {
-        id: "ald_1954_o67_saer_ja",
-        type: "end",
-        label: "Over 67 år – med særaldersgrense (1954–1962)",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Regler for alderspensjon ved særaldersgrense for årskull 1954–1962",
-                "Levealdersjustering og overgangsregler for dette årskullet",
-                "Samordning med alderspensjon fra NAV"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-
-      ald_1954_o67_saer_nei: {
-        id: "ald_1954_o67_saer_nei",
-        type: "end",
-        label: "Over 67 år – uten særaldersgrense (1954–1962)",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Regler for alderspensjon etter fylte 67 år for årskull 1954–1962",
-                "Levealdersjustering og individuell garanti",
-                "Samordning med alderspensjon fra NAV"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-
-      ald_1954_u67_saer: {
-        id: "ald_1954_u67_saer",
-        type: "choice",
-        label: "AG",
-        choices: [
-          { label: "60 år", next: "ald_1954_u67_saer_ja" },
-          { label: "65 år", next: "ald_1954_u67_saer_ja" },
-          { label: "70 år", next: "ald_1954_u67_saer_nei" }
-        ]
-      },
-
-      ald_1954_u67_saer_ja: {
-        id: "ald_1954_u67_saer_ja",
-        type: "end",
-        label: "Under 67 år – med særaldersgrense (1954–1962)",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Mulighet for tidliguttak ved særaldersgrense (60 eller 65 år)",
-                "Valg mellom AFP og alderspensjon",
-                "85-årsregelen og vilkår"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-
-      ald_1954_u67_saer_nei: {
-        id: "ald_1954_u67_saer_nei",
-        type: "end",
-        label: "Under 67 år – uten særaldersgrense (1954–1962)",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Muligheter for tidlig uttak (AFP)",
-                "Vilkår for AFP for årskull 1954–1962",
-                "Hva skjer ved ønsket uttak før 67 år uten særaldersgrense"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-
-      ald_6364_vp: {
-        id: "ald_6364_vp",
-        type: "choice",
-        label: "",
-        choices: [
-          { label: "Veiledning", next: "ald_6364_veil_end" },
-          { label: "Mottar pensjon", next: "ald_6364_mottar_ny_end" }
-        ]
-      },
-
-      ald_6364_veil_end: {
-        id: "ald_6364_veil_end",
-        type: "end",
-        label: "Veiledning – 1963–1964",
-        boxChoices: [
-          { id: "ag_6364v",  label: "AG",     options: ["60 år", "65 år", "70 år"] },
-          { id: "pen_6364v", label: "Pensjon", options: ["Tidligpensjon", "Alderspensjon"] }
-        ],
-        contentByKey: {
-          "60 år|Tidligpensjon": { infos: [{ heading: "AG 60 år – Tidligpensjon (1963–1964)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "60 år|Alderspensjon": { infos: [{ heading: "AG 60 år – Alderspensjon (1963–1964)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "65 år|Tidligpensjon": { infos: [{ heading: "AG 65 år – Tidligpensjon (1963–1964)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "65 år|Alderspensjon": { infos: [{ heading: "AG 65 år – Alderspensjon (1963–1964)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "70 år|Tidligpensjon": { infos: [{ heading: "AG 70 år – Tidligpensjon (1963–1964)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "70 år|Alderspensjon": { infos: [{ heading: "AG 70 år – Alderspensjon (1963–1964)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] }
-        },
-        content: {}
-      },
-
-      ald_6364_mottar_ny_end: {
-        id: "ald_6364_mottar_ny_end",
-        type: "end",
-        label: "Mottar pensjon – 1963–1964",
-        boxChoices: [
-          { id: "pen_6364m", label: "Pensjon", options: ["Alderspensjon", "Tidligpensjon"] }
-        ],
-        contentByKey: {
-          "Alderspensjon": {
-            links: [
-              { label: "Mottar du alderspensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/mottar-du-alderspensjon" }
-            ]
-          },
-          "Tidligpensjon": {
-            links: [
-              { label: "Mottar du tidligpensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/tidligpensjon/mottar-tidligpensjon" }
-            ]
-          }
-        },
-        content: {}
-      },
-
-      ald_6570_vp: {
-        id: "ald_6570_vp",
-        type: "choice",
-        label: "",
-        choices: [
-          { label: "Veiledning", next: "ald_6570_veil_end" },
-          { label: "Mottar pensjon", next: "ald_6570_mottar_ny_end" }
-        ]
-      },
-
-      ald_6570_veil_end: {
-        id: "ald_6570_veil_end",
-        type: "end",
-        label: "Veiledning – 1965–1969",
-        boxChoices: [
-          { id: "ag_6570v",  label: "AG",     options: ["60 år", "65 år", "70 år"] },
-          { id: "pen_6570v", label: "Pensjon", options: ["Tidligpensjon", "Alderspensjon"] }
-        ],
-        contentByKey: {
-          "60 år|Tidligpensjon": { infos: [{ heading: "AG 60 år – Tidligpensjon (1965–1969)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "60 år|Alderspensjon": { infos: [{ heading: "AG 60 år – Alderspensjon (1965–1969)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "65 år|Tidligpensjon": { infos: [{ heading: "AG 65 år – Tidligpensjon (1965–1969)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "65 år|Alderspensjon": { infos: [{ heading: "AG 65 år – Alderspensjon (1965–1969)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "70 år|Tidligpensjon": { infos: [{ heading: "AG 70 år – Tidligpensjon (1965–1969)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "70 år|Alderspensjon": { infos: [{ heading: "AG 70 år – Alderspensjon (1965–1969)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] }
-        },
-        content: {}
-      },
-
-      ald_6570_mottar_ny_end: {
-        id: "ald_6570_mottar_ny_end",
-        type: "end",
-        label: "Mottar pensjon – 1965–1969",
-        boxChoices: [
-          { id: "pen_6570m", label: "Pensjon", options: ["Alderspensjon", "Tidligpensjon"] }
-        ],
-        contentByKey: {
-          "Alderspensjon": {
-            links: [
-              { label: "Mottar du alderspensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/mottar-du-alderspensjon" }
-            ]
-          },
-          "Tidligpensjon": {
-            links: [
-              { label: "Mottar du tidligpensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/tidligpensjon/mottar-tidligpensjon" }
-            ]
-          }
-        },
-        content: {}
-      },
-
-      ald_71_vp: {
-        id: "ald_71_vp",
-        type: "choice",
-        label: "",
-        choices: [
-          { label: "Veiledning", next: "ald_71_veil_end" },
-          { label: "Mottar pensjon", next: "ald_71_mottar_end" }
-        ]
-      },
-
-      ald_71_veil_end: {
-        id: "ald_71_veil_end",
-        type: "end",
-        label: "Veiledning – 1970 eller senere",
-        boxChoices: [
-          { id: "alder_71v", label: "Alder", options: ["Over 67 år", "Under 67 år"] },
-          { id: "ag_71v",    label: "AG",    options: ["60 år", "65 år", "70 år"] }
-        ],
-        contentByKey: {
-          "Over 67 år|60 år": { infos: [{ heading: "Over 67 år – AG 60 år (1970+)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "Over 67 år|65 år": { infos: [{ heading: "Over 67 år – AG 65 år (1970+)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "Over 67 år|70 år": { infos: [{ heading: "Over 67 år – AG 70 år (1970+)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "Under 67 år|60 år": { infos: [{ heading: "Under 67 år – AG 60 år (1970+)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "Under 67 år|65 år": { infos: [{ heading: "Under 67 år – AG 65 år (1970+)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] },
-          "Under 67 år|70 år": { infos: [{ heading: "Under 67 år – AG 70 år (1970+)", list: ["Foreløpig plassholdertekst – innhold er under utarbeidelse."] }] }
-        },
-        content: {}
-      },
-
-      ald_start: {
-        id: "ald_start",
-        type: "choice",
-        label: "Regelverk",
-        desc: "Velg hvilket regelverk som gjelder for medlemmet.",
-        choices: [
-          { label: "Født 1962 eller tidligere", sub: "Eldre opptjeningsspor", next: "ald_old_split" },
-          { label: "Født 1963 eller senere", sub: "Nytt opptjeningsspor med påslag", next: "ald_new_split" }
-        ]
-      },
-      ald_old_split: {
-        id: "ald_old_split",
-        type: "choice",
-        label: "Født i 1962 eller tidligere",
-        desc: "Velg riktig årskull.",
-        choices: [
-          { label: "Født i 1953 eller tidligere", sub: "Eldre opptjeningsspor", next: "ald_1953_status" },
-          { label: "Født 1954–1962", sub: "Overgangsgruppe – blandet levealdersjustering", next: "ald_1954_status" }
-        ]
-      },
-
-      /* ── SPOR: 1953 OG TIDLIGERE ────────────────────────────── */
-      ald_1953_status: {
-        id: "ald_1953_status",
-        type: "choice",
-        label: "Mottar medlemmet pensjon?",
-        desc: "Velg status nåværende status.",
-        choices: [
-          { label: "Mottar full eller gradert pensjon", next: "ald_1953_full" },
-          { label: "Mottar ikke pensjon", next: "ald_1953_ingen_pensjon" }
-        ]
-      },
-
-      ald_1953_ingen_pensjon: {
-        id: "ald_1953_ingen_pensjon",
-        type: "end",
-        label: "Mottar ikke pensjon fra KLP",
-        content: {
-          infos: [
-            {
-              heading: "Merk",
-              text: "Personer født i 1953 eller tidligere er i dag over 72 år. Dersom vedkommende ikke mottar alderspensjon fra KLP, mottar de mest sannsynlig pensjon fra en annen pensjonsordning."
-            }
-          ]
-        }
-      },
-
-      ald_1953_full: {
-        id: "ald_1953_full",
-        type: "end",
-        label: "Mottar alderspensjon fra KLP",
-        desc: "Husk disse punktene i samtalen:",
-        content: {
-          infos: [
-            {
-              heading: "Hva påvirker ikke pensjonen",
-              list: [
-                "Pensjonistlønn fra en KLP-arbeidsgiver påvirker ikke pensjonen",
-                "Jobb i privat sektor påvirker ikke pensjonen",
-                "SPL-stillinger: kan jobbe inntil 19,9 % per kalenderkvartal",
-                "Sykehus/lege: kan jobbe inntil 168 timer per kalenderkvartal"
-              ]
-            },
-            {
-              heading: "Hva kan påvirke pensjonen",
-              list: [
-                "Innmelding i KLP i en ny stillingsprosent justerer pensjonen",
-                "Endringer i alderspensjon fra NAV kan påvirke utbetalingen fra KLP",
-                "Pensjonen samordnes med alderspensjon fra NAV"
-              ]
-            }
-          ],
-          links: [
-            { label: "Jobb og pensjon", url: "https://www.klp.no/pensjon/jobb-og-pensjon" }
-          ]
-        }
-      },
-
-      ald_1953_gradert: {
-        id: "ald_1953_gradert",
-        type: "end",
-        label: "Mottar gradert alderspensjon – 1953 og tidligere",
-        desc: "Aktuelle punkter for samtalen:",
-        content: {
-          infos: [
-            {
-              heading: "Endringer som må meldes til KLP",
-              list: [
-                "Endringer i stillingsprosent eller arbeidssituasjon må meldes",
-                "Dersom man skal fratre stillingen må KLP varsles",
-                "Pensjon fra fratreden kan ikke beregnes nøyaktig hvis det er flere pensjonsgivere i perioden"
-              ]
-            },
-            {
-              heading: "Konsekvens av å stå lenger i jobb",
-              list: [
-                "Samordningseffekten øker jo lenger man utsetter fullt uttak"
-              ]
-            }
-          ],
-          links: [
-            { label: "Jobb og pensjon", url: "https://www.klp.no/pensjon/jobb-og-pensjon" }
-          ],
-          warnings: ["Påminn om at endringer må meldes umiddelbart – for sen melding kan føre til feil utbetaling."]
-        }
-      },
-
-      ald_1953_nopensjon: {
-        id: "ald_1953_nopensjon",
-        type: "choice",
-        label: "Alder ved henvendelse",
-        choices: [
-          { label: "Under 67 år", sub: "Vurder muligheter for tidlig uttak", next: "ald_1953_under67" },
-          { label: "Fylt 67 år", sub: "Rett til alderspensjon fra denne alderen", next: "ald_1953_fylt67" }
-        ]
-      },
-
-      ald_1953_under67: {
-        id: "ald_1953_under67",
-        type: "choice",
-        label: "Særaldersgrense?",
-        choices: [
-          { label: "Har særaldersgrense", sub: "Stilling med lavere aldersgrense enn 70 år", next: "ald_1953_saer" },
-          { label: "Ingen særaldersgrense", sub: "Ordinær aldersgrense", next: "ald_1953_ikkesaer" }
-        ]
-      },
-
-      ald_1953_saer: {
-        id: "ald_1953_saer",
-        type: "choice",
-        label: "Særaldersgrense – under 67 år",
-        desc: "Velg aktuelt spor for videre veiledning.",
-        choices: [
-          { label: "Kan velge mellom Alderspensjon og Avtalefestet pensjon (AFP)", next: "ald_1953_saer_begge" },
-          { label: "Alderspensjon", next: "ald_1953_saer_ald" },
-          { label: "Avtalefestet pensjon (AFP)", next: "ald_1953_saer_afp" }
-        ]
-      },
-
-      ald_1953_saer_begge: {
-        id: "ald_1953_saer_begge",
-        type: "end",
-        label: "Valg mellom Alderspensjon og AFP",
-        desc: "Hjelp medlemmet med valget mellom de to ytelsene:",
-        content: {
-          infos: [
-            {
-              heading: "Valg mellom AFP og alderspensjon",
-              list: [
-                "Avklar hvilken ordning som gir mest utbetaling totalt",
-                "Vurder skattefordeler ved AFP vs. alderspensjon",
-                "Avklar om alderspensjon fra NAV bør tas ut",
-                "Avklar om inntekten skal være på vanlig lønn eller pensjonistlønn"
-              ]
-            },
-            {
-              heading: "Vilkår for alderspensjon etter særaldersgrense",
-              list: [
-                "Oppfyller vedkommende vilkår til Folketrygdberegnet AFP?",
-                "Oppfyller medlemmet 85-årsregelen? (Medlemstid + alder = 85)"
-              ]
-            }
-          ],
-          links: [
-            { label: "Dine alternativer ved særaldersgrense", url: "https://www.klp.no/pensjon/1962-eller-tidligere/saeraldersgrense/dine-alternativer" },
-            { label: "Vilkår ved særaldersgrense", url: "https://www.klp.no/pensjon/1962-eller-tidligere/saeraldersgrense/vilkaar" },
-            { label: "Før du tar ut pensjon", url: "https://www.klp.no/pensjon/1962-eller-tidligere/saeraldersgrense/for-du-tar-ut-pensjon" }
-          ]
-        }
-      },
-
-      ald_1953_saer_ald: {
-        id: "ald_1953_saer_ald",
-        type: "end",
-        label: "Alderspensjon ved særaldersgrense",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Vilkår for alderspensjon ved særaldersgrense (1953-kullet)",
-                "85-årsregelen og hvordan den beregnes",
-                "Levealdersjustering og individuell garanti",
-                "Samordning med alderspensjon fra NAV"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for alderspensjon ved særaldersgrense er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-
-      ald_1953_saer_afp: {
-        id: "ald_1953_saer_afp",
-        type: "end",
-        label: "Avtalefestet pensjon (AFP)",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Vilkår for AFP ved særaldersgrense",
-                "Beregning av AFP og eventuell samordning",
-                "Konsekvenser av å velge AFP fremfor alderspensjon",
-                "Hva skjer ved overgang til 67 år"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for AFP ved særaldersgrense er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-
-      ald_1953_ikkesaer: {
-        id: "ald_1953_ikkesaer",
-        type: "end",
-        label: "Ingen særaldersgrense – under 67 år",
-        desc: "Muligheter for tidlig uttak:",
-        content: {
-          infos: [
-            {
-              heading: "Muligheter for å ta ut pensjon tidligere",
-              list: [
-                "AFP kan i noen tilfeller være aktuelt (mellom 62–65 år og 65–67 år)",
-                "Avklar om vedkommende oppfyller AFP-vilkårene",
-                "Avklar om det er andre grunner som kan gi rett til tidlig uttak"
-              ]
-            }
-          ],
-          links: [
-            { label: "AFP – vilkår (62–65 år)", url: "https://www.klp.no/pensjon/1962-eller-tidligere/afp/vilkaar" },
-            { label: "AFP – beregninger", url: "https://www.klp.no/pensjon/1962-eller-tidligere/afp/beregninger" }
-          ],
-          warnings: ["AFP kan ikke kombineres med alderspensjon fra NAV – NAV-pensjonen må stanses først."]
-        }
-      },
-
-      ald_1953_fylt67: {
-        id: "ald_1953_fylt67",
-        type: "choice",
-        label: "Alderspensjon fra 67 år",
-        desc: "Velg situasjonen til medlemmet.",
-        choices: [
-          { label: "Skal fortsette å jobbe", next: "ald_1953_fylt67_jobb" },
-          { label: "Skal fratre stillingen sin", next: "ald_1953_fylt67_fratre" }
-        ]
-      },
-
-      ald_1953_fylt67_jobb: {
-        id: "ald_1953_fylt67_jobb",
-        type: "end",
-        label: "Å jobbe etter fylte 67 år",
-        desc: "Viktige punkter når medlemmet fortsetter i jobb:",
-        content: {
-          infos: [
-            {
-              heading: "Å jobbe lenger enn 67 år",
-              list: [
-                "Levealdersjustering: når skjer den, og hva betyr det?",
-                "Individuell garanti: hva er det og hvordan fases den ut?",
-                "Utsatt uttak kan påvirke det endelige beløpet"
-              ]
-            }
-          ],
-          links: [
-            { label: "Hva er levealdersjustering?", url: "https://www.klp.no/pensjon/offentlig-tjenestepensjon/alderspensjon/hva-er-levealdersjustering" },
-            { label: "Hva er individuell garanti og hvordan skal den fases ut?", url: "https://www.klp.no/pensjon/offentlig-tjenestepensjon/alderspensjon/hva-er-individuell-garanti-og-hvordan-skal-den-fases-ut" }
-          ]
-        }
-      },
-
-      ald_1953_fylt67_fratre: {
-        id: "ald_1953_fylt67_fratre",
-        type: "end",
-        label: "Alderspensjon ved fratreden",
-        desc: "Viktige punkter når medlemmet fratrer stillingen:",
-        content: {
-          infos: [
-            {
-              heading: "Pensjonen samordnes med alderspensjon fra NAV",
-              list: [
-                "Pensjonen fra KLP beregnes og samordnes med hva vedkommende får fra NAV",
-                "Utsatt uttak kan påvirke det endelige beløpet"
-              ]
-            }
-          ],
-          links: [
-            { label: "Nye samordningsregler for offentlig tjenestepensjon", url: "https://www.klp.no/pensjon/offentlig-tjenestepensjon/alderspensjon/nye-samordningsregler-for-offentlig-tjenestepensjon" }
-          ]
-        }
-      },
-
-      /* ── SPOR: 1954–1962 ─────────────────────────────────────── */
-      ald_1954_status: {
-        id: "ald_1954_status",
-        type: "choice",
-        label: "Mottar medlemmet pensjon?",
-        desc: "Velg status for pensjonsutbetalingen.",
-        choices: [
-          { label: "Mottar full pensjon", sub: "Allerede i fullt uttak", next: "ald_1954_mottar" },
-          { label: "Mottar gradert pensjon", sub: "Delvis uttak – kombinerer jobb og pensjon", next: "ald_1954_gradert" },
-          { label: "Mottar ikke pensjon ennå", sub: "Veileder om fremtidig uttak", next: "ald_1954_nopensjon" },
-          { label: "Mottar pensjon fra en annen kasse", sub: "Ikke KLP-medlem i dag", next: "ald_1954_annenkasse" }
-        ]
-      },
-
-      ald_1954_annenkasse: {
-        id: "ald_1954_annenkasse",
-        type: "end",
-        label: "Mottar pensjon fra et annet sted enn KLP",
-        desc: "Avklar om vedkommende har rettigheter hos KLP:",
-        content: {
-          infos: [
-            {
-              heading: "Mulige KLP-rettigheter",
-              list: [
-                "Sjekk om vedkommende har oppsatt rett fra tidligere KLP-medlemskap",
-                "Oppsatt rett utbetales ikke automatisk – det må søkes",
-                "Samordning kan påvirke total utbetaling"
-              ]
-            }
-          ],
-          links: [
-            { label: "Oppsatt pensjon", url: "https://www.klp.no/pensjon/offentlig-tjenestepensjon/alderspensjon" }
-          ]
-        }
-      },
-
-      ald_1954_gradert: {
-        id: "ald_1954_gradert",
-        type: "choice",
-        label: "Alder ved henvendelse",
-        choices: [
-          { label: "Under 67 år", sub: "AFP eller gradert alderspensjon er aktuelt", next: "ald_1954_under67" },
-          { label: "Over 67 år", sub: "Samme avklaringer som for 1953-kullet", next: "ald_1953_fylt67" }
-        ]
-      },
-
-      ald_1954_mottar: {
-        id: "ald_1954_mottar",
-        type: "choice",
-        label: "Alder ved henvendelse",
-        choices: [
-          { label: "Under 67 år", sub: "AFP eller alderspensjon er aktuelt", next: "ald_1954_under67" },
-          { label: "Over 67 år", sub: "Samme avklaringer som for 1953-kullet", next: "ald_1953_fylt67" }
-        ]
-      },
-
-      ald_1954_under67: {
-        id: "ald_1954_under67",
-        type: "choice",
-        label: "Mottar pensjon – under 67 år (1954–1962)",
-        desc: "Velg type pensjon som mottas.",
-        choices: [
-          { label: "Mottar alderspensjon", next: "ald_1954_u67_ald" },
-          { label: "Mottar AFP", next: "ald_1954_u67_afp" }
-        ]
-      },
-
-      ald_1954_u67_ald: {
-        id: "ald_1954_u67_ald",
-        type: "end",
-        label: "Mottar alderspensjon – under 67 år",
-        desc: "Avklar praktiske konsekvenser av å jobbe ved siden av alderspensjon:",
-        content: {
-          infos: [
-            {
-              heading: "Jobb og alderspensjon",
-              list: [
-                "Jobbe på pensjonistlønn påvirker ikke alderspensjonen",
-                "Jobbe i privat sektor påvirker ikke KLP-pensjonen",
-                "Endringer i alderspensjon fra NAV kan påvirke KLP-pensjonen"
-              ]
-            },
-            {
-              heading: "Endringer må meldes",
-              list: [
-                "Endringer i stilling eller arbeidssituasjon må meldes til KLP"
-              ]
-            }
-          ],
-          links: [
-            { label: "Jobb og pensjon", url: "https://www.klp.no/pensjon/jobb-og-pensjon" }
-          ],
-          warnings: ["For overgangsårskull gjelder særlige regler for levealdersjustering – når vil pensjonen gå nedover?"]
-        }
-      },
-
-      ald_1954_u67_afp: {
-        id: "ald_1954_u67_afp",
-        type: "end",
-        label: "Mottar AFP – under 67 år",
-        desc: "Avklar type AFP og praktiske konsekvenser:",
-        content: {
-          infos: [
-            {
-              heading: "FTAFP (folketrygdberegnet AFP)",
-              list: [
-                "Avklar toleransebeløp og etteroppgjør",
-                "Overgang der AFP beregnes som alderspensjon ved 67 år"
-              ]
-            },
-            {
-              heading: "TPAFP (tjenestepensjonberegnet AFP)",
-              list: [
-                "Avklar inntekt i overgangsåret",
-                "Regler for pensjonistlønn og konsekvens av ny innmelding"
-              ]
-            }
-          ],
-          links: [
-            { label: "AFP i offentlig sektor", url: "https://www.klp.no/pensjon/afp" }
-          ],
-          warnings: ["Kombinasjon med NAV-ytelser kan ha konsekvenser – sjekk alltid NAV-siden."]
-        }
-      },
-
-      ald_1954_nopensjon: {
-        id: "ald_1954_nopensjon",
-        type: "choice",
-        label: "Alder ved henvendelse",
-        desc: "Avklar om det gjelder før eller etter 67 år.",
-        choices: [
-          { label: "Under 67 år", sub: "Vurder muligheter for tidlig uttak", next: "ald_1953_under67" },
-          { label: "Fylt 67 år", sub: "Rett til alderspensjon – avklar samordning", next: "ald_1953_fylt67" }
-        ]
-      },
-
-      ald_new_split: {
-        id: "ald_new_split",
-        type: "choice",
-        label: "Alderspensjon: nytt spor",
-        desc: "Velg riktig underkategori for videre veiledning.",
-        choices: [
-          { label: "Født 1963–1964", sub: "Mest overgangsregler", next: "ald_new_6364_end" },
-          { label: "Født 1965–1969", sub: "Delvise overgangsregler", next: "ald_new_6570_end" },
-          { label: "Født 1970 eller senere", sub: "Fullt nytt spor", next: "ald_new_71_end" }
-        ]
-      },
-      /* ── SPOR: FØDT 1963–1964 ─────────────────────────────────── */
-      ald_new_6364_end: {
-        id: "ald_new_6364_end",
-        type: "choice",
-        label: "Alderspensjon: 1963–1964",
-        desc: "Velg status for pensjonsutbetalingen.",
-        choices: [
-          { label: "Mottar ikke pensjon (veiledning)", next: "ald_6364_nopensjon_saer" },
-          { label: "Mottar pensjon", next: "ald_6364_mottar" }
-        ]
-      },
-
-      ald_6364_nopensjon_saer: {
-        id: "ald_6364_nopensjon_saer",
-        type: "choice",
-        label: "Særaldersgrense?",
-        desc: "Velg type særaldersgrense, eller ingen.",
-        choices: [
-          { label: "Særaldersgrense 65 år", next: "ald_6364_saer65" },
-          { label: "Særaldersgrense 60 år", next: "ald_6364_saer60" },
-          { label: "Ingen særaldersgrense", next: "ald_6364_ingen_saer_end" }
-        ]
-      },
-
-      ald_6364_saer65: {
-        id: "ald_6364_saer65",
-        type: "choice",
-        label: "Særaldersgrense 65 år – hva kan velges?",
-        choices: [
-          { label: "Kan velge mellom Tidligpensjon og Alderspensjon", next: "ald_6364_saer65_begge_end" },
-          { label: "Kan kun ta ut alderspensjon", next: "ald_6364_saer65_ald_end" }
-        ]
-      },
-
-      ald_6364_saer65_begge_end: {
-        id: "ald_6364_saer65_begge_end",
-        type: "end",
-        label: "Tidligpensjon eller Alderspensjon – 65 år (1963–1964)",
-        content: {
-          infos: [
-            {
-              heading: "Nyttige lenker",
-              list: [
-                "Hva lønner seg mellom tidligpensjon og alderspensjon?"
-              ]
-            },
-            {
-              heading: "Særalderspåslag og overgangstillegg",
-              list: [
-                "Særalderspåslag og overgangstillegg"
-              ]
-            }
-          ],
-          links: [
-            { label: "Hva lønner seg mellom tidligpensjon og alderspensjon?", url: "https://www.klp.no/artikler/ta-gjennomtenkte-valg-saeraldersgrense" },
-            { label: "Særalderspåslag", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon/saeralderspaslag" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6364_saer65_ald_end: {
-        id: "ald_6364_saer65_ald_end",
-        type: "end",
-        label: "Kun alderspensjon – 65 år (1963–1964)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" },
-            { label: "Betinget tjenestepensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/betinget-tjenestepensjon" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6364_saer60: {
-        id: "ald_6364_saer60",
-        type: "choice",
-        label: "Særaldersgrense 60 år – hva kan velges?",
-        choices: [
-          { label: "Kan velge mellom Tidligpensjon og Alderspensjon", next: "ald_6364_saer60_begge_end" },
-          { label: "Kan kun ta ut alderspensjon", next: "ald_6364_saer60_ald_end" }
-        ]
-      },
-
-      ald_6364_saer60_begge_end: {
-        id: "ald_6364_saer60_begge_end",
-        type: "end",
-        label: "Tidligpensjon eller Alderspensjon – 60 år (1963–1964)",
-        content: {
-          links: [
-            { label: "Hva lønner seg mellom tidligpensjon og alderspensjon?", url: "https://www.klp.no/artikler/ta-gjennomtenkte-valg-saeraldersgrense" },
-            { label: "Særaldersgrense 60 år – født 1963–1969", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/60/fodt-fra-1963-til-og-med-1969" },
-            { label: "Særalderspåslag", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon/saeralderspaslag" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6364_saer60_ald_end: {
-        id: "ald_6364_saer60_ald_end",
-        type: "end",
-        label: "Kun alderspensjon – 60 år (1963–1964)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "Særalderspåslag", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon/saeralderspaslag" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6364_ingen_saer_end: {
-        id: "ald_6364_ingen_saer_end",
-        type: "end",
-        label: "Ingen særaldersgrense – alderspensjon (1963–1964)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" },
-            { label: "Betinget tjenestepensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/betinget-tjenestepensjon" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6364_mottar: {
-        id: "ald_6364_mottar",
-        type: "choice",
-        label: "Type pensjon som mottas",
-        choices: [
-          { label: "Alderspensjon", next: "ald_6364_mottar_ald_end" },
-          { label: "Tidligpensjon", next: "ald_6364_mottar_tidlig_end" }
-        ]
-      },
-
-      ald_6364_mottar_ald_end: {
-        id: "ald_6364_mottar_ald_end",
-        type: "end",
-        label: "Mottar alderspensjon – 1963–1964",
-        content: {
-          links: [
-            { label: "Mottar du alderspensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/mottar-du-alderspensjon" }
-          ]
-        }
-      },
-
-      ald_6364_mottar_tidlig_end: {
-        id: "ald_6364_mottar_tidlig_end",
-        type: "end",
-        label: "Mottar tidligpensjon – 1963–1964",
-        content: {
-          links: [
-            { label: "Mottar du tidligpensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/tidligpensjon/mottar-tidligpensjon" }
-          ]
-        }
-      },
-
-      /* ── SPOR: FØDT 1965–1969 ─────────────────────────────────── */
-      ald_new_6570_end: {
-        id: "ald_new_6570_end",
-        type: "choice",
-        label: "Alderspensjon: 1965–1969",
-        desc: "Velg status for pensjonsutbetalingen.",
-        choices: [
-          { label: "Mottar pensjon", next: "ald_6570_mottar" },
-          { label: "Mottar ikke pensjon (veiledning)", next: "ald_6570_nopensjon" }
-        ]
-      },
-
-      ald_6570_mottar: {
-        id: "ald_6570_mottar",
-        type: "choice",
-        label: "Type pensjon som mottas",
-        choices: [
-          { label: "Tidligpensjon", next: "ald_6570_mottar_tidlig_end" },
-          { label: "Alderspensjon", next: "ald_6570_mottar_ald_end" }
-        ]
-      },
-
-      ald_6570_mottar_tidlig_end: {
-        id: "ald_6570_mottar_tidlig_end",
-        type: "end",
-        label: "Mottar tidligpensjon – 1965–1969",
-        content: {
-          links: [
-            { label: "Mottar du alderspensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/mottar-du-alderspensjon" }
-          ]
-        }
-      },
-
-      ald_6570_mottar_ald_end: {
-        id: "ald_6570_mottar_ald_end",
-        type: "end",
-        label: "Mottar alderspensjon – 1965–1969",
-        content: {
-          links: [
-            { label: "Mottar du tidligpensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/tidligpensjon/mottar-tidligpensjon" }
-          ]
-        }
-      },
-
-      ald_6570_nopensjon: {
-        id: "ald_6570_nopensjon",
-        type: "choice",
-        label: "Særaldersgrense?",
-        desc: "Velg type særaldersgrense, eller ingen.",
-        choices: [
-          { label: "Særaldersgrense", next: "ald_6570_saer_type" },
-          { label: "Ingen særaldersgrense", next: "ald_6570_ingen_saer_end" }
-        ]
-      },
-
-      ald_6570_saer_type: {
-        id: "ald_6570_saer_type",
-        type: "choice",
-        label: "Hvilken særaldersgrense?",
-        choices: [
-          { label: "Særaldersgrense 60 år", next: "ald_6570_saer60" },
-          { label: "Særaldersgrense 65 år", next: "ald_6570_saer65" }
-        ]
-      },
-
-      ald_6570_saer60: {
-        id: "ald_6570_saer60",
-        type: "choice",
-        label: "Særaldersgrense 60 år – hva kan velges?",
-        choices: [
-          { label: "Kan velge mellom Tidligpensjon og Alderspensjon", next: "ald_6570_saer60_begge_end" },
-          { label: "Kan kun ta ut alderspensjon", next: "ald_6570_saer60_ald_end" }
-        ]
-      },
-
-      ald_6570_saer60_begge_end: {
-        id: "ald_6570_saer60_begge_end",
-        type: "end",
-        label: "Tidligpensjon eller Alderspensjon – 60 år (1965–1969)",
-        content: {
-          links: [
-            { label: "Hva lønner seg mellom tidligpensjon og alderspensjon?", url: "https://www.klp.no/artikler/ta-gjennomtenkte-valg-saeraldersgrense" },
-            { label: "Særaldersgrense 60 år – født 1963–1969", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/60/fodt-fra-1963-til-og-med-1969" },
-            { label: "Særalderspåslag", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon/saeralderspaslag" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6570_saer60_ald_end: {
-        id: "ald_6570_saer60_ald_end",
-        type: "end",
-        label: "Kun alderspensjon – 60 år (1965–1969)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" },
-            { label: "Betinget tjenestepensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/betinget-tjenestepensjon" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6570_saer65: {
-        id: "ald_6570_saer65",
-        type: "choice",
-        label: "Særaldersgrense 65 år – hva kan velges?",
-        choices: [
-          { label: "Kan velge mellom Tidligpensjon og Alderspensjon", next: "ald_6570_saer65_begge_end" },
-          { label: "Kan kun ta ut alderspensjon", next: "ald_6570_saer65_ald_end" }
-        ]
-      },
-
-      ald_6570_saer65_begge_end: {
-        id: "ald_6570_saer65_begge_end",
-        type: "end",
-        label: "Tidligpensjon eller Alderspensjon – 65 år (1965–1969)",
-        content: {
-          links: [
-            { label: "Hva lønner seg mellom tidligpensjon og alderspensjon?", url: "https://www.klp.no/artikler/ta-gjennomtenkte-valg-saeraldersgrense" },
-            { label: "Særalderspåslag", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon/saeralderspaslag" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6570_saer65_ald_end: {
-        id: "ald_6570_saer65_ald_end",
-        type: "end",
-        label: "Kun alderspensjon – 65 år (1965–1969)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" },
-            { label: "Betinget tjenestepensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/betinget-tjenestepensjon" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_6570_ingen_saer_end: {
-        id: "ald_6570_ingen_saer_end",
-        type: "end",
-        label: "Ingen særaldersgrense – alderspensjon (1965–1969)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" },
-            { label: "Betinget tjenestepensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/betinget-tjenestepensjon" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      /* ── SPOR: FØDT 1970 ELLER SENERE ────────────────────────── */
-      ald_new_71_end: {
-        id: "ald_new_71_end",
-        type: "choice",
-        label: "Alderspensjon: 1970 eller senere",
-        desc: "Velg status for pensjonsutbetalingen.",
-        choices: [
-          { label: "Mottar pensjon", next: "ald_71_mottar_end" },
-          { label: "Mottar ikke pensjon (veiledning)", next: "ald_71_nopensjon" }
-        ]
-      },
-
-      ald_71_mottar_end: {
-        id: "ald_71_mottar_end",
-        type: "end",
-        label: "Mottar alderspensjon – 1970 eller senere",
-        content: {
-          links: [
-            { label: "Mottar du tidligpensjon?", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/tidligpensjon/mottar-tidligpensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" },
-            { label: "Overgangstillegg", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/overgangstillegg" }
-          ]
-        }
-      },
-
-      ald_71_nopensjon: {
-        id: "ald_71_nopensjon",
-        type: "choice",
-        label: "Særaldersgrense?",
-        desc: "Velg aktuelt spor.",
-        choices: [
-          { label: "Har særaldersgrense", next: "ald_71_saer_end" },
-          { label: "Ingen særaldersgrense", next: "ald_71_ingen_saer_end" }
-        ]
-      },
-
-      ald_71_saer_end: {
-        id: "ald_71_saer_end",
-        type: "end",
-        label: "Særaldersgrense – 1970 eller senere",
-        content: {
-          links: [
-            { label: "Hva lønner seg mellom tidligpensjon og alderspensjon?", url: "https://www.klp.no/artikler/ta-gjennomtenkte-valg-saeraldersgrense" },
-            { label: "Særaldersgrense 60 år – født 1970 eller senere", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/60/fodt-i-1970-eller-senere" },
-            { label: "Tidligpensjon ved særaldersgrense", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/tidligpensjon" },
-            { label: "Alderspensjon ved særaldersgrense", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" }
-          ]
-        }
-      },
-
-      ald_71_ingen_saer_end: {
-        id: "ald_71_ingen_saer_end",
-        type: "end",
-        label: "Ingen særaldersgrense – alderspensjon (1970 eller senere)",
-        content: {
-          links: [
-            { label: "Særaldersgrense – alderspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/saraldersgrense/alderspensjon" },
-            { label: "De ulike pensjonsdelene og vilkår", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler" },
-            { label: "Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/alderspensjon-opptjent-for-2020" },
-            { label: "Påslagspensjon", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/paslagspensjon" },
-            { label: "AFP livsvarig", url: "https://www.klp.no/pensjon/1963-eller-senere/alderspensjon/pensjonsdeler/afp-livsvarig" }
-          ]
-        }
-      },
-
-      ufo_start: {
-        id: "ufo_start",
-        type: "choice",
-        label: "Velg regelverk",
-        choices: [
-          { label: "1962 eller tidligere", next: "ufo_old_end" },
-          { label: "1963 og senere", next: "ufo_new_end" }
-        ]
-      },
-      ufo_old_end: {
-        id: "ufo_old_end",
-        type: "end",
-        label: "Uførepensjon: 1962 eller tidligere",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Vilkår for uførepensjon etter gammelt regelverk",
-                "Uføregrad og inntektsavkortning",
-                "Oppfølgingsplikt og meldeplikt ved endring i arbeidsevne",
-                "Overgang til alderspensjon ved særaldersgrense eller senest 67 år",
-                "Samordning med uføretrygd fra NAV"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for uførepensjon etter gammelt regelverk er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ],
-          warnings: ["Kontroller forventet arbeidsinntekt tydelig for å unngå etteroppgjør."]
-        }
-      },
-      ufo_new_end: {
-        id: "ufo_new_end",
-        type: "end",
-        label: "Uførepensjon: 1963 eller senere",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Vilkår for uførepensjon etter nytt regelverk",
-                "Uføregrad og beregning av ytelse",
-                "Inntektsavkortning og toleransebeløp",
-                "Opphør ved 67 år og overgang til alderspensjonsspor",
-                "Samordning med uføretrygd fra NAV"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for uførepensjon etter nytt regelverk er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ],
-          warnings: ["Avklar overgang til alderspensjon tidlig for riktig forventningsstyring."]
-        }
-      },
-
-      etl_start: {
-        id: "etl_start",
-        type: "choice",
-        label: "Etterlattepensjon: avdødes status",
-        desc: "Start med status ved dødstidspunkt.",
-        choices: [
-          { label: "Avdøde var medlem og mottok pensjon", sub: "Vurder ektefelle- og barnespor", next: "etl_member_with_pension" },
-          { label: "Avdøde var medlem uten pensjon", sub: "Vurder aktivt medlemskap ved død", next: "etl_member_no_pension" },
-          { label: "Avdøde var ikke medlem", sub: "Vurder oppsatt rett", next: "etl_non_member" }
-        ]
-      },
-      etl_member_with_pension: {
-        id: "etl_member_with_pension",
-        type: "choice",
-        label: "Etterlatte: velg ytelse",
-        choices: [
-          { label: "Ektefellepensjon", sub: "Vurder rettigheter for gjenlevende", next: "etl_spouse_end" },
-          { label: "Barnepensjon", sub: "Vurder rettigheter for barn", next: "etl_child_end" }
-        ]
-      },
-      etl_member_no_pension: {
-        id: "etl_member_no_pension",
-        type: "choice",
-        label: "Etterlatte: velg ytelse",
-        content: { warnings: ["Kontroller karens og tidslinje mellom medlemskap, ekteskap og død."] },
-        choices: [
-          { label: "Ektefellepensjon", sub: "Vurder rettigheter for gjenlevende", next: "etl_spouse_end" },
-          { label: "Barnepensjon", sub: "Vurder rettigheter for barn", next: "etl_child_end" }
-        ]
-      },
-      etl_non_member: {
-        id: "etl_non_member",
-        type: "choice",
-        label: "Etterlatte: ikke medlem",
-        choices: [
-          { label: "Oppsatt rett finnes", sub: "Fortsett med etterlatteveiledning", next: "etl_oppsatt_end" },
-          { label: "Ingen oppsatt rett", sub: "Ingen ytelse i dette sporet", next: "etl_no_right_end" }
-        ]
-      },
-      etl_spouse_end: {
-        id: "etl_spouse_end",
-        type: "end",
-        label: "Etterlatte: ektefellespor",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Rettighetstype og varighet av ektefellepensjonen",
-                "Vilkår (ekteskapets lengde, alder, m.m.)",
-                "Hva som kan stoppe eller redusere ytelsen",
-                "Samordning med ytelser fra NAV",
-                "Søknadsprosess og dokumentasjonskrav"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for ektefellepensjon er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ],
-          warnings: ["Sjekk forhold som kan stoppe eller endre ytelsen, inkludert ny sivilstatus."]
-        }
-      },
-      etl_child_end: {
-        id: "etl_child_end",
-        type: "end",
-        label: "Etterlatte: barnespor",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Barnets alder og rett til barnepensjon",
-                "Varighet av barnepensjon (som regel til 20 år)",
-                "Dokumentasjonskrav: fødselsattest, ev. adopsjonsdokumenter",
-                "Beregning av barnepensjonen og samordning"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for barnepensjon er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-      etl_oppsatt_end: {
-        id: "etl_oppsatt_end",
-        type: "end",
-        label: "Etterlatte: oppsatt rett",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Hva oppsatt rett til etterlattepensjon innebærer",
-                "Minste tjenestetid for oppsatt rett (3 år)",
-                "Beregning av oppsatt etterlatteytelse",
-                "Søknadsprosess og dokumentasjonskrav"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for etterlattepensjon ved oppsatt rett er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-      etl_no_right_end: {
-        id: "etl_no_right_end",
-        type: "end",
-        label: "Etterlatte: ingen rett i ordningen",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Tydelig bekreftelse på at det ikke foreligger rett i KLP-ordningen",
-                "Henvisning til NAV for eventuelle ytelser fra Folketrygden",
-                "Andre kontaktpunkt (f.eks. andre pensjonsordninger avdøde kan ha hatt)"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Avdøde har ikke opptjent rett til etterlattepensjon i KLP-ordningen. Vennligst ta kontakt med NAV eller andre aktuelle pensjonsordninger."
-            }
-          ]
-        }
-      },
-
-      med_start: {
-        id: "med_start",
-        type: "choice",
-        label: "Medlemskap: tema",
-        desc: "Velg avklaringstema.",
-        choices: [
-          { label: "Innmelding", sub: "Fast og midlertidig ansatte", next: "med_inn_end" },
-          { label: "Utmelding", sub: "Oppsatt rett og videre løp", next: "med_ut_end" },
-          { label: "Frivillig medlemskap ved permisjon", sub: "Frister og dekning", next: "med_perm_end" },
-          { label: "Pensjonistvilkår", sub: "Unntak fra innmelding", next: "med_pens_end" }
-        ]
-      },
-      med_inn_end: {
-        id: "med_inn_end",
-        type: "end",
-        label: "Medlemskap: innmelding",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Vilkår for innmelding: fast/midlertidig ansettelse og stillingsandel (minst 20 %)",
-                "Innmeldingstidspunkt og arbeidsgivers plikt",
-                "Karensregler og unntak",
-                "Hva skjer ved innmelding av allerede pensjonerte"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for innmelding i KLP er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-      med_ut_end: {
-        id: "med_ut_end",
-        type: "end",
-        label: "Medlemskap: utmelding",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Hva utmelding innebærer og fra hvilken dato den gjelder",
-                "Oppsatt rett – vilkår (minst 3 år) og hva det betyr for fremtidig pensjon",
-                "Overføring av pensjonsrettigheter ved bytte av arbeidsgiver",
-                "Hva medlemmet bør gjøre videre (søknad, dokumentasjon)"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for utmelding fra KLP er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-      med_perm_end: {
-        id: "med_perm_end",
-        type: "end",
-        label: "Medlemskap: permisjon",
-        content: {
-          infos: [
-            {
-              heading: "Her bør det stå informasjon om",
-              list: [
-                "Hvilke permisjoner som gir automatisk pensjonsdekning (f.eks. foreldrepermisjon)",
-                "Frivillig betaling av premie i permisjon – frister og krav",
-                "Konsekvenser av ikke å betale under permisjon",
-                "Gjeninnmelding etter permisjon"
-              ]
-            },
-            {
-              heading: "Foreløpig plassholdertekst",
-              text: "Innhold for permisjon og pensjonsdekning er under utarbeidelse. Kontakt pensjonsrådgiver for veiledning."
-            }
-          ]
-        }
-      },
-      med_pens_end: {
-        id: "med_pens_end",
-        type: "end",
-        label: "Medlemskap: pensjonistvilkår",
-        desc: "Samtalen bør avklare hvem som ikke skal meldes inn på nytt.",
-        content: { warnings: ["Feil innmelding av pensjonister er en vanlig avvikskilde. Kontroller alltid status ved nyansettelse."] }
-      }
-    };
-
-    const path = [{ nodeId: "root", selected: null }];
-    let boxState = {};
-
-    function normalizeText(str) {
-      if (!str) return "";
-      return String(str)
-        .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
-        .replace(/[\u2600-\u27BF]/g, "")
-        .replace(/vedtekter/gi, "")
-        .replace(/\s+/g, " ")
-        .trim();
+  });
+  if (!labels.length) {
+    if (ta.value === lastAutoSummary) { ta.value = ''; lastAutoSummary = ''; }
+    return;
+  }
+  let text;
+  if (labels.length === 1) {
+    text = 'Innhold i samtalen: ' + labels[0] + '.';
+  } else {
+    const last = labels.pop();
+    text = 'Innhold i samtalen: ' + labels.join('. ') + '. ' + last + '.';
+  }
+  if (ta.value === '' || ta.value === lastAutoSummary) {
+    ta.value = text;
+    lastAutoSummary = text;
+  }
+}
+
+function copySummary() {
+  const ta = document.getElementById('summary-textarea');
+  const btn = document.getElementById('summary-copy-btn');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(function() { showCopied(btn); }).catch(function() { fallbackCopy(ta, btn); });
+  } else {
+    fallbackCopy(ta, btn);
+  }
+}
+
+function fallbackCopy(ta, btn) {
+  ta.select();
+  document.execCommand('copy');
+  showCopied(btn);
+}
+
+function showCopied(btn) {
+  btn.textContent = 'Kopiert!';
+  setTimeout(function() { btn.textContent = 'Kopier'; }, 2000);
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + name).classList.add("active");
+  btn.classList.add("active");
+}
+
+// ── SØKEFUNKSJON ─────────────────────────────────────────
+
+function sokINode(node, q) {
+  // Returnerer liste over matchende kortttitler (maks 2 for visning)
+  const treff = [];
+  function sjekkTekst(str) { return str && str.toLowerCase().includes(q); }
+  function sjekkKort(item) {
+    if (!item) return null;
+    const t = typeof item === 'object' ? item.title : item;
+    const tx = typeof item === 'object' ? item.text : '';
+    const d  = typeof item === 'object' ? item.details : '';
+    return (sjekkTekst(t) || sjekkTekst(tx) || sjekkTekst(d)) ? (t || '') : null;
+  }
+  const c = node.content || {};
+  (c.infos && c.infos[0] ? c.infos[0].list : []).forEach(function(k) { const m = sjekkKort(k); if (m) treff.push(m); });
+  (c.warnings || []).forEach(function(k) { const m = sjekkKort(k); if (m) treff.push(m); });
+  (c.unntak   || []).forEach(function(k) { const m = sjekkKort(k); if (m) treff.push(m); });
+  return treff;
+}
+
+function handleSearch(query) {
+  const list = document.getElementById('search-results');
+  const q = query.trim().toLowerCase();
+  if (!q) { list.classList.remove('open'); list.innerHTML = ''; return; }
+
+  const resultater = [];
+  Object.values(NODES).forEach(function(n) {
+    if (n.type !== 'end') return;
+    const labelMatch = n.label && n.label.toLowerCase().includes(q);
+    const kortTreff  = sokINode(n, q);
+    if (labelMatch || kortTreff.length) {
+      resultater.push({ node: n, labelMatch: labelMatch, kortTreff: kortTreff });
     }
+  });
 
-    function esc(str) {
-      return normalizeText(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+  resultater.sort(function(a, b) {
+    if (a.labelMatch && !b.labelMatch) return -1;
+    if (!a.labelMatch && b.labelMatch) return 1;
+    return 0;
+  });
+
+  const visResultater = resultater.slice(0, 8);
+
+  if (!visResultater.length) {
+    list.innerHTML = '<li class="search-result-item" style="color:var(--klp-gray-300)">Ingen treff</li>';
+    list.classList.add('open');
+    return;
+  }
+
+  function hl(str) {
+    if (!str) return '';
+    return escAttr(str).replace(new RegExp('(' + escAttr(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<strong>$1</strong>');
+  }
+
+  list.innerHTML = visResultater.map(function(r) {
+    const n = r.node;
+    const sti = finnStiTilNode(n.id);
+    const stitekst = sti ? sti.slice(1, -1).map(function(id) {
+      return NODES[id] ? escAttr(NODES[id].label || '') : '';
+    }).filter(Boolean).join(' › ') : '';
+    const kortvisning = r.kortTreff.slice(0, 2).map(function(t) {
+      return '<span class="search-result-kort">' + hl(t) + '</span>';
+    }).join('');
+    return '<li class="search-result-item" onmousedown="navigerTilNode(\'' + n.id + '\')">'
+      + hl(n.label)
+      + (kortvisning ? '<div class="search-result-path">' + kortvisning + '</div>' : stitekst ? '<div class="search-result-path">' + stitekst + '</div>' : '')
+      + '</li>';
+  }).join('');
+  list.classList.add('open');
+}
+
+function closeSearch() {
+  const list = document.getElementById('search-results');
+  if (list) { list.classList.remove('open'); list.innerHTML = ''; }
+  const inp = document.getElementById('search-input');
+  if (inp) inp.value = '';
+}
+
+function finnStiTilNode(targetId) {
+  const queue = [['root']];
+  const visited = new Set();
+  while (queue.length) {
+    const sti = queue.shift();
+    const nodeId = sti[sti.length - 1];
+    if (visited.has(nodeId)) continue;
+    visited.add(nodeId);
+    if (nodeId === targetId) return sti;
+    const node = NODES[nodeId];
+    if (node && node.choices) {
+      node.choices.forEach(function(c) { if (c.next && !visited.has(c.next)) queue.push(sti.concat([c.next])); });
     }
+  }
+  return null;
+}
 
-    function truncateFrom(stepIndexInclusive) {
-      path.splice(stepIndexInclusive);
+function navigerTilNode(targetId) {
+  const sti = finnStiTilNode(targetId);
+  if (!sti) return;
+  path.length = 0;
+  for (var i = 0; i < sti.length; i++) {
+    const nodeId = sti[i];
+    const node = NODES[nodeId];
+    const nextId = sti[i + 1];
+    let selected = null;
+    if (nextId && node && node.choices) {
+      selected = node.choices.findIndex(function(c) { return c.next === nextId; });
+      if (selected === -1) selected = null;
     }
+    path.push({ nodeId: nodeId, selected: selected });
+  }
+  boxState = {};
+  closeSearch();
+  render();
+}
 
-    function choose(stepIndex, choiceIndex) {
-      const step = path[stepIndex];
-      const node = NODES[step.nodeId];
-      if (!node || !node.choices || !node.choices[choiceIndex]) return;
+// ── ADMIN REDIGERINGSMODUS ────────────────────────────────
 
-      step.selected = choiceIndex;
-      truncateFrom(stepIndex + 1);
-      boxState = {};
+let adminMode = false;
+let adminSelectedNodeId = null;
 
-      const nextId = node.choices[choiceIndex].next;
-      if (nextId && NODES[nextId]) {
-        path.push({ nodeId: nextId, selected: null });
-      }
-      render();
-    }
+function escAttr(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
-    function continueFrom(stepIndex) {
-      const node = NODES[path[stepIndex].nodeId];
-      if (!node || !node.next || !NODES[node.next]) return;
-      truncateFrom(stepIndex + 1);
-      path.push({ nodeId: node.next, selected: null });
-      render();
-    }
+function openAdminTab() {
+  const pw = prompt('Skriv inn administrasjonskode:');
+  if (pw !== 'klp2025') return;
+  adminMode = true;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn, .admin-tab-icon').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-rediger').classList.add('active');
+  const btn = document.getElementById('admin-tab-btn');
+  btn.classList.add('active');
+  btn.style.opacity = '1';
+  renderAdminTab();
+}
 
-    function selectColumn(stepIndex) {
-      truncateFrom(stepIndex + 1);
-      render();
-    }
+function renderAdminTab() {
+  renderAdminTree();
+  if (adminSelectedNodeId) {
+    renderAdminEditor(adminSelectedNodeId);
+  }
+}
 
-    function resetFlow() {
-      path.length = 0;
-      path.push({ nodeId: "root", selected: null });
-      render();
-    }
+function renderAdminTree() {
+  const tree = document.getElementById('admin-tree');
+  if (!tree) return;
+  let html = '';
 
-    function renderContent(content) {
-      if (!content) return "";
-      let html = "";
+  html += '<div class="admin-tree-group">Ytelse (start)</div>';
+  html += adminTreeItem('root', 'Ytelse', 'choice');
 
-      (content.infos || []).forEach(info => {
-        html += '<div class="panel info">';
-        if (info.heading) html += '<div class="panel-title">' + esc(info.heading) + '</div>';
-        if (info.text) html += '<p>' + esc(info.text) + '</p>';
-        if (info.list && info.list.length) {
-          html += '<ul>';
-          info.list.forEach(item => { html += '<li>' + esc(item) + '</li>'; });
-          html += '</ul>';
-        }
-        html += '</div>';
-      });
+  const groups = [
+    { label: 'Alderspensjon', ids: ['ald_arskull','ald_1953_vp','ald_1953_veil_end','ald_1953_mottar_end','ald_1954_vp','ald_1954_veil_end','ald_1954_mottar_end','ald_6364_vp','ald_6364_veil_end','ald_6364_mottar_end','ald_6570_vp','ald_6570_veil_end','ald_6570_mottar_end','ald_71_vp','ald_71_veil_end','ald_71_mottar_end'] },
+    { label: 'Uførepensjon', ids: ['ufo_start','ufo_old_end','ufo_new_end'] },
+    { label: 'Etterlattepensjon', ids: ['etl_start','etl_aktiv_end','etl_pensjon_end','etl_oppsatt_end'] },
+    { label: 'Medlemskap', ids: ['med_start','med_inn_end','med_ut_end','med_perm_end','med_pens_end'] }
+  ];
 
-      (content.warnings || []).forEach(w => {
-        html += '<div class="panel warn"><div class="panel-title">Viktig</div><p>' + esc(w) + '</p></div>';
-      });
+  const knownIds = new Set(['root']);
+  groups.forEach(g => g.ids.forEach(id => knownIds.add(id)));
+  const extraIds = Object.keys(NODES).filter(id => !knownIds.has(id));
+  if (extraIds.length) groups.push({ label: 'Egendefinerte noder', ids: extraIds });
 
-      if (content.links && content.links.length) {
-        html += '<div class="panel info">';
-        html += '<div class="panel-title">Nyttige lenker</div>';
-        html += '<ul>';
-        content.links.forEach(function(link) {
-          html += '<li><a href="' + link.url + '" target="_blank" rel="noopener noreferrer">' + esc(link.label) + '</a></li>';
-        });
-        html += '</ul>';
-        html += '</div>';
-      }
+  groups.forEach(function(group) {
+    html += '<div class="admin-tree-group">' + escAttr(group.label) + '</div>';
+    group.ids.forEach(function(id) {
+      const node = NODES[id];
+      if (!node) return;
+      html += adminTreeItem(id, node.label || id, node.type);
+    });
+  });
 
-      return html;
-    }
+  tree.innerHTML = html;
+}
 
-    function renderChoices(node, stepIndex, selectedIndex) {
-      if (!node.choices || !node.choices.length) return "";
-      let html = "";
-      node.choices.forEach((choice, idx) => {
-        const isSelected = selectedIndex === idx;
-        const isCurrent = stepIndex === path.length - 1 && isSelected;
-        const cls = isCurrent ? "option current-choice" : isSelected ? "option selected" : "option";
-        html += '<button class="' + cls + '" onclick="choose(' + stepIndex + ',' + idx + ')">';
-        html += '<div class="option-label">' + esc(choice.label) + '</div>';
-        html += '</button>';
-      });
-      return html;
-    }
+function adminTreeItem(id, label, type) {
+  const sel = adminSelectedNodeId === id ? ' selected' : '';
+  const badge = type === 'end'
+    ? '<span class="node-type-badge badge-end">Slutt</span>'
+    : '<span class="node-type-badge badge-choice">Valg</span>';
+  return '<div class="admin-tree-item' + sel + '" onclick="selectAdminNode(\'' + id + '\')">'
+    + badge
+    + '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escAttr(label) + '</span>'
+    + '</div>';
+}
 
-    function renderDetailPanel(step, index) {
-      const node = NODES[step.nodeId];
-      if (!node) return "";
+function selectAdminNode(id) {
+  adminSelectedNodeId = id;
+  renderAdminTree();
+  renderAdminEditor(id);
+}
 
-      let html = '<article class="detail-panel">';
+function renderAdminEditor(id) {
+  const node = NODES[id];
+  const ed = document.getElementById('admin-editor');
+  if (!ed) return;
+  if (!node) { ed.innerHTML = '<p>Node ikke funnet.</p>'; return; }
 
-      // Header
-      html += '<div class="detail-panel-head" onclick="selectColumn(' + index + ')" style="cursor:pointer">';
-      html += '<div class="column-step">Steg ' + (index + 1) + ' – Samtaleguide</div>';
-      html += '<div class="column-title">' + esc(node.label) + '</div>';
-      if (node.desc) html += '<div class="column-sub">' + esc(node.desc) + '</div>';
-      html += '</div>';
+  let html = '<div class="admin-editor-header">'
+    + '<span class="admin-editor-title">' + escAttr(node.label || id) + '</span>'
+    + '<button class="admin-export-btn" onclick="openExportModal()">Generer kode</button>'
+    + '</div>';
 
-      // Body: one section per info-heading, each list item as a checkbox
-      html += '<div class="detail-panel-body">';
+  if (id === 'root') {
+    html += renderAdminRootEditor();
+  } else if (node.type === 'choice') {
+    html += renderAdminChoiceEditor(node);
+  } else if (node.type === 'end') {
+    html += renderAdminEndEditor(node);
+  }
 
-      const content = node.content || {};
-      (content.infos || []).forEach(function(info, sectionIdx) {
-        html += '<div class="detail-section">';
-        if (info.heading) {
-          html += '<div class="detail-section-title">' + esc(info.heading) + '</div>';
-        }
-        if (info.text) {
-          const cbId = 'cb_' + esc(node.id) + '_s' + sectionIdx + '_t';
-          html += '<div class="checkbox-item">';
-          html += '<input type="checkbox" id="' + cbId + '">';
-          html += '<label for="' + cbId + '">' + esc(info.text) + '</label>';
-          html += '</div>';
-        }
-        (info.list || []).forEach(function(item, itemIdx) {
-          const cbId = 'cb_' + esc(node.id) + '_s' + sectionIdx + '_i' + itemIdx;
-          html += '<div class="checkbox-item">';
-          html += '<input type="checkbox" id="' + cbId + '">';
-          html += '<label for="' + cbId + '">' + esc(item) + '</label>';
-          html += '</div>';
-        });
-        html += '</div>';
-      });
+  ed.innerHTML = html;
+}
 
-      (content.warnings || []).forEach(function(w) {
-        html += '<div class="detail-section" style="border-left-color:var(--klp-pink-600);background:#fff6f8;min-width:220px">';
-        html += '<div class="detail-section-title" style="color:var(--klp-pink-600)">Viktig</div>';
-        html += '<p style="font-size:13px;line-height:1.5;color:var(--klp-gray-900)">' + esc(w) + '</p>';
-        html += '</div>';
-      });
+function adminFieldGroup(labelText, inputHtml) {
+  return '<div class="admin-field-group"><label class="admin-field-label">' + labelText + '</label>' + inputHtml + '</div>';
+}
 
-      html += '</div>'; // end detail-panel-body
+function renderAdminRootEditor() {
+  let html = '<div class="admin-section"><div class="admin-section-title">Hovedkategorier (ROOT_CHOICES)</div>';
+  ROOT_CHOICES.forEach(function(rc, idx) {
+    html += '<div class="admin-choice-row">';
+    html += adminFieldGroup('Label', '<input class="admin-field" value="' + escAttr(rc.label) + '" oninput="updateRootChoice(' + idx + ',\'label\',this.value)">');
+    html += adminFieldGroup('Undertekst', '<input class="admin-field" value="' + escAttr(rc.sub || '') + '" oninput="updateRootChoice(' + idx + ',\'sub\',this.value)">');
+    const nextOk = NODES[rc.next] ? '' : 'border-color:#f87171;';
+    html += adminFieldGroup('Neste node-ID', '<input class="admin-field" style="' + nextOk + '" value="' + escAttr(rc.next || '') + '" oninput="updateRootChoice(' + idx + ',\'next\',this.value)">');
+    html += '</div>';
+    html += '<div style="text-align:right;margin-bottom:14px"><button class="admin-btn-del" onclick="deleteRootChoice(' + idx + ')">Slett kategori</button></div>';
+  });
+  html += '<button class="admin-btn-add" onclick="addRootChoice()">+ Legg til kategori</button>';
+  html += '</div>';
+  return html;
+}
 
-      // Footer: links
-      if (content.links && content.links.length) {
-        html += '<div class="detail-panel-foot">';
-        content.links.forEach(function(link) {
-          html += '<a href="' + link.url + '" target="_blank" rel="noopener noreferrer" style="'
-            + 'font-size:13px;font-weight:600;color:var(--klp-green-700);text-decoration:underline;'
-            + 'text-underline-offset:2px;padding:4px 0">'
-            + esc(link.label) + '</a>';
-        });
-        html += '</div>';
-      }
+function renderAdminChoiceEditor(node) {
+  let html = '<div class="admin-section">';
+  html += adminFieldGroup('Node-tittel', '<input class="admin-field" value="' + escAttr(node.label) + '" oninput="updateNodeLabel(\'' + node.id + '\',this.value)">');
+  html += '</div>';
+  html += '<div class="admin-section"><div class="admin-section-title">Valg (knapper)</div>';
+  (node.choices || []).forEach(function(choice, idx) {
+    html += '<div class="admin-choice-row">';
+    html += adminFieldGroup('Label', '<input class="admin-field" value="' + escAttr(choice.label) + '" oninput="updateNodeChoice(\'' + node.id + '\',' + idx + ',\'label\',this.value)">');
+    html += adminFieldGroup('Undertekst', '<input class="admin-field" value="' + escAttr(choice.sub || '') + '" oninput="updateNodeChoice(\'' + node.id + '\',' + idx + ',\'sub\',this.value)">');
+    const nextOk = NODES[choice.next] ? '' : 'border-color:#f87171;';
+    html += adminFieldGroup('Neste node-ID', '<input class="admin-field" style="' + nextOk + '" value="' + escAttr(choice.next || '') + '" oninput="updateNodeChoice(\'' + node.id + '\',' + idx + ',\'next\',this.value)">');
+    html += '</div>';
+    html += '<div style="text-align:right;margin-bottom:14px"><button class="admin-btn-del" onclick="deleteNodeChoice(\'' + node.id + '\',' + idx + ')">Slett valg</button></div>';
+  });
+  html += '<button class="admin-btn-add" onclick="addNodeChoice(\'' + node.id + '\')">+ Legg til valg</button>';
+  html += '</div>';
+  return html;
+}
 
-      html += '</article>';
-      return html;
-    }
+function renderAdminEndEditor(node) {
+  const content = node.content || {};
+  let html = '<div class="admin-section">';
+  html += adminFieldGroup('Node-tittel', '<input class="admin-field" value="' + escAttr(node.label) + '" oninput="updateNodeLabel(\'' + node.id + '\',this.value)">');
+  html += '</div>';
 
-    function renderRow(step, index) {
-      const node = NODES[step.nodeId];
-      if (!node) return "";
+  function contentSection(title, section, items) {
+    let s = '<div class="admin-section"><div class="admin-section-title">' + title + '</div>';
+    (items || []).forEach(function(item, idx) {
+      const t   = typeof item === 'object' ? (item.title   || '') : (item || '');
+      const tx  = typeof item === 'object' ? (item.text    || '') : '';
+      const det = typeof item === 'object' ? (item.details || '') : '';
+      s += '<div class="admin-card-row">';
+      s += '<div class="admin-card-row-head"><span class="admin-card-num">Kort ' + (idx + 1) + '</span>'
+        + '<button class="admin-btn-del" onclick="deleteContentCard(\'' + node.id + '\',\'' + section + '\',' + idx + ')">Slett</button></div>';
+      s += adminFieldGroup('Tittel', '<input class="admin-field" value="' + escAttr(t) + '" oninput="updateEndNodeContent(\'' + node.id + '\',\'' + section + '\',' + idx + ',\'title\',this.value)">');
+      s += adminFieldGroup('Beskrivelse', '<textarea class="admin-field ta" oninput="updateEndNodeContent(\'' + node.id + '\',\'' + section + '\',' + idx + ',\'text\',this.value)">' + escAttr(tx) + '</textarea>');
+      s += adminFieldGroup('Detaljert innhold (popup)', '<textarea class="admin-field ta" oninput="updateEndNodeContent(\'' + node.id + '\',\'' + section + '\',' + idx + ',\'details\',this.value)">' + escAttr(det) + '</textarea>');
+      s += '</div>';
+    });
+    s += '<button class="admin-btn-add" onclick="addContentCard(\'' + node.id + '\',\'' + section + '\')">+ Legg til kort</button>';
+    s += '</div>';
+    return s;
+  }
 
-      let html = "";
+  const infoList = content.infos && content.infos[0] ? (content.infos[0].list || []) : [];
+  html += contentSection('Hovedregler (kort)', 'infos', infoList);
+  html += contentSection('Viktig å huske på (kort)', 'warnings', content.warnings || []);
+  html += contentSection('Unntak (kort)', 'unntak', content.unntak || []);
 
-      // Arrow separator between steps
-      if (index > 0) {
-        html += '<span class="flow-row-sep">›</span>';
-      }
+  function linkSection(title, key, links) {
+    let s = '<div class="admin-section"><div class="admin-section-title">' + title + '</div>';
+    (links || []).forEach(function(link, idx) {
+      s += '<div class="admin-link-row">';
+      s += '<div>' + adminFieldGroup('Lenketekst', '<input class="admin-field" value="' + escAttr(link.label || '') + '" oninput="updateEndNodeLink(\'' + node.id + '\',\'' + key + '\',' + idx + ',\'label\',this.value)">') + '</div>';
+      s += '<div>' + adminFieldGroup('URL', '<input class="admin-field" value="' + escAttr(link.url || '') + '" oninput="updateEndNodeLink(\'' + node.id + '\',\'' + key + '\',' + idx + ',\'url\',this.value)">') + '</div>';
+      s += '<div style="padding-bottom:1px"><button class="admin-btn-del" onclick="deleteEndNodeLink(\'' + node.id + '\',\'' + key + '\',' + idx + ')">×</button></div>';
+      s += '</div>';
+    });
+    s += '<button class="admin-btn-add" onclick="addEndNodeLink(\'' + node.id + '\',\'' + key + '\')">+ Legg til lenke</button>';
+    s += '</div>';
+    return s;
+  }
 
-      html += '<div class="flow-row">';
-      if (node.label) {
-        html += '<div class="flow-row-label">' + esc(node.label) + '</div>';
-      }
-      html += '<div class="flow-row-choices">';
-      html += renderChoices(node, index, step.selected);
-      html += '</div>';
-      if (node.content) {
-        html += '<div style="width:100%;margin-top:6px">';
-        html += renderContent(node.content);
-        html += '</div>';
-      }
-      html += '</div>';
-      return html;
-    }
+  html += linkSection('Lenker – Hovedregler', 'lenkerHoved', content.lenkerHoved || []);
+  html += linkSection('Lenker – Viktig å huske på', 'lenkerViktig', content.lenkerViktig || []);
+  html += linkSection('Lenker – Unntak', 'lenkerUnntak', content.lenkerUnntak || []);
 
-    function render() {
-      const flow = document.getElementById("flow");
-      let html = "";
-      let endNode = null;
+  html += '<div class="admin-section"><div class="admin-section-title">Ny forgreningsnode</div>'
+    + '<p style="font-size:12px;color:var(--klp-gray-700);margin-bottom:8px">Opprett en ny choice-node og koble den til ved å sette dens ID som «Neste node-ID» i et valg over.</p>'
+    + '<button class="admin-btn-add" onclick="addNewChoiceNode()">+ Opprett ny choice-node</button>'
+    + '</div>';
 
-      for (let i = 0; i < path.length; i++) {
-        const node = NODES[path[i].nodeId];
-        if (!node) continue;
-        if (node.type === "end") {
-          endNode = node;
-        } else {
-          html += renderRow(path[i], i);
-        }
-      }
+  return html;
+}
 
-      flow.innerHTML = html;
-      renderContentBoxes(endNode);
-    }
+// ── Mutasjons-hjelpere ────────────────────────────────────
 
-    function chooseBox(groupId, val) {
-      boxState[groupId] = val;
-      // find current end node and re-render boxes
-      let endNode = null;
-      for (let i = 0; i < path.length; i++) {
-        const n = NODES[path[i].nodeId];
-        if (n && n.type === "end") { endNode = n; break; }
-      }
-      renderContentBoxes(endNode);
-    }
+function updateRootChoice(idx, field, value) {
+  ROOT_CHOICES[idx][field] = value;
+  NODES.root.choices[idx][field] = value;
+}
 
-    function renderContentBoxes(node) {
-      const emptyPlaceholder = '<p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p>';
-      const hoofdBody  = document.getElementById("box-hoved-body");
-      const viktigBody = document.getElementById("box-viktig-body");
-      const unntakBody = document.getElementById("box-unntak-body");
+function updateNodeLabel(nodeId, value) {
+  if (NODES[nodeId]) NODES[nodeId].label = value;
+}
 
-      if (!node) {
-        hoofdBody.innerHTML  = emptyPlaceholder;
-        viktigBody.innerHTML = emptyPlaceholder;
-        unntakBody.innerHTML = emptyPlaceholder;
-        return;
-      }
+function updateNodeChoice(nodeId, choiceIdx, field, value) {
+  const node = NODES[nodeId];
+  if (!node || !node.choices || !node.choices[choiceIdx]) return;
+  node.choices[choiceIdx][field] = value;
+  renderAdminEditor(nodeId);
+}
 
-      // Box filter buttons (Alder, AG, etc.)
-      let filterHtml = "";
-      if (node.boxChoices && node.boxChoices.length) {
-        filterHtml += '<div class="box-filter-area">';
-        node.boxChoices.forEach(function(group) {
-          filterHtml += '<div class="box-filter-row">';
-          filterHtml += '<span class="box-filter-label">' + esc(group.label) + '</span>';
-          group.options.forEach(function(opt) {
-            const isActive = boxState[group.id] === opt;
-            filterHtml += '<button class="box-filter-btn' + (isActive ? ' active' : '') + '" onclick="chooseBox(\'' + group.id + '\',\'' + opt + '\')">'
-              + esc(opt) + '</button>';
-          });
-          filterHtml += '</div>';
-        });
-        filterHtml += '</div>';
-      }
+function updateEndNodeContent(nodeId, section, idx, field, value) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (section === 'infos') {
+    if (!node.content.infos || !node.content.infos[0]) return;
+    const item = node.content.infos[0].list[idx];
+    if (item) item[field] = value;
+  } else {
+    const arr = node.content[section];
+    if (!arr) return;
+    if (typeof arr[idx] === 'object') arr[idx][field] = value;
+    else arr[idx] = value;
+  }
+}
 
-      // Resolve content: use contentByKey if boxChoices exist
-      let content = node.content || {};
-      if (node.boxChoices && node.contentByKey) {
-        const key = node.boxChoices.map(function(g) { return boxState[g.id] || ""; }).join("|");
-        if (node.contentByKey[key]) {
-          content = node.contentByKey[key];
-        } else {
-          // Not all filters selected yet
-          hoofdBody.innerHTML = filterHtml + '<p class="content-placeholder" style="padding:4px 0 8px">Velg Alder og AG over for å se innhold.</p>' + renderTopicCards(node.id);
-          viktigBody.innerHTML = emptyPlaceholder;
-          unntakBody.innerHTML = emptyPlaceholder;
-          return;
-        }
-      }
+function updateEndNodeLink(nodeId, key, idx, field, value) {
+  const node = NODES[nodeId];
+  if (!node || !node.content || !node.content[key] || !node.content[key][idx]) return;
+  node.content[key][idx][field] = value;
+}
 
-      // Hovedregler → filter buttons + infos
-      let hoofdHtml = filterHtml;
-      let infoHtml = "";
-      (content.infos || []).forEach(function(info, sIdx) {
-        if (info.heading) {
-          infoHtml += '<div class="detail-section-title" style="margin-top:' + (sIdx > 0 ? '14px' : '0') + '">' + esc(info.heading) + '</div>';
-        }
-        if (info.text) {
-          const cbId = 'cbh_' + esc(node.id) + '_s' + sIdx + '_t';
-          infoHtml += '<div class="checkbox-item"><input type="checkbox" id="' + cbId + '" onchange="updateSummary()"><label for="' + cbId + '">' + esc(info.text) + '</label></div>';
-        }
-        (info.list || []).forEach(function(item, iIdx) {
-          const cbId = 'cbh_' + esc(node.id) + '_s' + sIdx + '_i' + iIdx;
-          infoHtml += '<div class="checkbox-item"><input type="checkbox" id="' + cbId + '" onchange="updateSummary()"><label for="' + cbId + '">' + esc(item) + '</label></div>';
-        });
-      });
-      hoofdBody.innerHTML = hoofdHtml + (infoHtml || '') + renderTopicCards(node.id);
+function addRootChoice() {
+  const newId = 'node_' + Date.now();
+  const newChoice = { label: 'Ny kategori', sub: '', next: newId };
+  ROOT_CHOICES.push(newChoice);
+  NODES.root.choices.push(newChoice);
+  NODES[newId] = { id: newId, type: 'choice', label: 'Ny node', choices: [] };
+  adminSelectedNodeId = 'root';
+  renderAdminTab();
+  renderAdminEditor('root');
+}
 
-      // Viktig å huske på → warnings with checkboxes
-      let viktigHtml = "";
-      (content.warnings || []).forEach(function(w, wIdx) {
-        const cbId = 'cbv_' + esc(node.id) + '_w' + wIdx;
-        viktigHtml += '<div class="checkbox-item" style="margin-bottom:8px">';
-        viktigHtml += '<input type="checkbox" id="' + cbId + '" onchange="updateSummary()">';
-        viktigHtml += '<label for="' + cbId + '" style="font-size:13px;line-height:1.5;color:var(--klp-gray-900)">' + esc(w) + '</label>';
-        viktigHtml += '</div>';
-      });
-      viktigBody.innerHTML = viktigHtml || emptyPlaceholder;
+function deleteRootChoice(idx) {
+  if (!confirm('Slette denne kategorien?')) return;
+  ROOT_CHOICES.splice(idx, 1);
+  NODES.root.choices.splice(idx, 1);
+  renderAdminEditor('root');
+}
 
-      // Unntak → lenker with checkboxes
-      let unntakHtml = "";
-      if (content.links && content.links.length) {
-        content.links.forEach(function(link, lIdx) {
-          const cbId = 'cbu_' + esc(node.id) + '_l' + lIdx;
-          unntakHtml += '<div class="checkbox-item" style="margin-bottom:8px">';
-          unntakHtml += '<input type="checkbox" id="' + cbId + '" onchange="updateSummary()">';
-          unntakHtml += '<label for="' + cbId + '"><a href="' + link.url + '" target="_blank" rel="noopener noreferrer" style="color:var(--klp-green-700);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:2px">' + esc(link.label) + '</a></label>';
-          unntakHtml += '</div>';
-        });
-      }
-      unntakBody.innerHTML = unntakHtml || emptyPlaceholder;
+function addNodeChoice(nodeId) {
+  const node = NODES[nodeId];
+  if (!node) return;
+  const newId = 'node_' + Date.now();
+  if (!node.choices) node.choices = [];
+  node.choices.push({ label: 'Nytt valg', sub: '', next: newId });
+  NODES[newId] = { id: newId, type: 'end', label: 'Ny sluttnode', content: tomtSkjelett() };
+  renderAdminTab();
+  selectAdminNode(nodeId);
+}
 
-      // Reset summary when content changes
-      updateSummary();
-    }
+function deleteNodeChoice(nodeId, idx) {
+  const node = NODES[nodeId];
+  if (!node || !node.choices) return;
+  if (!confirm('Slette dette valget?')) return;
+  node.choices.splice(idx, 1);
+  renderAdminEditor(nodeId);
+}
 
-    function updateSummary() {
-      const ta = document.getElementById('summary-textarea');
-      if (!ta) return;
+function addContentCard(nodeId, section) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  const newCard = { title: 'Nytt kort', text: '', details: '' };
+  if (section === 'infos') {
+    if (!node.content.infos || !node.content.infos[0]) node.content.infos = [{ list: [] }];
+    node.content.infos[0].list.push(newCard);
+  } else {
+    if (!node.content[section]) node.content[section] = [];
+    node.content[section].push(newCard);
+  }
+  renderAdminEditor(nodeId);
+}
 
-      const labels = [];
+function deleteContentCard(nodeId, section, idx) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (section === 'infos') {
+    if (node.content.infos && node.content.infos[0]) node.content.infos[0].list.splice(idx, 1);
+  } else {
+    if (node.content[section]) node.content[section].splice(idx, 1);
+  }
+  renderAdminEditor(nodeId);
+}
 
-      // Checked items from all three content boxes
-      const allChecked = document.querySelectorAll(
-        '#box-hoved-body input[type="checkbox"]:checked, ' +
-        '#box-viktig-body input[type="checkbox"]:checked, ' +
-        '#box-unntak-body input[type="checkbox"]:checked'
-      );
-      allChecked.forEach(function(cb) {
-        // Skip topic card checkboxes (handled separately)
-        if (cb.id && cb.id.startsWith('tcb_')) return;
-        const lbl = document.querySelector('label[for="' + cb.id + '"]');
-        if (lbl) {
-          let txt = lbl.textContent.trim().replace(/\.$/, '');
-          if (txt) labels.push(txt.charAt(0).toUpperCase() + txt.slice(1));
-        }
-      });
+function addEndNodeLink(nodeId, key) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (!node.content[key]) node.content[key] = [];
+  node.content[key].push({ label: 'Ny lenke', url: '#' });
+  renderAdminEditor(nodeId);
+}
 
-      // Checked topic cards
-      TOPIC_CARDS.forEach(function(card) {
-        const cb = document.getElementById('tcb_' + card.id);
-        if (cb && cb.checked) labels.push(card.label);
-      });
+function deleteEndNodeLink(nodeId, key, idx) {
+  const node = NODES[nodeId];
+  if (!node || !node.content || !node.content[key]) return;
+  node.content[key].splice(idx, 1);
+  renderAdminEditor(nodeId);
+}
 
-      if (!labels.length) { ta.value = ''; return; }
+function addNewChoiceNode() {
+  const raw = prompt('Skriv inn en unik node-ID (bokstaver, tall og understrek):');
+  if (!raw || !raw.trim()) return;
+  const id = raw.trim().replace(/[^a-zA-Z0-9_]/g, '_');
+  if (NODES[id]) { alert('Denne ID-en finnes allerede: ' + id); return; }
+  NODES[id] = { id: id, type: 'choice', label: 'Ny node – ' + id, choices: [] };
+  renderAdminTab();
+  selectAdminNode(id);
+}
 
-      let text;
-      if (labels.length === 1) {
-        text = 'Innhold i samtalen: ' + labels[0] + '.';
-      } else {
-        const last = labels.pop();
-        text = 'Innhold i samtalen: ' + labels.join('. ') + '. ' + last + '.';
-      }
+// ── Kodeeksport ───────────────────────────────────────────
 
-      ta.value = text;
-    }
+function openExportModal() {
+  const html = generateExportHTML();
+  document.getElementById('admin-export-textarea').value = html;
+  document.getElementById('admin-export-dialog').showModal();
+}
 
-    function topicChanged(id) {
-      const cb = document.getElementById('tcb_' + id);
-      const card = document.getElementById('tc_' + id);
-      if (cb && card) {
-        if (cb.checked) card.classList.add('checked');
-        else card.classList.remove('checked');
-      }
-      updateSummary();
-    }
+function copyExportCode() {
+  const ta  = document.getElementById('admin-export-textarea');
+  const btn = document.querySelector('.admin-export-copy');
+  const done = function() {
+    btn.textContent = 'Kopiert!';
+    setTimeout(function() { btn.textContent = 'Kopier alt'; }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(done).catch(function() {
+      ta.removeAttribute('readonly'); ta.select(); document.execCommand('copy'); ta.setAttribute('readonly',''); done();
+    });
+  } else {
+    ta.removeAttribute('readonly'); ta.select(); document.execCommand('copy'); ta.setAttribute('readonly',''); done();
+  }
+}
 
-    function openTopicDrawer(id) {
-      const card = TOPIC_CARDS.find(function(c) { return c.id === id; });
-      if (!card) return;
-      document.getElementById('topic-drawer-title').textContent = card.label;
-      let html = '';
-      card.sections.forEach(function(s) {
-        html += '<div class="topic-drawer-section">';
-        html += '<div class="topic-drawer-section-title">' + esc(s.heading) + '</div>';
-        html += '<p>' + esc(s.text) + '</p>';
-        html += '</div>';
-      });
-      document.getElementById('topic-drawer-body').innerHTML = html;
-      document.getElementById('topic-drawer').classList.add('open');
-      document.getElementById('topic-drawer-overlay').classList.add('open');
-    }
+function generateExportHTML() {
+  const source = document.documentElement.outerHTML;
+  const MARKER_RC_START = '// @@ADMIN_ROOT_CHOICES_START@@';
+  const MARKER_RC_END   = '// @@ADMIN_ROOT_CHOICES_END@@';
+  const MARKER_N_START  = '// @@ADMIN_NODES_START@@';
+  const MARKER_N_END    = '// @@ADMIN_NODES_END@@';
 
-    function closeTopicDrawer() {
-      document.getElementById('topic-drawer').classList.remove('open');
-      document.getElementById('topic-drawer-overlay').classList.remove('open');
-    }
+  const newRC = MARKER_RC_START + '\nconst ROOT_CHOICES = ' + JSON.stringify(ROOT_CHOICES, null, 2) + ';\n' + MARKER_RC_END;
+  const newN  = MARKER_N_START  + '\nconst NODES = '        + JSON.stringify(NODES,        null, 2) + ';\n' + MARKER_N_END;
 
-    function copySummary() {
-      const ta = document.getElementById('summary-textarea');
-      const btn = document.getElementById('summary-copy-btn');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(ta.value).then(function() { showCopied(btn); }).catch(function() { fallbackCopy(ta, btn); });
-      } else {
-        fallbackCopy(ta, btn);
-      }
-    }
+  const s1 = source.indexOf(MARKER_RC_START);
+  const e1 = source.indexOf(MARKER_RC_END) + MARKER_RC_END.length;
+  const s2 = source.indexOf(MARKER_N_START);
+  const e2 = source.indexOf(MARKER_N_END)  + MARKER_N_END.length;
 
-    function fallbackCopy(ta, btn) {
-      ta.removeAttribute('readonly');
-      ta.select();
-      document.execCommand('copy');
-      ta.setAttribute('readonly', '');
-      showCopied(btn);
-    }
+  if (s1 < 0 || s2 < 0) return source;
 
-    function showCopied(btn) {
-      btn.textContent = 'Kopiert!';
-      setTimeout(function() { btn.textContent = 'Kopier'; }, 2000);
-    }
+  return '<!DOCTYPE html>\n'
+    + source.slice(0, s1) + newRC
+    + source.slice(e1, s2) + newN
+    + source.slice(e2);
+}
 
-    render();
+render();
 
-    function switchTab(name, btn) {
-      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      document.getElementById("tab-" + name).classList.add("active");
-      btn.classList.add("active");
-    }
-  </script>
+</script>
 </body>
 </html>
