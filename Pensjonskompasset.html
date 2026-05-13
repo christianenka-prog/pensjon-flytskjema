@@ -4,22 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pensjonskompasset</title>
-  <style>    :root {      --klp-gray-900: #3d3d3d;      --klp-gray-700: #5e5e5e;      --klp-gray-300: #cacaca;      --klp-white: #ffffff;      --klp-green-100: #b8dad6;      --klp-green-600: #569994;      --klp-green-700: #3d7475;      --klp-pink-100: #f5c4ce;      --klp-pink-600: #cc4169;      --bg: #f4f4f4;      --card: #ffffff;      --border: #e3e3e3;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      background: linear-gradient(180deg, #eaf3f1 0%, #f5f9f7 100%);      color: var(--klp-gray-900);      min-height: 100%;      display: flex;      flex-direction: column;    }    .topbar {      background: linear-gradient(135deg, var(--klp-green-600) 0%, var(--klp-green-100) 100%);      color: var(--klp-green-700);      padding: 14px 20px;      display: flex;      justify-content: space-between;      align-items: center;      position: sticky;      top: 0;      z-index: 10;      border-bottom: 3px solid var(--klp-green-600);    }    .brand {      font-size: 18px;      font-weight: 700;      letter-spacing: 0.2px;    }    .brand span { color: var(--klp-white); }    .meta {      color: var(--klp-gray-300);      font-size: 12px;      margin-top: 2px;    }    .btn-reset {      border: 1px solid var(--klp-green-700);      background: rgba(255,255,255,0.6);      color: var(--klp-green-700);      padding: 7px 12px;      border-radius: 8px;      cursor: pointer;      font-size: 13px;      font-weight: 600;    }    .btn-reset:hover {      border-color: var(--klp-green-700);      background: var(--klp-white);    }    .page {      padding: 20px;    }    .flow-board {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 0;      padding-bottom: 24px;    }    .flow-row {      display: flex;      flex-direction: row;      align-items: center;      gap: 10px;      padding: 10px 0;      flex-shrink: 0;    }    .flow-row + .flow-row {      padding-left: 0;    }    .flow-row-sep {      font-size: 22px;      color: var(--klp-gray-300);      padding: 0 12px;      flex-shrink: 0;      user-select: none;    }    .flow-row-label {      flex-shrink: 0;      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.3px;      white-space: nowrap;    }    .flow-row-choices {      display: flex;      flex-wrap: wrap;      gap: 6px;    }    /* Text-style classes still used in detail panel */    .column-step {      font-size: 11px;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.4px;      margin-bottom: 4px;    }    .column-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);      line-height: 1.3;    }    .column-sub {      font-size: 13px;      color: var(--klp-gray-700);      margin-top: 6px;      line-height: 1.5;    }    .option {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      text-align: left;      cursor: pointer;      transition: all 0.18s ease;    }    .option-label {      font-size: 12px;      font-weight: 600;      color: var(--klp-gray-900);      line-height: 1.3;      white-space: nowrap;    }    .option:hover {      border-color: var(--klp-green-600);      background: rgba(86, 153, 148, 0.12);    }    .option.selected {      border-color: var(--klp-green-600);      background: rgba(184, 218, 214, 0.6);    }    .option.current-choice {      border-color: var(--klp-pink-600);      background: var(--klp-pink-100);    }    .option-sub {      font-size: 12px;      color: var(--klp-gray-700);      margin-top: 3px;      line-height: 1.4;    }    .panel {      border: 1px solid var(--border);      border-radius: 10px;      padding: 10px;      background: #fbfbfb;    }    .panel.info {      border-left: 3px solid var(--klp-green-600);    }    .panel.warn {      border-left: 3px solid var(--klp-pink-600);      background: #fff6f8;    }    .panel-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 6px;    }    .panel p,    .panel li {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);    }    .panel ul {      padding-left: 16px;      margin-top: 2px;    }    .panel a {      color: var(--klp-green-700);      font-weight: 500;      text-decoration: underline;      text-underline-offset: 2px;    }    .panel a:hover { color: var(--klp-pink-600); }    .btn-next {      border: none;      border-radius: 10px;      padding: 10px;      font-size: 13px;      font-weight: 700;      cursor: pointer;      background: var(--klp-green-600);      color: #fff;      margin-top: 2px;    }    .btn-next:hover { background: var(--klp-green-700); }    /* \uc0── FANER ─────────────────────────────────────────────── */    .tabs {      display: flex;      gap: 4px;      padding: 12px 20px 0;      border-bottom: 2px solid var(--border);      background: transparent;    }    .tab-btn {      padding: 7px 18px;      font-size: 14px;      font-weight: 600;      border: 1px solid var(--border);      border-bottom: none;      border-radius: 8px 8px 0 0;      background: #ececec;      color: var(--klp-gray-700);      cursor: pointer;      position: relative;      bottom: -2px;      transition: background 0.15s;    }    .tab-btn:hover {      background: #e0e0e0;    }    .tab-btn.active {      background: var(--card);      color: var(--klp-gray-900);      border-color: var(--border);      border-bottom-color: var(--card);    }    .tab-panel { display: none; }    .tab-panel.active { display: block; }    /* \uc0── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */    .flow-board.has-detail {      align-items: stretch;    }    .detail-panel {      flex-basis: 100%;      max-width: 900px;      margin-top: 16px;      background: var(--card);      border: 1px solid var(--klp-green-600);      border-radius: 12px;      box-shadow: 0 4px 16px rgba(86, 153, 148, 0.18);      overflow: hidden;      display: flex;      flex-direction: column;    }    .detail-panel-head {      padding: 14px 18px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;    }    .detail-panel-body {      padding: 16px;      display: flex;      flex-direction: row;      flex-wrap: wrap;      gap: 16px;      align-items: flex-start;      flex: 1;    }    .detail-section {      flex: 1;      min-width: 220px;      background: #fbfbfb;      border: 1px solid var(--border);      border-left: 3px solid var(--klp-green-600);      border-radius: 10px;      padding: 12px 14px;    }    .detail-section-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 10px;    }    .checkbox-item {      display: flex;      align-items: flex-start;      gap: 8px;      margin-bottom: 8px;    }    .checkbox-item input[type="checkbox"] {      margin-top: 2px;      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;    }    .checkbox-item label {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);      cursor: pointer;    }    .checkbox-item input:checked + label {      color: var(--klp-gray-700);      text-decoration: line-through;      text-decoration-color: var(--klp-green-600);    }    .detail-panel-foot {      padding: 12px 16px;      border-top: 1px solid var(--border);      display: flex;      flex-wrap: wrap;      gap: 8px;    }    /* \uc0── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */    .tab-panel.active {      display: flex;      flex-direction: column;      flex: 1;      min-height: 0;      overflow: hidden;    }    .content-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 16px;      flex: 1;      min-height: 0;    }    .content-box {      background: var(--card);      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      display: flex;      flex-direction: column;      overflow: hidden;      min-height: 0;    }    .content-box-head {      padding: 12px 16px;      border-bottom: 2px solid var(--klp-green-600);      background: var(--klp-green-100);      font-size: 15px;      font-weight: 700;      color: var(--klp-green-700);      flex-shrink: 0;    }    .content-box-body {      flex: 1;      display: flex;      flex-direction: column;      min-height: 0;      overflow: hidden;    }    .content-box-main {      flex: 1;      overflow-y: auto;      padding: 14px 16px;      min-height: 0;    }    .content-box-foot {      flex-shrink: 0;      padding: 10px 16px;      border-top: 1px solid var(--klp-green-600);      background: rgba(184, 218, 214, 0.25);    }    .content-box-foot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-green-700); margin-bottom: 6px; }    .content-box-foot-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .content-box-foot-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .content-box-foot-list a:hover { color: var(--klp-pink-600); }    /* \uc0── SAMMENDRAG ─────────────────────────────────────────── */    .summary-box {      flex-shrink: 0;      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      background: var(--card);      display: flex;      flex-direction: column;      height: 150px;      margin-top: 0;    }    .summary-box-head {      padding: 10px 16px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;      font-size: 15px;      font-weight: 700;      color: var(--klp-gray-900);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;    }    .summary-copy-btn {      border: 1px solid var(--klp-green-600);      background: transparent;      color: var(--klp-green-700);      padding: 4px 14px;      border-radius: 8px;      cursor: pointer;      font-size: 12px;      font-weight: 700;      transition: all 0.15s;    }    .summary-copy-btn:hover {      background: var(--klp-green-600);      color: #fff;    }    .summary-textarea {      flex: 1;      padding: 10px 16px;      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      font-size: 12px;      line-height: 1.5;      color: var(--klp-gray-900);      border: none;      resize: none;      background: var(--card);      outline: none;      border-radius: 0 0 12px 12px;    }    .content-placeholder {      color: var(--klp-gray-300);      font-size: 13px;      font-style: italic;    }    .box-filter-area {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 16px;      padding: 10px 16px;      border-bottom: 1px solid var(--klp-green-600);      background: rgba(184,218,214,0.35);    }    .box-filter-row {      display: flex;      align-items: center;      gap: 6px;      flex-wrap: nowrap;    }    .box-filter-label {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.3px;      color: var(--klp-gray-700);      min-width: 40px;      flex-shrink: 0;    }    .box-filter-btn {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 6px;      padding: 4px 10px;      font-size: 12px;      font-weight: 600;      cursor: pointer;      transition: all 0.15s ease;      color: var(--klp-gray-900);    }    .box-filter-btn:hover {      border-color: var(--klp-green-600);      background: rgba(86,153,148,0.12);    }    .box-filter-btn.active {      background: var(--klp-green-600);      color: #fff;      border-color: var(--klp-green-700);    }    /* \uc0── TEMAKORT (inni Hovedregler) ────────────────────────── */    .topic-cards-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 8px;      margin-top: 14px;    }    .topic-card {      display: flex;      flex-direction: column;      gap: 8px;      background: #ecf5f3;      border: 1px solid #cfe3df;      border-radius: 6px;      padding: 12px;      cursor: pointer;      transition: background 0.15s, border-color 0.15s;      min-height: 90px;    }    .topic-card:hover { background: rgba(86,153,148,0.15); border-color: var(--klp-green-600); }    .topic-card.checked {      background: rgba(86,153,148,0.22);      border-color: var(--klp-green-700);    }    .topic-card-top {      display: flex;      align-items: center;      gap: 8px;    }    .topic-card input[type="checkbox"] {      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;      margin: 0;    }    .topic-card-title {      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-900);      flex: 1;    }    .topic-card-desc {      font-size: 12px;      color: var(--klp-gray-700);      line-height: 1.5;    }    .topic-card-chevron {      margin-left: auto;      font-size: 12px;      color: var(--klp-green-700);      opacity: 0.7;    }    .topic-card-details { display: none; }    .topic-cards-grid { align-items: start; }    .card-popup-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.18);      opacity: 0;      pointer-events: none;      transition: opacity 0.2s;      z-index: 999;    }    .card-popup-overlay.open { opacity: 1; pointer-events: auto; }    .card-popup {      position: fixed;      width: 540px;      max-width: 92vw;      background: var(--klp-white);      border: 1px solid var(--klp-green-600);      border-radius: 14px;      padding: 26px 30px;      box-shadow: 0 16px 40px rgba(0,0,0,0.24);      z-index: 1000;      opacity: 0;      pointer-events: none;      transform: scale(0.2);      transform-origin: top left;      transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);    }    .card-popup.open {      opacity: 1;      pointer-events: auto;      transform: translate(28px, 28px) scale(1);    }    .card-popup-close {      position: absolute;      top: 8px;      right: 10px;      background: none;      border: none;      font-size: 22px;      line-height: 1;      cursor: pointer;      color: var(--klp-gray-700);      padding: 4px 8px;      border-radius: 6px;    }    .card-popup-close:hover { background: var(--border); }    .card-popup-title {      font-size: 20px;      font-weight: 700;      color: var(--klp-green-700);      margin-bottom: 14px;      padding-right: 32px;      line-height: 1.3;    }    .card-popup-body { font-size: 15px; line-height: 1.65; color: var(--klp-gray-900); }    .topic-section-divider {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin: 14px 0 6px;    }    .box-link-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }    .box-link-footer-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .box-link-footer-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .box-link-footer-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .box-link-footer-list a:hover { color: var(--klp-pink-600); }    /* \uc0── TEMA-DRAWER ─────────────────────────────────────────── */    .topic-drawer-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.3);      z-index: 199;      opacity: 0;      pointer-events: none;      transition: opacity 0.25s;    }    .topic-drawer-overlay.open {      opacity: 1;      pointer-events: auto;    }    .topic-drawer {      position: fixed;      top: 0;      right: 0;      width: 380px;      max-width: 95vw;      height: 100vh;      background: var(--card);      box-shadow: -4px 0 30px rgba(0,0,0,0.15);      z-index: 200;      display: flex;      flex-direction: column;      transform: translateX(100%);      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);    }    .topic-drawer.open { transform: translateX(0); }    .topic-drawer-head {      padding: 16px 20px;      border-bottom: 1px solid var(--border);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;      background: #fbfbfb;    }    .topic-drawer-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);    }    .topic-drawer-close {      background: none;      border: none;      font-size: 22px;      cursor: pointer;      color: var(--klp-gray-700);      line-height: 1;      padding: 2px 8px;      border-radius: 6px;    }    .topic-drawer-close:hover { background: var(--border); }    .topic-drawer-body {      padding: 16px 20px;      overflow-y: auto;      flex: 1;    }    .topic-drawer-section { margin-bottom: 16px; }    .topic-drawer-section:last-child { margin-bottom: 0; }    .topic-drawer-section-title {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 5px;    }    .topic-drawer-section p {      font-size: 13px;      line-height: 1.6;      color: var(--klp-gray-900);    }    @media (max-width: 720px) {      .page { padding: 12px; }      .content-grid { grid-template-columns: 1fr; }      .summary-box { height: 120px; }    }  </style>
+  <style>    :root {      --klp-gray-900: #3d3d3d;      --klp-gray-700: #5e5e5e;      --klp-gray-300: #cacaca;      --klp-white: #ffffff;      --klp-green-100: #3d7460;      --klp-green-600: #3d7460;      --klp-green-700: #2d5a48;      --klp-pink-100: #f5c4ce;      --klp-pink-600: #cc4169;      --bg: #f4f4f4;      --card: #ffffff;      --border: #e3e3e3;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      background: #f0f0f0;      color: var(--klp-gray-900);      min-height: 100%;      display: flex;      flex-direction: column;    }    .topbar {      background: #4a4a4a;      color: #ffffff;      padding: 14px 20px;      display: flex;      justify-content: space-between;      align-items: center;      position: sticky;      top: 0;      z-index: 10;      border-bottom: 3px solid #3d3d3d;    }    .brand {      font-size: 18px;      font-weight: 700;      letter-spacing: 0.2px;    }    .brand span { color: var(--klp-white); }    .meta {      color: var(--klp-gray-300);      font-size: 12px;      margin-top: 2px;    }    .btn-reset {      border: 1px solid rgba(255,255,255,0.6);      background: rgba(255,255,255,0.15);      color: #ffffff;      padding: 7px 12px;      border-radius: 8px;      cursor: pointer;      font-size: 13px;      font-weight: 600;    }    .btn-reset:hover {      border-color: var(--klp-green-700);      background: var(--klp-white);    }    .page {      padding: 20px;    }    .flow-board {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 0;      padding-bottom: 24px;    }    .flow-row {      display: flex;      flex-direction: row;      align-items: center;      gap: 10px;      padding: 10px 0;      flex-shrink: 0;    }    .flow-row + .flow-row {      padding-left: 0;    }    .flow-row-sep {      font-size: 22px;      color: var(--klp-gray-300);      padding: 0 12px;      flex-shrink: 0;      user-select: none;    }    .flow-row-label {      flex-shrink: 0;      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.3px;      white-space: nowrap;    }    .flow-row-choices {      display: flex;      flex-wrap: wrap;      gap: 6px;    }    /* Text-style classes still used in detail panel */    .column-step {      font-size: 11px;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.4px;      margin-bottom: 4px;    }    .column-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);      line-height: 1.3;    }    .column-sub {      font-size: 13px;      color: var(--klp-gray-700);      margin-top: 6px;      line-height: 1.5;    }    .option {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      text-align: left;      cursor: pointer;      transition: all 0.18s ease;    }    .option-label {      font-size: 12px;      font-weight: 600;      color: var(--klp-gray-900);      line-height: 1.3;      white-space: nowrap;    }    .option:hover {      border-color: var(--klp-green-600);      background: rgba(86, 153, 148, 0.12);    }    .option.selected {      border-color: var(--klp-green-600);      background: rgba(184, 218, 214, 0.6);    }    .option.current-choice {      border-color: var(--klp-pink-600);      background: var(--klp-pink-100);    }    .option-sub {      font-size: 12px;      color: var(--klp-gray-700);      margin-top: 3px;      line-height: 1.4;    }    .panel {      border: 1px solid var(--border);      border-radius: 10px;      padding: 10px;      background: #fbfbfb;    }    .panel.info {      border-left: 3px solid var(--klp-green-600);    }    .panel.warn {      border-left: 3px solid var(--klp-pink-600);      background: #fff6f8;    }    .panel-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 6px;    }    .panel p,    .panel li {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);    }    .panel ul {      padding-left: 16px;      margin-top: 2px;    }    .panel a {      color: var(--klp-green-700);      font-weight: 500;      text-decoration: underline;      text-underline-offset: 2px;    }    .panel a:hover { color: var(--klp-pink-600); }    .btn-next {      border: none;      border-radius: 10px;      padding: 10px;      font-size: 13px;      font-weight: 700;      cursor: pointer;      background: var(--klp-pink-600);      color: #fff;      margin-top: 2px;    }    .btn-next:hover { background: #a83255; }    /* \uc0── FANER ─────────────────────────────────────────────── */    .tabs {      display: flex;      gap: 4px;      padding: 12px 20px 0;      border-bottom: 2px solid var(--border);      background: transparent;    }    .tab-btn {      padding: 7px 18px;      font-size: 14px;      font-weight: 600;      border: 1px solid var(--border);      border-bottom: none;      border-radius: 8px 8px 0 0;      background: #ececec;      color: var(--klp-gray-700);      cursor: pointer;      position: relative;      bottom: -2px;      transition: background 0.15s;    }    .tab-btn:hover {      background: #e0e0e0;    }    .tab-btn.active {      background: var(--card);      color: var(--klp-gray-900);      border-color: var(--border);      border-bottom-color: var(--card);    }    .tab-panel { display: none; }    .tab-panel.active { display: block; }    /* \uc0── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */    .flow-board.has-detail {      align-items: stretch;    }    .detail-panel {      flex-basis: 100%;      max-width: 900px;      margin-top: 16px;      background: var(--card);      border: 1px solid var(--klp-green-600);      border-radius: 12px;      box-shadow: 0 4px 16px rgba(0,0,0,0.10);      overflow: hidden;      display: flex;      flex-direction: column;    }    .detail-panel-head {      padding: 14px 18px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;    }    .detail-panel-body {      padding: 16px;      display: flex;      flex-direction: row;      flex-wrap: wrap;      gap: 16px;      align-items: flex-start;      flex: 1;    }    .detail-section {      flex: 1;      min-width: 220px;      background: #fbfbfb;      border: 1px solid var(--border);      border-left: 3px solid var(--klp-green-600);      border-radius: 10px;      padding: 12px 14px;    }    .detail-section-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 10px;    }    .checkbox-item {      display: flex;      align-items: flex-start;      gap: 8px;      margin-bottom: 8px;    }    .checkbox-item input[type="checkbox"] {      margin-top: 2px;      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;    }    .checkbox-item label {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);      cursor: pointer;    }    .checkbox-item input:checked + label {      color: var(--klp-gray-700);      text-decoration: line-through;      text-decoration-color: var(--klp-green-600);    }    .detail-panel-foot {      padding: 12px 16px;      border-top: 1px solid var(--border);      display: flex;      flex-wrap: wrap;      gap: 8px;    }    /* \uc0── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */    .tab-panel.active {      display: flex;      flex-direction: column;      flex: 1;      min-height: 0;      overflow: hidden;    }    .content-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 16px;      flex: 1;      min-height: 0;    }    .content-box {      background: var(--card);      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      display: flex;      flex-direction: column;      overflow: hidden;      min-height: 0;    }    .content-box-head {      padding: 12px 16px;      border-bottom: 2px solid #4a4a4a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      flex-shrink: 0;    }    .content-box-body {      flex: 1;      display: flex;      flex-direction: column;      min-height: 0;      overflow: hidden;    }    .content-box-main {      flex: 1;      overflow-y: auto;      padding: 14px 16px;      min-height: 0;    }    .content-box-foot {      flex-shrink: 0;      padding: 10px 16px;      border-top: 1px solid #d8d8d8;      background: #f0f0f0;    }    .content-box-foot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .content-box-foot-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .content-box-foot-list a { font-size: 12px; color: var(--klp-pink-600); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .content-box-foot-list a:hover { color: #f5c4ce; }    /* \uc0── SAMMENDRAG ─────────────────────────────────────────── */    .summary-box {      flex-shrink: 0;      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      background: var(--card);      display: flex;      flex-direction: column;      height: 90px;      margin-top: 0;    }    .summary-box-head {      padding: 10px 16px;      border-bottom: 1px solid #3a3a3a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;    }    .summary-copy-btn {      border: none;      background: var(--klp-pink-600);      color: #fff;      padding: 4px 14px;      border-radius: 8px;      cursor: pointer;      font-size: 12px;      font-weight: 700;      transition: all 0.15s;    }    .summary-copy-btn:hover {      background: #a83255;    }    .summary-textarea {      flex: 1;      padding: 10px 16px;      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      font-size: 12px;      line-height: 1.5;      color: var(--klp-gray-900);      border: none;      resize: none;      background: var(--card);      outline: none;      border-radius: 0 0 12px 12px;    }    .content-placeholder {      color: var(--klp-gray-300);      font-size: 13px;      font-style: italic;    }    .box-filter-area {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 16px;      padding: 10px 16px;      border-bottom: 1px solid var(--klp-green-600);      background: rgba(61,116,96,0.12);    }    .box-filter-row {      display: flex;      align-items: center;      gap: 6px;      flex-wrap: nowrap;    }    .box-filter-label {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.3px;      color: var(--klp-gray-700);      min-width: 40px;      flex-shrink: 0;    }    .box-filter-btn {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      font-size: 12px;      font-weight: 600;      cursor: pointer;      transition: all 0.18s ease;      color: var(--klp-gray-900);    }    .box-filter-btn:hover {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.08);    }    .box-filter-btn.active {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.15);      color: var(--klp-gray-900);    }    /* \uc0── TEMAKORT (inni Hovedregler) ────────────────────────── */    .topic-cards-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 8px;      margin-top: 14px;    }    .topic-card {      display: flex;      flex-direction: column;      gap: 8px;      background: #f0f0f0;      border: 1px solid #d8d8d8;      border-radius: 6px;      padding: 12px;      cursor: pointer;      transition: background 0.15s, border-color 0.15s;      min-height: 90px;    }    .topic-card:hover { background: #e4e4e4; border-color: #cacaca; }    .topic-card.checked {      background: #dcdcdc;      border-color: #b0b0b0;    }    .topic-card-top {      display: flex;      align-items: center;      gap: 8px;    }    .topic-card input[type="checkbox"] {      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;      margin: 0;    }    .topic-card-title {      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-900);      flex: 1;    }    .topic-card-desc {      font-size: 12px;      color: var(--klp-gray-700);      line-height: 1.5;    }    .topic-card-chevron {      margin-left: auto;      font-size: 12px;      color: var(--klp-green-700);      opacity: 0.7;    }    .topic-card-details { display: none; }    .topic-cards-grid { align-items: start; }    .card-popup-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.18);      opacity: 0;      pointer-events: none;      transition: opacity 0.2s;      z-index: 999;    }    .card-popup-overlay.open { opacity: 1; pointer-events: auto; }    .card-popup {      position: fixed;      width: 540px;      max-width: 92vw;      background: var(--klp-white);      border: 1px solid var(--klp-green-600);      border-radius: 14px;      padding: 26px 30px;      box-shadow: 0 16px 40px rgba(0,0,0,0.24);      z-index: 1000;      opacity: 0;      pointer-events: none;      transform: scale(0.2);      transform-origin: top left;      transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);    }    .card-popup.open {      opacity: 1;      pointer-events: auto;      transform: scale(1);    }    .card-popup-close {      position: absolute;      top: 8px;      right: 10px;      background: none;      border: none;      font-size: 22px;      line-height: 1;      cursor: pointer;      color: var(--klp-gray-700);      padding: 4px 8px;      border-radius: 6px;    }    .card-popup-close:hover { background: var(--border); }    .card-popup-title {      font-size: 20px;      font-weight: 700;      color: var(--klp-green-700);      margin-bottom: 14px;      padding-right: 32px;      line-height: 1.3;    }    .card-popup-body { font-size: 15px; line-height: 1.65; color: var(--klp-gray-900); max-height: 55vh; overflow-y: auto; }    .topic-section-divider {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin: 14px 0 6px;    }    .box-link-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }    .box-link-footer-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .box-link-footer-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .box-link-footer-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .box-link-footer-list a:hover { color: var(--klp-pink-600); }    /* \uc0── TEMA-DRAWER ─────────────────────────────────────────── */    .topic-drawer-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.3);      z-index: 199;      opacity: 0;      pointer-events: none;      transition: opacity 0.25s;    }    .topic-drawer-overlay.open {      opacity: 1;      pointer-events: auto;    }    .topic-drawer {      position: fixed;      top: 0;      right: 0;      width: 380px;      max-width: 95vw;      height: 100vh;      background: var(--card);      box-shadow: -4px 0 30px rgba(0,0,0,0.15);      z-index: 200;      display: flex;      flex-direction: column;      transform: translateX(100%);      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);    }    .topic-drawer.open { transform: translateX(0); }    .topic-drawer-head {      padding: 16px 20px;      border-bottom: 1px solid var(--border);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;      background: #fbfbfb;    }    .topic-drawer-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);    }    .topic-drawer-close {      background: none;      border: none;      font-size: 22px;      cursor: pointer;      color: var(--klp-gray-700);      line-height: 1;      padding: 2px 8px;      border-radius: 6px;    }    .topic-drawer-close:hover { background: var(--border); }    .topic-drawer-body {      padding: 16px 20px;      overflow-y: auto;      flex: 1;    }    .topic-drawer-section { margin-bottom: 16px; }    .topic-drawer-section:last-child { margin-bottom: 0; }    .topic-drawer-section-title {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 5px;    }    .topic-drawer-section p {      font-size: 13px;      line-height: 1.6;      color: var(--klp-gray-900);    }    @media (max-width: 720px) {      .page { padding: 12px; }      .content-grid { grid-template-columns: 1fr; }      .summary-box { height: 120px; }    }    .summary-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; }    .flow-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; padding: 2px 0 6px; flex-basis: 100%; }    /* ── SØKEFELT ────────────────────────────────────────────── */    .search-wrap { position: relative; max-width: 200px; }    .search-input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s, width 0.2s; width: 140px; }    .search-input:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.12); width: 200px; }    .search-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--klp-white); border: 1px solid var(--klp-green-600); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 50; max-height: 260px; overflow-y: auto; display: none; }    .search-results.open { display: block; }    .search-result-item { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--klp-gray-900); border-bottom: 1px solid var(--border); }    .search-result-item:last-child { border-bottom: none; }    .search-result-item:hover { background: rgba(86,153,148,0.1); color: var(--klp-green-700); }    .search-result-item strong { color: var(--klp-green-700); }    .search-result-path { font-size: 11px; color: var(--klp-gray-300); margin-top: 1px; }    .search-result-kort { display: inline-block; margin-right: 6px; }    .search-result-kort::before { content: '→ '; }    /* ── ADMIN REDIGERINGSMODUS ──────────────────────────────── */    .admin-tab-icon { background: none; border: none; cursor: pointer; color: var(--klp-gray-300); font-size: 13px; padding: 7px 10px; opacity: 0.35; position: relative; bottom: -2px; border-radius: 8px 8px 0 0; transition: opacity 0.2s; line-height: 1; }    .admin-tab-icon:hover { opacity: 0.9; color: var(--klp-gray-700); }    .admin-tab-icon.active { opacity: 1; color: var(--klp-gray-700); background: var(--card); border: 1px solid var(--border); border-bottom-color: var(--card); }    .admin-layout { display: flex; flex-direction: row; flex: 1; min-height: 0; gap: 0; }    .admin-tree { width: 240px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; background: #fafafa; }    .admin-tree-item { display: flex; align-items: center; gap: 6px; padding: 6px 12px 6px 10px; cursor: pointer; font-size: 12px; color: var(--klp-gray-700); border-left: 3px solid transparent; transition: background 0.12s; user-select: none; }    .admin-tree-item:hover { background: rgba(86,153,148,0.08); }    .admin-tree-item.selected { background: rgba(86,153,148,0.15); border-left-color: var(--klp-green-600); color: var(--klp-gray-900); font-weight: 600; }    .node-type-badge { font-size: 10px; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }    .badge-choice { background: #dbeafe; color: #1e40af; }    .badge-end { background: #d1fae5; color: #065f46; }    .admin-tree-group { padding: 8px 12px 2px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-300); }    .admin-editor { flex: 1; overflow-y: auto; padding: 20px 24px; }    .admin-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--klp-green-100); }    .admin-editor-title { font-size: 16px; font-weight: 700; color: var(--klp-gray-900); }    .admin-export-btn { background: var(--klp-pink-600); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }    .admin-export-btn:hover { background: #a83255; }    .admin-section { margin-bottom: 24px; }    .admin-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-700); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }    .admin-field { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s; }    .admin-field:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.15); }    .admin-field.ta { resize: vertical; min-height: 58px; }    .admin-field-label { font-size: 11px; font-weight: 600; color: var(--klp-gray-700); margin-bottom: 3px; display: block; }    .admin-field-group { margin-bottom: 8px; }    .admin-card-row { background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }    .admin-card-row-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }    .admin-card-num { font-size: 11px; font-weight: 700; color: var(--klp-gray-300); }    .admin-btn-del { background: none; border: 1px solid #fca5a5; color: #dc2626; border-radius: 6px; padding: 2px 8px; font-size: 12px; cursor: pointer; transition: all 0.12s; }    .admin-btn-del:hover { background: #fef2f2; }    .admin-btn-add { background: none; border: 1px dashed var(--klp-green-600); color: var(--klp-green-700); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; transition: all 0.12s; }    .admin-btn-add:hover { background: rgba(86,153,148,0.08); }    .admin-choice-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; }    .admin-link-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }    #admin-export-dialog { border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: min(720px, 95vw); box-shadow: 0 16px 48px rgba(0,0,0,0.2); }    #admin-export-dialog::backdrop { background: rgba(0,0,0,0.45); }    .admin-export-dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; }    .admin-export-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--klp-gray-700); padding: 2px 8px; border-radius: 6px; line-height: 1; }    .admin-export-close:hover { background: var(--border); }    .admin-export-copy { background: var(--klp-green-600); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 12px; }    .admin-export-copy:hover { background: var(--klp-green-700); }    #admin-export-textarea { width: 100%; height: 55vh; font-family: monospace; font-size: 11px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; resize: none; display: block; }  </style>
 </head>
-<body>  <header class="topbar">    <div>      <div class="brand"><span>Pensjonskompasset</span></div>    </div>    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>  </header>  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">    <nav class="tabs">      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>    </nav>    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">      <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>      <div class="content-grid">        <div class="content-box">          <div class="content-box-head">Hovedregler</div>          <div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Viktig å huske på</div>          <div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Unntak</div>          <div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>      </div>      <div class="summary-box">        <div class="summary-box-head">          <span>Notatsammendrag</span>          <button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button>        </div>        <textarea id="summary-textarea" class="summary-textarea" readonly placeholder="Velg et alternativ i navigasjonen for å generere et sammendrag."></textarea>      </div>    </div>    <div id="tab-beregninger" class="tab-panel" style="padding:20px">      <p style="color:var(--klp-gray-700);font-size:14px">Beregningsverktøy kommer her.</p>    </div>  </main>
+<body>  <header class="topbar">    <div>      <div class="brand"><span>Pensjonskompasset</span></div>    </div>    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>  </header>  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">    <nav class="tabs">      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-bottom:2px"><div class="search-wrap" style="margin-bottom:0"><input id="search-input" class="search-input" type="text" placeholder="Søk…" oninput="handleSearch(this.value)" onblur="setTimeout(function(){closeSearch()},150)" autocomplete="off"><ul id="search-results" class="search-results"></ul></div><button id="admin-tab-btn" class="admin-tab-icon" onclick="openAdminTab()" title="Redigeringsmodus">✎</button></div>    </nav>    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">      <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>      <div class="content-grid">        <div class="content-box">          <div class="content-box-head">Hovedregler</div>          <div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Viktig å huske på</div>          <div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Unntak</div>          <div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>      </div>      <div class="summary-box">        <div class="summary-box-head">          <span>Notatsammendrag</span>          <button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button>        </div>        <textarea id="summary-textarea" class="summary-textarea" placeholder="Hak av bokser over, eller skriv her..."></textarea>      </div>    </div>    <div id="tab-beregninger" class="tab-panel" style="padding:20px">      <p style="color:var(--klp-gray-700);font-size:14px">Beregningsverktøy kommer her.</p>    </div>    <div id="tab-rediger" class="tab-panel" style="padding:0;gap:0"><div class="admin-layout"><div id="admin-tree" class="admin-tree"></div><div id="admin-editor" class="admin-editor"><div class="admin-editor-header"><span class="admin-editor-title">Rediger flytskjema</span><button class="admin-export-btn" onclick="openExportModal()">Generer kode</button></div><p style="color:var(--klp-gray-700);font-size:13px">Velg et element i menyen til venstre for å redigere det.</p></div></div></div>  </main>
 <div id="card-popup-overlay" class="card-popup-overlay" onclick="closeCardPopup()"></div>
 <div id="card-popup" class="card-popup" role="dialog" aria-modal="true">
   <button class="card-popup-close" onclick="closeCardPopup()" aria-label="Lukk">×</button>
   <div id="card-popup-title" class="card-popup-title"></div>
   <div id="card-popup-body" class="card-popup-body"></div>
 </div>
+<dialog id="admin-export-dialog">
+  <div class="admin-export-dialog-head">
+    <strong>Ferdig HTML — kopier og lim inn i GitHub</strong>
+    <button class="admin-export-close" onclick="document.getElementById('admin-export-dialog').close()">×</button>
+  </div>
+  <button class="admin-export-copy" onclick="copyExportCode()">Kopier alt</button>
+  <textarea id="admin-export-textarea" readonly></textarea>
+</dialog>
 <script>
+// @@ADMIN_ROOT_CHOICES_START@@
 const ROOT_CHOICES = [
   { label: "Alderspensjon",     next: "ald_arskull" },
   { label: "Uførepensjon",      sub: "Start med fødselsår",                next: "ufo_start" },
   { label: "Etterlattepensjon", sub: "Start med avdødes status",           next: "etl_start" },
   { label: "Medlemskap",        sub: "Innmelding, utmelding og permisjon", next: "med_start" }
 ];
+// @@ADMIN_ROOT_CHOICES_END@@
 
 /*
   ─────────────────────────────────────────────────────────────
@@ -67,6 +77,7 @@ const AG_FILTER = [
   { id: "ag", label: "AG", options: ["60 år", "65 år", "70 år"] }
 ];
 
+// @@ADMIN_NODES_START@@
 const NODES = {
 
   root: {
@@ -193,10 +204,13 @@ const NODES = {
   med_pens_end: { id: "med_pens_end", type: "end", label: "Medlemskap – pensjonistvilkår",  content: tomtSkjelett() }
 
 };
+// @@ADMIN_NODES_END@@
 
 
 const path = [{ nodeId: "root", selected: null }];
 let boxState = {};
+let lastAutoSummary = '';
+
 
 function normalizeText(str) {
   if (!str) return "";
@@ -240,6 +254,7 @@ function selectColumn(stepIndex) {
 }
 
 function resetFlow() {
+  if (path.length > 1 && !confirm('Er du sikker på at du vil starte på nytt?')) return;
   path.length = 0;
   path.push({ nodeId: "root", selected: null });
   render();
@@ -250,7 +265,8 @@ function renderChoices(node, stepIndex, selectedIndex) {
   let html = "";
   node.choices.forEach((choice, idx) => {
     const isSelected = selectedIndex === idx;
-    const isCurrent = stepIndex === path.length - 1 && isSelected;
+    const leadsToEnd = isSelected && choice.next && NODES[choice.next] && NODES[choice.next].type === 'end';
+    const isCurrent = (stepIndex === path.length - 1 && isSelected) || (leadsToEnd && stepIndex === path.length - 2);
     const cls = isCurrent ? "option current-choice" : isSelected ? "option selected" : "option";
     html += '<button class="' + cls + '" onclick="choose(' + stepIndex + ',' + idx + ')">';
     html += '<div class="option-label">' + esc(choice.label) + '</div>';
@@ -289,6 +305,10 @@ function render() {
     } else {
       html += renderRow(path[i], i);
     }
+  }
+  if (endNode && !sessionStorage.getItem('hintSett')) {
+    html += '<p class="flow-hint">← Klikk et tidligere valg for å endre</p>';
+    sessionStorage.setItem('hintSett', '1');
   }
   flow.innerHTML = html;
   renderContentBoxes(endNode);
@@ -334,8 +354,19 @@ function toggleCardExpand(event, cardId) {
 
   // Posisjoner popup-en oppå kortets posisjon — animasjonen vil flytte diagonalt og skalere opp
   const rect = card.getBoundingClientRect();
-  popup.style.left = rect.left + 'px';
-  popup.style.top  = rect.top  + 'px';
+  const popupWidth = Math.min(540, window.innerWidth * 0.92);
+  const margin = 12;
+  let left = rect.left + 20;
+  let origin = 'top left';
+  if (left + popupWidth > window.innerWidth - margin) {
+    left = rect.right - popupWidth - 20;
+    if (left < margin) left = margin;
+    origin = 'top right';
+  }
+  let top = Math.max(margin, rect.top + 20);
+  popup.style.left = left + 'px';
+  popup.style.top  = top + 'px';
+  popup.style.transformOrigin = origin;
 
   // Lukk eventuell forrige først for å nullstille animasjonen
   popup.classList.remove('open');
@@ -345,6 +376,15 @@ function toggleCardExpand(event, cardId) {
   popup.classList.add('open');
   overlay.classList.add('open');
   popup.dataset.activeCard = cardId;
+
+  // Etter at popup er rendret: sjekk om den stikker utenfor nedre kant og juster
+  requestAnimationFrame(() => {
+    const pr = popup.getBoundingClientRect();
+    if (pr.bottom > window.innerHeight - margin) {
+      const adjusted = Math.max(margin, window.innerHeight - pr.height - margin);
+      popup.style.top = adjusted + 'px';
+    }
+  });
 }
 
 function closeCardPopup() {
@@ -374,7 +414,7 @@ function renderFilterSpacer(node) {
 function renderLinkFooter(links) {
   if (!links || !links.length) return '<div class="content-box-foot" style="visibility:hidden" aria-hidden="true"><div class="content-box-foot-title">.</div></div>';
   let html = '<div class="content-box-foot">';
-  html += '<div class="content-box-foot-title">Relevante lenker</div>';
+  html += '<div class="content-box-foot-title">Lenker</div>';
   html += '<div class="content-box-foot-list">';
   links.forEach(function(link) {
     html += '<a href="' + (link.url || '#') + '" target="_blank" rel="noopener noreferrer">' + esc(link.label) + '</a>';
@@ -427,12 +467,12 @@ function alleFiltreValgt(node) {
 
 function ventPaaFilterMelding(node) {
   if (!node.boxChoices || !node.boxChoices.length) return '';
-  const navn = node.boxChoices.map(function(g) { return g.label; }).join(' og ');
-  return '<p class="content-placeholder" style="padding:18px 0;text-align:center">Velg ' + esc(navn) + ' over for å se innhold.</p>';
+  const mangler = node.boxChoices.filter(function(g) { return !boxState[g.id]; });
+  return mangler.length ? '' : '';
 }
 
 function renderContentBoxes(node) {
-  const emptyPlaceholder = '<p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p>';
+  const emptyPlaceholder = '';
   const hoofdBody  = document.getElementById("box-hoved-body");
   const viktigBody = document.getElementById("box-viktig-body");
   const unntakBody = document.getElementById("box-unntak-body");
@@ -446,6 +486,8 @@ function renderContentBoxes(node) {
   const filterHtml = renderFilterArea(node);
   const visKort = alleFiltreValgt(node);
   const ventMelding = ventPaaFilterMelding(node);
+  const harFilter = !!(node.boxChoices && node.boxChoices.length);
+  const visLenker = !harFilter || visKort;
 
   // Hovedregler: infos
   let hoofdSection;
@@ -461,7 +503,7 @@ function renderContentBoxes(node) {
     });
     hoofdSection = wrapGrid(infoHtml) || emptyPlaceholder;
   }
-  hoofdBody.innerHTML = wrapBoxContent(filterHtml + hoofdSection, renderLinkFooter(content.lenkerHoved));
+  hoofdBody.innerHTML = wrapBoxContent(filterHtml + hoofdSection, visLenker ? renderLinkFooter(content.lenkerHoved) : '');
 
   // Viktig å huske på: warnings
   let viktigSection;
@@ -475,7 +517,7 @@ function renderContentBoxes(node) {
     });
     viktigSection = wrapGrid(viktigHtml) || emptyPlaceholder;
   }
-  viktigBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + viktigSection, renderLinkFooter(content.lenkerViktig));
+  viktigBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + viktigSection, visLenker ? renderLinkFooter(content.lenkerViktig) : '');
 
   // Unntak: plain text checkboxes
   let unntakSection;
@@ -489,7 +531,7 @@ function renderContentBoxes(node) {
     });
     unntakSection = wrapGrid(unntakHtml) || emptyPlaceholder;
   }
-  unntakBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + unntakSection, renderLinkFooter(content.lenkerUnntak));
+  unntakBody.innerHTML = wrapBoxContent(renderFilterSpacer(node) + unntakSection, visLenker ? renderLinkFooter(content.lenkerUnntak) : '');
 
   updateSummary();
 }
@@ -511,7 +553,10 @@ function updateSummary() {
       if (txt) labels.push(txt.charAt(0).toUpperCase() + txt.slice(1));
     }
   });
-  if (!labels.length) { ta.value = ''; return; }
+  if (!labels.length) {
+    if (ta.value === lastAutoSummary) { ta.value = ''; lastAutoSummary = ''; }
+    return;
+  }
   let text;
   if (labels.length === 1) {
     text = 'Innhold i samtalen: ' + labels[0] + '.';
@@ -519,7 +564,10 @@ function updateSummary() {
     const last = labels.pop();
     text = 'Innhold i samtalen: ' + labels.join('. ') + '. ' + last + '.';
   }
-  ta.value = text;
+  if (ta.value === '' || ta.value === lastAutoSummary) {
+    ta.value = text;
+    lastAutoSummary = text;
+  }
 }
 
 function copySummary() {
@@ -533,10 +581,8 @@ function copySummary() {
 }
 
 function fallbackCopy(ta, btn) {
-  ta.removeAttribute('readonly');
   ta.select();
   document.execCommand('copy');
-  ta.setAttribute('readonly', '');
   showCopied(btn);
 }
 
@@ -550,6 +596,491 @@ function switchTab(name, btn) {
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
   document.getElementById("tab-" + name).classList.add("active");
   btn.classList.add("active");
+}
+
+// ── SØKEFUNKSJON ─────────────────────────────────────────
+
+function sokINode(node, q) {
+  // Returnerer liste over matchende kortttitler (maks 2 for visning)
+  const treff = [];
+  function sjekkTekst(str) { return str && str.toLowerCase().includes(q); }
+  function sjekkKort(item) {
+    if (!item) return null;
+    const t = typeof item === 'object' ? item.title : item;
+    const tx = typeof item === 'object' ? item.text : '';
+    const d  = typeof item === 'object' ? item.details : '';
+    return (sjekkTekst(t) || sjekkTekst(tx) || sjekkTekst(d)) ? (t || '') : null;
+  }
+  const c = node.content || {};
+  (c.infos && c.infos[0] ? c.infos[0].list : []).forEach(function(k) { const m = sjekkKort(k); if (m) treff.push(m); });
+  (c.warnings || []).forEach(function(k) { const m = sjekkKort(k); if (m) treff.push(m); });
+  (c.unntak   || []).forEach(function(k) { const m = sjekkKort(k); if (m) treff.push(m); });
+  return treff;
+}
+
+function handleSearch(query) {
+  const list = document.getElementById('search-results');
+  const q = query.trim().toLowerCase();
+  if (!q) { list.classList.remove('open'); list.innerHTML = ''; return; }
+
+  const resultater = [];
+  Object.values(NODES).forEach(function(n) {
+    if (n.type !== 'end') return;
+    const labelMatch = n.label && n.label.toLowerCase().includes(q);
+    const kortTreff  = sokINode(n, q);
+    if (labelMatch || kortTreff.length) {
+      resultater.push({ node: n, labelMatch: labelMatch, kortTreff: kortTreff });
+    }
+  });
+
+  resultater.sort(function(a, b) {
+    if (a.labelMatch && !b.labelMatch) return -1;
+    if (!a.labelMatch && b.labelMatch) return 1;
+    return 0;
+  });
+
+  const visResultater = resultater.slice(0, 8);
+
+  if (!visResultater.length) {
+    list.innerHTML = '<li class="search-result-item" style="color:var(--klp-gray-300)">Ingen treff</li>';
+    list.classList.add('open');
+    return;
+  }
+
+  function hl(str) {
+    if (!str) return '';
+    return escAttr(str).replace(new RegExp('(' + escAttr(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<strong>$1</strong>');
+  }
+
+  list.innerHTML = visResultater.map(function(r) {
+    const n = r.node;
+    const sti = finnStiTilNode(n.id);
+    const stitekst = sti ? sti.slice(1, -1).map(function(id) {
+      return NODES[id] ? escAttr(NODES[id].label || '') : '';
+    }).filter(Boolean).join(' › ') : '';
+    const kortvisning = r.kortTreff.slice(0, 2).map(function(t) {
+      return '<span class="search-result-kort">' + hl(t) + '</span>';
+    }).join('');
+    return '<li class="search-result-item" onmousedown="navigerTilNode(\'' + n.id + '\')">'
+      + hl(n.label)
+      + (kortvisning ? '<div class="search-result-path">' + kortvisning + '</div>' : stitekst ? '<div class="search-result-path">' + stitekst + '</div>' : '')
+      + '</li>';
+  }).join('');
+  list.classList.add('open');
+}
+
+function closeSearch() {
+  const list = document.getElementById('search-results');
+  if (list) { list.classList.remove('open'); list.innerHTML = ''; }
+  const inp = document.getElementById('search-input');
+  if (inp) inp.value = '';
+}
+
+function finnStiTilNode(targetId) {
+  const queue = [['root']];
+  const visited = new Set();
+  while (queue.length) {
+    const sti = queue.shift();
+    const nodeId = sti[sti.length - 1];
+    if (visited.has(nodeId)) continue;
+    visited.add(nodeId);
+    if (nodeId === targetId) return sti;
+    const node = NODES[nodeId];
+    if (node && node.choices) {
+      node.choices.forEach(function(c) { if (c.next && !visited.has(c.next)) queue.push(sti.concat([c.next])); });
+    }
+  }
+  return null;
+}
+
+function navigerTilNode(targetId) {
+  const sti = finnStiTilNode(targetId);
+  if (!sti) return;
+  path.length = 0;
+  for (var i = 0; i < sti.length; i++) {
+    const nodeId = sti[i];
+    const node = NODES[nodeId];
+    const nextId = sti[i + 1];
+    let selected = null;
+    if (nextId && node && node.choices) {
+      selected = node.choices.findIndex(function(c) { return c.next === nextId; });
+      if (selected === -1) selected = null;
+    }
+    path.push({ nodeId: nodeId, selected: selected });
+  }
+  boxState = {};
+  closeSearch();
+  render();
+}
+
+// ── ADMIN REDIGERINGSMODUS ────────────────────────────────
+
+let adminMode = false;
+let adminSelectedNodeId = null;
+
+function escAttr(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function openAdminTab() {
+  const pw = prompt('Skriv inn administrasjonskode:');
+  if (pw !== 'klp2025') return;
+  adminMode = true;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn, .admin-tab-icon').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-rediger').classList.add('active');
+  const btn = document.getElementById('admin-tab-btn');
+  btn.classList.add('active');
+  btn.style.opacity = '1';
+  renderAdminTab();
+}
+
+function renderAdminTab() {
+  renderAdminTree();
+  if (adminSelectedNodeId) {
+    renderAdminEditor(adminSelectedNodeId);
+  }
+}
+
+function renderAdminTree() {
+  const tree = document.getElementById('admin-tree');
+  if (!tree) return;
+  let html = '';
+
+  html += '<div class="admin-tree-group">Ytelse (start)</div>';
+  html += adminTreeItem('root', 'Ytelse', 'choice');
+
+  const groups = [
+    { label: 'Alderspensjon', ids: ['ald_arskull','ald_1953_vp','ald_1953_veil_end','ald_1953_mottar_end','ald_1954_vp','ald_1954_veil_end','ald_1954_mottar_end','ald_6364_vp','ald_6364_veil_end','ald_6364_mottar_end','ald_6570_vp','ald_6570_veil_end','ald_6570_mottar_end','ald_71_vp','ald_71_veil_end','ald_71_mottar_end'] },
+    { label: 'Uførepensjon', ids: ['ufo_start','ufo_old_end','ufo_new_end'] },
+    { label: 'Etterlattepensjon', ids: ['etl_start','etl_aktiv_end','etl_pensjon_end','etl_oppsatt_end'] },
+    { label: 'Medlemskap', ids: ['med_start','med_inn_end','med_ut_end','med_perm_end','med_pens_end'] }
+  ];
+
+  const knownIds = new Set(['root']);
+  groups.forEach(g => g.ids.forEach(id => knownIds.add(id)));
+  const extraIds = Object.keys(NODES).filter(id => !knownIds.has(id));
+  if (extraIds.length) groups.push({ label: 'Egendefinerte noder', ids: extraIds });
+
+  groups.forEach(function(group) {
+    html += '<div class="admin-tree-group">' + escAttr(group.label) + '</div>';
+    group.ids.forEach(function(id) {
+      const node = NODES[id];
+      if (!node) return;
+      html += adminTreeItem(id, node.label || id, node.type);
+    });
+  });
+
+  tree.innerHTML = html;
+}
+
+function adminTreeItem(id, label, type) {
+  const sel = adminSelectedNodeId === id ? ' selected' : '';
+  const badge = type === 'end'
+    ? '<span class="node-type-badge badge-end">Slutt</span>'
+    : '<span class="node-type-badge badge-choice">Valg</span>';
+  return '<div class="admin-tree-item' + sel + '" onclick="selectAdminNode(\'' + id + '\')">'
+    + badge
+    + '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escAttr(label) + '</span>'
+    + '</div>';
+}
+
+function selectAdminNode(id) {
+  adminSelectedNodeId = id;
+  renderAdminTree();
+  renderAdminEditor(id);
+}
+
+function renderAdminEditor(id) {
+  const node = NODES[id];
+  const ed = document.getElementById('admin-editor');
+  if (!ed) return;
+  if (!node) { ed.innerHTML = '<p>Node ikke funnet.</p>'; return; }
+
+  let html = '<div class="admin-editor-header">'
+    + '<span class="admin-editor-title">' + escAttr(node.label || id) + '</span>'
+    + '<button class="admin-export-btn" onclick="openExportModal()">Generer kode</button>'
+    + '</div>';
+
+  if (id === 'root') {
+    html += renderAdminRootEditor();
+  } else if (node.type === 'choice') {
+    html += renderAdminChoiceEditor(node);
+  } else if (node.type === 'end') {
+    html += renderAdminEndEditor(node);
+  }
+
+  ed.innerHTML = html;
+}
+
+function adminFieldGroup(labelText, inputHtml) {
+  return '<div class="admin-field-group"><label class="admin-field-label">' + labelText + '</label>' + inputHtml + '</div>';
+}
+
+function renderAdminRootEditor() {
+  let html = '<div class="admin-section"><div class="admin-section-title">Hovedkategorier (ROOT_CHOICES)</div>';
+  ROOT_CHOICES.forEach(function(rc, idx) {
+    html += '<div class="admin-choice-row">';
+    html += adminFieldGroup('Label', '<input class="admin-field" value="' + escAttr(rc.label) + '" oninput="updateRootChoice(' + idx + ',\'label\',this.value)">');
+    html += adminFieldGroup('Undertekst', '<input class="admin-field" value="' + escAttr(rc.sub || '') + '" oninput="updateRootChoice(' + idx + ',\'sub\',this.value)">');
+    const nextOk = NODES[rc.next] ? '' : 'border-color:#f87171;';
+    html += adminFieldGroup('Neste node-ID', '<input class="admin-field" style="' + nextOk + '" value="' + escAttr(rc.next || '') + '" oninput="updateRootChoice(' + idx + ',\'next\',this.value)">');
+    html += '</div>';
+    html += '<div style="text-align:right;margin-bottom:14px"><button class="admin-btn-del" onclick="deleteRootChoice(' + idx + ')">Slett kategori</button></div>';
+  });
+  html += '<button class="admin-btn-add" onclick="addRootChoice()">+ Legg til kategori</button>';
+  html += '</div>';
+  return html;
+}
+
+function renderAdminChoiceEditor(node) {
+  let html = '<div class="admin-section">';
+  html += adminFieldGroup('Node-tittel', '<input class="admin-field" value="' + escAttr(node.label) + '" oninput="updateNodeLabel(\'' + node.id + '\',this.value)">');
+  html += '</div>';
+  html += '<div class="admin-section"><div class="admin-section-title">Valg (knapper)</div>';
+  (node.choices || []).forEach(function(choice, idx) {
+    html += '<div class="admin-choice-row">';
+    html += adminFieldGroup('Label', '<input class="admin-field" value="' + escAttr(choice.label) + '" oninput="updateNodeChoice(\'' + node.id + '\',' + idx + ',\'label\',this.value)">');
+    html += adminFieldGroup('Undertekst', '<input class="admin-field" value="' + escAttr(choice.sub || '') + '" oninput="updateNodeChoice(\'' + node.id + '\',' + idx + ',\'sub\',this.value)">');
+    const nextOk = NODES[choice.next] ? '' : 'border-color:#f87171;';
+    html += adminFieldGroup('Neste node-ID', '<input class="admin-field" style="' + nextOk + '" value="' + escAttr(choice.next || '') + '" oninput="updateNodeChoice(\'' + node.id + '\',' + idx + ',\'next\',this.value)">');
+    html += '</div>';
+    html += '<div style="text-align:right;margin-bottom:14px"><button class="admin-btn-del" onclick="deleteNodeChoice(\'' + node.id + '\',' + idx + ')">Slett valg</button></div>';
+  });
+  html += '<button class="admin-btn-add" onclick="addNodeChoice(\'' + node.id + '\')">+ Legg til valg</button>';
+  html += '</div>';
+  return html;
+}
+
+function renderAdminEndEditor(node) {
+  const content = node.content || {};
+  let html = '<div class="admin-section">';
+  html += adminFieldGroup('Node-tittel', '<input class="admin-field" value="' + escAttr(node.label) + '" oninput="updateNodeLabel(\'' + node.id + '\',this.value)">');
+  html += '</div>';
+
+  function contentSection(title, section, items) {
+    let s = '<div class="admin-section"><div class="admin-section-title">' + title + '</div>';
+    (items || []).forEach(function(item, idx) {
+      const t   = typeof item === 'object' ? (item.title   || '') : (item || '');
+      const tx  = typeof item === 'object' ? (item.text    || '') : '';
+      const det = typeof item === 'object' ? (item.details || '') : '';
+      s += '<div class="admin-card-row">';
+      s += '<div class="admin-card-row-head"><span class="admin-card-num">Kort ' + (idx + 1) + '</span>'
+        + '<button class="admin-btn-del" onclick="deleteContentCard(\'' + node.id + '\',\'' + section + '\',' + idx + ')">Slett</button></div>';
+      s += adminFieldGroup('Tittel', '<input class="admin-field" value="' + escAttr(t) + '" oninput="updateEndNodeContent(\'' + node.id + '\',\'' + section + '\',' + idx + ',\'title\',this.value)">');
+      s += adminFieldGroup('Beskrivelse', '<textarea class="admin-field ta" oninput="updateEndNodeContent(\'' + node.id + '\',\'' + section + '\',' + idx + ',\'text\',this.value)">' + escAttr(tx) + '</textarea>');
+      s += adminFieldGroup('Detaljert innhold (popup)', '<textarea class="admin-field ta" oninput="updateEndNodeContent(\'' + node.id + '\',\'' + section + '\',' + idx + ',\'details\',this.value)">' + escAttr(det) + '</textarea>');
+      s += '</div>';
+    });
+    s += '<button class="admin-btn-add" onclick="addContentCard(\'' + node.id + '\',\'' + section + '\')">+ Legg til kort</button>';
+    s += '</div>';
+    return s;
+  }
+
+  const infoList = content.infos && content.infos[0] ? (content.infos[0].list || []) : [];
+  html += contentSection('Hovedregler (kort)', 'infos', infoList);
+  html += contentSection('Viktig å huske på (kort)', 'warnings', content.warnings || []);
+  html += contentSection('Unntak (kort)', 'unntak', content.unntak || []);
+
+  function linkSection(title, key, links) {
+    let s = '<div class="admin-section"><div class="admin-section-title">' + title + '</div>';
+    (links || []).forEach(function(link, idx) {
+      s += '<div class="admin-link-row">';
+      s += '<div>' + adminFieldGroup('Lenketekst', '<input class="admin-field" value="' + escAttr(link.label || '') + '" oninput="updateEndNodeLink(\'' + node.id + '\',\'' + key + '\',' + idx + ',\'label\',this.value)">') + '</div>';
+      s += '<div>' + adminFieldGroup('URL', '<input class="admin-field" value="' + escAttr(link.url || '') + '" oninput="updateEndNodeLink(\'' + node.id + '\',\'' + key + '\',' + idx + ',\'url\',this.value)">') + '</div>';
+      s += '<div style="padding-bottom:1px"><button class="admin-btn-del" onclick="deleteEndNodeLink(\'' + node.id + '\',\'' + key + '\',' + idx + ')">×</button></div>';
+      s += '</div>';
+    });
+    s += '<button class="admin-btn-add" onclick="addEndNodeLink(\'' + node.id + '\',\'' + key + '\')">+ Legg til lenke</button>';
+    s += '</div>';
+    return s;
+  }
+
+  html += linkSection('Lenker – Hovedregler', 'lenkerHoved', content.lenkerHoved || []);
+  html += linkSection('Lenker – Viktig å huske på', 'lenkerViktig', content.lenkerViktig || []);
+  html += linkSection('Lenker – Unntak', 'lenkerUnntak', content.lenkerUnntak || []);
+
+  html += '<div class="admin-section"><div class="admin-section-title">Ny forgreningsnode</div>'
+    + '<p style="font-size:12px;color:var(--klp-gray-700);margin-bottom:8px">Opprett en ny choice-node og koble den til ved å sette dens ID som «Neste node-ID» i et valg over.</p>'
+    + '<button class="admin-btn-add" onclick="addNewChoiceNode()">+ Opprett ny choice-node</button>'
+    + '</div>';
+
+  return html;
+}
+
+// ── Mutasjons-hjelpere ────────────────────────────────────
+
+function updateRootChoice(idx, field, value) {
+  ROOT_CHOICES[idx][field] = value;
+  NODES.root.choices[idx][field] = value;
+}
+
+function updateNodeLabel(nodeId, value) {
+  if (NODES[nodeId]) NODES[nodeId].label = value;
+}
+
+function updateNodeChoice(nodeId, choiceIdx, field, value) {
+  const node = NODES[nodeId];
+  if (!node || !node.choices || !node.choices[choiceIdx]) return;
+  node.choices[choiceIdx][field] = value;
+  renderAdminEditor(nodeId);
+}
+
+function updateEndNodeContent(nodeId, section, idx, field, value) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (section === 'infos') {
+    if (!node.content.infos || !node.content.infos[0]) return;
+    const item = node.content.infos[0].list[idx];
+    if (item) item[field] = value;
+  } else {
+    const arr = node.content[section];
+    if (!arr) return;
+    if (typeof arr[idx] === 'object') arr[idx][field] = value;
+    else arr[idx] = value;
+  }
+}
+
+function updateEndNodeLink(nodeId, key, idx, field, value) {
+  const node = NODES[nodeId];
+  if (!node || !node.content || !node.content[key] || !node.content[key][idx]) return;
+  node.content[key][idx][field] = value;
+}
+
+function addRootChoice() {
+  const newId = 'node_' + Date.now();
+  const newChoice = { label: 'Ny kategori', sub: '', next: newId };
+  ROOT_CHOICES.push(newChoice);
+  NODES.root.choices.push(newChoice);
+  NODES[newId] = { id: newId, type: 'choice', label: 'Ny node', choices: [] };
+  adminSelectedNodeId = 'root';
+  renderAdminTab();
+  renderAdminEditor('root');
+}
+
+function deleteRootChoice(idx) {
+  if (!confirm('Slette denne kategorien?')) return;
+  ROOT_CHOICES.splice(idx, 1);
+  NODES.root.choices.splice(idx, 1);
+  renderAdminEditor('root');
+}
+
+function addNodeChoice(nodeId) {
+  const node = NODES[nodeId];
+  if (!node) return;
+  const newId = 'node_' + Date.now();
+  if (!node.choices) node.choices = [];
+  node.choices.push({ label: 'Nytt valg', sub: '', next: newId });
+  NODES[newId] = { id: newId, type: 'end', label: 'Ny sluttnode', content: tomtSkjelett() };
+  renderAdminTab();
+  selectAdminNode(nodeId);
+}
+
+function deleteNodeChoice(nodeId, idx) {
+  const node = NODES[nodeId];
+  if (!node || !node.choices) return;
+  if (!confirm('Slette dette valget?')) return;
+  node.choices.splice(idx, 1);
+  renderAdminEditor(nodeId);
+}
+
+function addContentCard(nodeId, section) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  const newCard = { title: 'Nytt kort', text: '', details: '' };
+  if (section === 'infos') {
+    if (!node.content.infos || !node.content.infos[0]) node.content.infos = [{ list: [] }];
+    node.content.infos[0].list.push(newCard);
+  } else {
+    if (!node.content[section]) node.content[section] = [];
+    node.content[section].push(newCard);
+  }
+  renderAdminEditor(nodeId);
+}
+
+function deleteContentCard(nodeId, section, idx) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (section === 'infos') {
+    if (node.content.infos && node.content.infos[0]) node.content.infos[0].list.splice(idx, 1);
+  } else {
+    if (node.content[section]) node.content[section].splice(idx, 1);
+  }
+  renderAdminEditor(nodeId);
+}
+
+function addEndNodeLink(nodeId, key) {
+  const node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (!node.content[key]) node.content[key] = [];
+  node.content[key].push({ label: 'Ny lenke', url: '#' });
+  renderAdminEditor(nodeId);
+}
+
+function deleteEndNodeLink(nodeId, key, idx) {
+  const node = NODES[nodeId];
+  if (!node || !node.content || !node.content[key]) return;
+  node.content[key].splice(idx, 1);
+  renderAdminEditor(nodeId);
+}
+
+function addNewChoiceNode() {
+  const raw = prompt('Skriv inn en unik node-ID (bokstaver, tall og understrek):');
+  if (!raw || !raw.trim()) return;
+  const id = raw.trim().replace(/[^a-zA-Z0-9_]/g, '_');
+  if (NODES[id]) { alert('Denne ID-en finnes allerede: ' + id); return; }
+  NODES[id] = { id: id, type: 'choice', label: 'Ny node – ' + id, choices: [] };
+  renderAdminTab();
+  selectAdminNode(id);
+}
+
+// ── Kodeeksport ───────────────────────────────────────────
+
+function openExportModal() {
+  const html = generateExportHTML();
+  document.getElementById('admin-export-textarea').value = html;
+  document.getElementById('admin-export-dialog').showModal();
+}
+
+function copyExportCode() {
+  const ta  = document.getElementById('admin-export-textarea');
+  const btn = document.querySelector('.admin-export-copy');
+  const done = function() {
+    btn.textContent = 'Kopiert!';
+    setTimeout(function() { btn.textContent = 'Kopier alt'; }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(done).catch(function() {
+      ta.removeAttribute('readonly'); ta.select(); document.execCommand('copy'); ta.setAttribute('readonly',''); done();
+    });
+  } else {
+    ta.removeAttribute('readonly'); ta.select(); document.execCommand('copy'); ta.setAttribute('readonly',''); done();
+  }
+}
+
+function generateExportHTML() {
+  const source = document.documentElement.outerHTML;
+  const MARKER_RC_START = '// @@ADMIN_ROOT_CHOICES_START@@';
+  const MARKER_RC_END   = '// @@ADMIN_ROOT_CHOICES_END@@';
+  const MARKER_N_START  = '// @@ADMIN_NODES_START@@';
+  const MARKER_N_END    = '// @@ADMIN_NODES_END@@';
+
+  const newRC = MARKER_RC_START + '\nconst ROOT_CHOICES = ' + JSON.stringify(ROOT_CHOICES, null, 2) + ';\n' + MARKER_RC_END;
+  const newN  = MARKER_N_START  + '\nconst NODES = '        + JSON.stringify(NODES,        null, 2) + ';\n' + MARKER_N_END;
+
+  const s1 = source.indexOf(MARKER_RC_START);
+  const e1 = source.indexOf(MARKER_RC_END) + MARKER_RC_END.length;
+  const s2 = source.indexOf(MARKER_N_START);
+  const e2 = source.indexOf(MARKER_N_END)  + MARKER_N_END.length;
+
+  if (s1 < 0 || s2 < 0) return source;
+
+  return '<!DOCTYPE html>\n'
+    + source.slice(0, s1) + newRC
+    + source.slice(e1, s2) + newN
+    + source.slice(e2);
 }
 
 render();
