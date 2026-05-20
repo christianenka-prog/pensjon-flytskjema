@@ -138,8 +138,47 @@ const NODES = {
       { label: "Mottar pensjon", next: "ald_1953_mottar_end" }
     ]
   },
-  ald_1953_veil_end:   { id: "ald_1953_veil_end",   type: "end", label: "Veiledning – 1953 eller tidligere",        boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
-  ald_1953_mottar_end: { id: "ald_1953_mottar_end", type: "end", label: "Mottar alderspensjon – 1953 eller tidligere", boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+  ald_1953_veil_end:   { id: "ald_1953_veil_end",   type: "end", label: "Veiledning – 1953 eller tidligere",        boxChoices: ALDER_AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Bruttoordning", text: "Du er omfattet av den gamle bruttoordningen for offentlig tjenestepensjon.", details: "Pensjonen beregnes som en prosent av sluttlønnen din. KLP beregner brutto pensjon og samordner deretter med folketrygden før utbetaling." },
+      { title: "30 år gir full pensjon", text: "Med 30 år i offentlig tjenestepensjon og 100 % stilling får du full opptjening.", details: "Har du arbeidet kortere enn 30 år, reduseres pensjonen forholdsmessig (antall år ÷ 30). Deltidsstilling gir tilsvarende reduksjon." },
+      { title: "Pensjonsalder 67 år", text: "Du kan ta ut alderspensjon fra KLP tidligst fra fylte 67 år.", details: "Unntak gjelder for stillinger med særaldersgrense (60 eller 65 år). Da kan pensjon tas ut på bestemte tidspunkter avhengig av 85-årsregelen." },
+      { title: "Kombinert pensjon ca. 66 % av sluttlønn", text: "Med full opptjening utgjør KLP og NAV til sammen omtrent 66 % av lønnen din.", details: "Dette forutsetter 30 år i 100 % stilling. Individuell garanti sikrer 66 % for deg født 1958 eller tidligere." },
+      { title: "Samordning med NAV", text: "KLP-pensjonen samordnes med alderspensjon fra NAV – du får ikke dobbel dekning.", details: "Samordningen betyr at KLP trekker fra en beregnet NAV-pensjon. Ny samordningsmodell (tilvekst) gjelder fra 2011 for de fleste i denne aldersgruppen." }
+    ] }],
+    warnings: [
+      { title: "Samordning kan gi lavere KLP-pensjon enn forventet", text: "Jo høyere NAV-pensjon, desto lavere blir KLP-delen etter samordning.", details: "Kontakt KLP for en konkret beregning av hva du vil motta samlet fra KLP og NAV." },
+      { title: "Arbeid etter 67 år endrer samordningen", text: "Fortsetter du å arbeide etter 67 år, øker samordningsfradraget og KLP-pensjonen reduseres.", details: "Inntekt fra arbeid telles inn i samordningsgrunnlaget. Vurder om det lønner seg å arbeide ved siden av pensjon." },
+      { title: "Individuell garanti gjelder bare til og med 1957-kullet", text: "Garanti for 66 % kombinert pensjon er utfaset for de født 1958 eller senere i denne gruppen.", details: "Er du født 1958–1962 gjelder overgangsregler. Ta kontakt med KLP for din individuelle beregning." }
+    ],
+    unntak: [
+      { title: "Særaldersgrense 60 eller 65 år", text: "Visse yrker (f.eks. brannkonstabler, sykepleiere) har lavere pensjonsalder.", details: "Med særaldersgrense 65 år kan du ta pensjon fra 62 år. Med særaldersgrense 60 år kan du ta pensjon fra 57 år, forutsatt at alder + tjenestetid ≥ 85." },
+      { title: "AFP fra 62–67 år", text: "Du kan ta ut avtalefestet pensjon (AFP) fra 62 år dersom du oppfyller vilkårene.", details: "AFP krever at du reduserer stillingen med minst 10 prosentpoeng og har jobbet for samme arbeidsgiver i minst 3 år. AFP og tidligpensjon kan kombineres." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon født 1962 eller tidligere", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1962-eller-tidligere/" }, { label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerViktig: [{ label: "KLP – Samordningsregler", url: "https://www.klp.no/pensjon/alderspensjon/" }, { label: "KLP – AFP", url: "https://www.klp.no/pensjon/afp/" }],
+    lenkerUnntak: [{ label: "KLP – Særaldersgrenser", url: "https://www.klp.no/pensjon/alderspensjon/" }, { label: "KLP – AFP vilkår", url: "https://www.klp.no/pensjon/afp/" }]
+  } },
+  ald_1953_mottar_end: { id: "ald_1953_mottar_end", type: "end", label: "Mottar alderspensjon – 1953 eller tidligere", boxChoices: ALDER_AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Månedlig utbetaling fra KLP", text: "Du mottar alderspensjon månedlig. Pensjonsuttalelse sendes ut mellom 12. januar og 31. januar hvert år.", details: "Uttalelsen viser pensjon fra KLP, NAV og andre registrerte pensjoner. Kontroller tallene og meld avvik til KLP." },
+      { title: "Regulering hvert år", text: "Pensjonen justeres årlig for lønnsvekst i offentlig sektor.", details: "Reguleringen skjer normalt til høst og varsles særskilt. Beløpet på neste utbetaling vil reflektere justeringen." },
+      { title: "Samordning med NAV-pensjon", text: "KLP-pensjonen din er samordnet med alderpensjon fra NAV – beløpene du mottar er justert for dette.", details: "Du mottar to atskilte utbetalinger: én fra KLP og én fra NAV. Samordningen er allerede beregnet i vedtaket ditt." },
+      { title: "Skattemessig behandling", text: "Pensjon er skattepliktig inntekt. Du har fått skattekort for løpende trekk.", details: "Pensjonsinntekt beskattes som alminnelig inntekt. Kontakt Skatteetaten ved endringer i skattekort." },
+      { title: "Meldeplikt ved endringer", text: "Du plikter å melde fra om endringer som kan påvirke pensjonen (nytt ekteskap, arbeidsinntekt, utenlandsopphold).", details: "Manglende melding kan medføre krav om tilbakebetaling av for mye utbetalt pensjon." }
+    ] }],
+    warnings: [
+      { title: "Arbeid ved siden av kan redusere KLP-pensjonen", text: "Arbeider du i en stilling med offentlig tjenestepensjon, kan samordningen justeres og KLP-pensjonen bli lavere.", details: "Ta kontakt med KLP før du starter arbeid for å få beregnet effekten." },
+      { title: "Samordningsfradrag øker ved fortsatt arbeid etter 67 år", text: "Inntekt fra arbeid telles inn i samordningsgrunnlaget og reduserer KLP-andelen.", details: "Vurder om det lønner seg å arbeide – effekten er individuell og avhenger av lønnsnivå og pensjonsstørrelse." },
+      { title: "Etterlatte har rettigheter ved dødsfallet", text: "Ektefelle og barn under 20 år kan ha krav på etterlattepensjon fra KLP og NAV.", details: "Samboere har IKKE rett til etterlattepensjon fra KLP. Meld fra til KLP og NAV umiddelbart ved dødsfallet." }
+    ],
+    unntak: [
+      { title: "Pensjonert via særaldersgrense", text: "Har du gått av tidligere enn 67 år pga. særaldersgrense, gjelder ditt opprinnelige vedtak.", details: "Pensjonsstart og beløp fremgår av vedtaket fra KLP. Reglene for overgang til ordinær alderspensjon ved 67 år er fastsatt i vedtaket." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≤1962", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1962-eller-tidligere/" }, { label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerViktig: [{ label: "KLP – Samordningsregler", url: "https://www.klp.no/pensjon/alderspensjon/" }],
+    lenkerUnntak: [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
 
   // --- 1954–1962 ---
   ald_1954_vp: {
@@ -149,8 +188,47 @@ const NODES = {
       { label: "Mottar pensjon", next: "ald_1954_mottar_end" }
     ]
   },
-  ald_1954_veil_end:   { id: "ald_1954_veil_end",   type: "end", label: "Veiledning – 1954–1962",        boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
-  ald_1954_mottar_end: { id: "ald_1954_mottar_end", type: "end", label: "Mottar alderspensjon – 1954–1962", boxChoices: ALDER_AG_FILTER, content: tomtSkjelett() },
+  ald_1954_veil_end:   { id: "ald_1954_veil_end",   type: "end", label: "Veiledning – 1954–1962",        boxChoices: ALDER_AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Hybrid ordning – blanding av gammel og ny", text: "Du er omfattet av overgangsregler som kombinerer gammel bruttoordning og ny påslagsordning.", details: "Andelen gammel ordning fases ned per årskull: født 1954 → 90 % gammel / 10 % ny. Født 1962 → 10 % gammel / 90 % ny. Andelen ny ordning øker med 10 prosentpoeng per fødselsår." },
+      { title: "Pensjonsalder 67 år (uten særaldersgrense)", text: "Du kan ta ut alderspensjon fra KLP fra fylte 67 år.", details: "Særaldersgrense 65 år gir pensjonsuttak fra 62 år. Særaldersgrense 60 år gir uttak fra 57 år, forutsatt at alder + tjenestetid ≥ 85." },
+      { title: "Kombinert pensjon ca. 66 % ved full opptjening", text: "Med 30 år i 100 % stilling og pensjonsuttak ved 67 år er kombinert pensjon fra KLP og NAV om lag 66 % av sluttlønn.", details: "Beløpet er individuelt og avhenger av lønn, opptjeningstid og stillingsprosent. Bruk KLPs pensjonskalkulator for din situasjon." },
+      { title: "Ny samordningsmodell (tilvekst)", text: "Din pensjon samordnes etter tilvekstmodellen, som er gunstigere enn gammel samordning.", details: "Tilvekstmodellen samordner pensjonsvekst i de to systemene, ikke bruttobeløp. Dette gir normalt høyere samlet pensjon enn eldre samordningsregler." },
+      { title: "Levealdersjustering gjelder", text: "Som del av nytt regelverk er din pensjon levealdersjustert via delingstall fra NAV.", details: "Jo lengre forventet levetid for ditt årskull, desto lavere blir årlig pensjon ved samme opptjening. Delingstallet fastsettes av NAV." }
+    ] }],
+    warnings: [
+      { title: "Komplekse overgangsregler – bruk kalkulator", text: "Beregning av pensjon for 1954–1962-kullet er sammensatt. Bruk KLPs pensjonskalkulator eller kontakt KLP direkte.", details: "Andelen gammel vs. ny ordning, samordning og levealdersjustering gjør individuell beregning nødvendig for et presist bilde." },
+      { title: "Omberegning ved nye samordningsregler", text: "Pensjonen din kan ha blitt omberegnet da nye samordningsregler ble innført. Kontroller vedtaket.", details: "Kontakt KLP dersom du mener vedtaket er feil eller ønsker en ny gjennomgang." },
+      { title: "Arbeid etter 67 år kan redusere KLP-andelen", text: "Inntekt fra arbeid etter pensjonering telles inn i samordningsgrunnlaget og kan redusere KLP-pensjonen.", details: "Vurder om det lønner seg å arbeide. Effekten er individuell." }
+    ],
+    unntak: [
+      { title: "Særaldersgrense 60 eller 65 år", text: "Visse yrker har lavere pensjonsalder og kan gå av tidligere.", details: "Særaldersgrense 65 → pensjon fra 62 år. Særaldersgrense 60 → pensjon fra 57 år. 85-årsregelen: alder + tjenestetid i den aktuelle stillingen må være minst 85." },
+      { title: "85-årsregelen", text: "Du kan ta ut pensjon når summen av alder og år i offentlig tjenestepensjon er minst 85.", details: "Eksempel: 62 år + 23 år tjenestetid = 85. Du kan da ta pensjon fra 62 år dersom du har særaldersgrense 65." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≤1962", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1962-eller-tidligere/" }, { label: "KLP – Samordningsregler", url: "https://www.klp.no/pensjon/alderspensjon/" }],
+    lenkerViktig: [{ label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – AFP", url: "https://www.klp.no/pensjon/afp/" }, { label: "KLP – Særaldersgrenser", url: "https://www.klp.no/pensjon/alderspensjon/" }]
+  } },
+  ald_1954_mottar_end: { id: "ald_1954_mottar_end", type: "end", label: "Mottar alderspensjon – 1954–1962", boxChoices: ALDER_AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Hybrid beregning i vedtaket ditt", text: "Din pensjon er beregnet som en kombinasjon av gammel bruttoordning og ny påslagsordning, basert på ditt fødselsår.", details: "Andelen gammel og ny ordning fremgår av pensjonsvedtaket. Kontakt KLP om du ønsker en forklaring av beregningen." },
+      { title: "Pensjonsuttalelse sendes i januar", text: "Du mottar pensjonsuttalelse mellom 12. januar og 31. januar hvert år.", details: "Uttalelsen viser pensjon fra KLP, NAV og andre pensjonsordninger. Kontroller beløpene og meld avvik til KLP." },
+      { title: "Regulering hvert år", text: "Pensjonen justeres årlig basert på lønnsvekst i offentlig sektor.", details: "Regulering varsles og reflekteres i neste månedlige utbetaling etter at den er vedtatt." },
+      { title: "Samordning etter tilvekstmodellen", text: "Pensjonen din er samordnet med NAV-pensjonen etter ny tilvekstmodell, som er gunstigere enn gammel samordning.", details: "Beløpene er allerede beregnet i vedtaket. Kontakt KLP om du mener samordningen er feil." },
+      { title: "Skattemessig behandling", text: "Pensjon er skattepliktig inntekt. Skattekort for løpende trekk er utstedt.", details: "Meld endringer i skattekort til Skatteetaten ved endring av inntektsforhold." }
+    ] }],
+    warnings: [
+      { title: "Sjekk vedtaket etter ny samordning", text: "Pensjonen kan ha blitt omberegnet ved innføring av nye samordningsregler. Kontroller at vedtaket er korrekt.", details: "Ta kontakt med KLP dersom beløpet ser ut til å ha endret seg uventet eller du ønsker en gjennomgang." },
+      { title: "Arbeid ved siden av kan påvirke KLP-andelen", text: "Arbeider du i en stilling med offentlig tjenestepensjon, kan samordningen justeres og KLP-pensjonen reduseres.", details: "Kontakt KLP for å beregne effekten før du starter arbeid." },
+      { title: "Inntektsendring kan endre samordning", text: "Endrer du inntekten din (fra arbeid eller annen pensjon), kan samordningsgrunnlaget justeres – noe som kan føre til etterbetaling eller krav.", details: "Meld fra til KLP ved vesentlige inntektsendringer for å unngå uventede justeringer." }
+    ],
+    unntak: [
+      { title: "Pensjonert via AFP eller særaldersgrense", text: "Har du tatt pensjon tidligere enn 67 år, gjelder ditt opprinnelige vedtak om pensjonsstart og beløp.", details: "Overgang til ordinær alderspensjon ved 67 år er beskrevet i vedtaket fra KLP." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≤1962", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1962-eller-tidligere/" }, { label: "KLP – Samordningsregler", url: "https://www.klp.no/pensjon/alderspensjon/" }],
+    lenkerViktig: [{ label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
 
   // --- 1963–1964 ---
   ald_6364_vp: {
@@ -160,8 +238,46 @@ const NODES = {
       { label: "Mottar pensjon", next: "ald_6364_mottar_end" }
     ]
   },
-  ald_6364_veil_end:   { id: "ald_6364_veil_end",   type: "end", label: "Veiledning – 1963–1964",        boxChoices: AG_FILTER, content: tomtSkjelett() },
-  ald_6364_mottar_end: { id: "ald_6364_mottar_end", type: "end", label: "Mottar alderspensjon – 1963–1964", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+  ald_6364_veil_end:   { id: "ald_6364_veil_end",   type: "end", label: "Veiledning – 1963–1964",        boxChoices: AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Ny påslagspensjon fra 2020", text: "Fra 2020 opptjener du påslagspensjon: 5,7 % av lønn opp til 12 G, pluss 18,1 % av lønn mellom 7,1 G og 12 G.", details: "Pensjon opptjent før 2020 følger de gamle reglene og samordnes med NAV. Pensjon opptjent fra 2020 følger ny påslagsordning og fordeles via delingstall." },
+      { title: "Levealdersjustering via delingstall", text: "Pensjonen deles på et delingstall som reflekterer forventet levetid for ditt årskull.", details: "Delingstallet fastsettes av NAV. Jo tidligere du tar pensjon, desto høyere delingstall og desto lavere årlig beløp. Utsatt uttak gir lavere delingstall og høyere årlig pensjon." },
+      { title: "Pensjonsuttak fra 62 år mulig", text: "Du kan ta ut alderspensjon fra fylte 62 år, men normal alder er 67 år.", details: "Tidlig uttak gir permanent lavere årlig pensjon fordi pensjonen skal vare lenger. Hvert år du utsetter uttak øker den årlige pensjonen merkbart." },
+      { title: "AFP livsvarig – livsvarig tillegg", text: "Du opptjener AFP livsvarig (4,21 % av lønn opp til 7,1 G, spart fra år 13 til 61). Betales livsvarig.", details: "AFP livsvarig kan kombineres med arbeid uten pensjonsreduksjon. Betales uavhengig av om du arbeider ved siden av." },
+      { title: "Betinget tjenestepensjon ved tidligpensjon", text: "Velger du tidligpensjon via særaldersgrense, får du betinget tjenestepensjon i stedet for AFP livsvarig.", details: "Betinget tjenestepensjon: 3 % av lønn opp til 7,1 G, spart frem til du når pensjonsalder. Overgang til alderspensjon ved 67 år." }
+    ] }],
+    warnings: [
+      { title: "Tidlig uttak gir permanent lavere pensjon", text: "Uttak ved 62 år kan gi betydelig lavere årlig pensjon enn uttak ved 67 år pga. høyere delingstall.", details: "Beregn konsekvensen nøye i KLPs pensjonskalkulator eller med din pensjonsveileder før du bestemmer deg." },
+      { title: "Pensjon opptjent før 2020 samordnes med NAV", text: "Den delen av pensjonen din som er opptjent før 2020, samordnes fortsatt med NAV-pensjonen.", details: "Ny samordningsmodell (tilvekst) gjelder for denne andelen. Påslagspensjon fra 2020 samordnes ikke." },
+      { title: "AFP livsvarig – valget er permanent", text: "Når du starter AFP livsvarig, kan valget ikke reverseres.", details: "Tenk gjennom tidspunktet nøye – det lønner seg normalt å utsette uttak så lenge du er i arbeid." }
+    ],
+    unntak: [
+      { title: "Særaldersgrense 65 år – tidligpensjon fra 62 år", text: "Med særaldersgrense 65 kan du ta tidligpensjon fra 62 år.", details: "Du får da betinget tjenestepensjon (ikke AFP livsvarig). Overgang til ordinær alderspensjon ved 67 år. 85-årsregelen: alder + tjenestetid i stillingen ≥ 85." },
+      { title: "Særaldersgrense 60 år – tidligpensjon fra 60 år", text: "Med særaldersgrense 60 kan du ta tidligpensjon fra 60 år.", details: "Samme som over: betinget tjenestepensjon fra uttakstidspunkt. Fra 2025 gjelder nytt livsvarig supplement for å kompensere for tidligere pensjonsstart." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≥1963", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1963-eller-senere/" }, { label: "KLP – AFP livsvarig", url: "https://www.klp.no/pensjon/afp/" }],
+    lenkerViktig: [{ label: "KLP – Levealdersjustering", url: "https://www.klp.no/pensjon/alderspensjon/" }, { label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Tidligpensjon og særaldersgrense", url: "https://www.klp.no/pensjon/alderspensjon/" }]
+  } },
+  ald_6364_mottar_end: { id: "ald_6364_mottar_end", type: "end", label: "Mottar alderspensjon – 1963–1964", boxChoices: PENSJONSTYPE_FILTER, content: {
+    infos: [{ list: [
+      { title: "Pensjon fra flere kilder", text: "Du mottar pensjon fra påslagsordningen (KLP), AFP livsvarig og NAV. Beløpene utbetales separat.", details: "Pensjon opptjent før 2020 følger gammel ordning og er samordnet med NAV. Påslagspensjon fra 2020 og AFP livsvarig er uavhengige av hverandre." },
+      { title: "Levealdersjustering er innbakt i beløpet", text: "Ditt pensjonsbeløp er beregnet med delingstall for ditt årskull og din alder ved uttakstidspunktet.", details: "Delingstallet er fastsatt ved uttak og endres ikke. Beløpet er permanent basert på valgt uttaksalder." },
+      { title: "AFP livsvarig betales for livet", text: "AFP livsvarig fortsetter uansett inntekt og kan kombineres med arbeid uten reduksjon.", details: "Du kan arbeide fullt ved siden av AFP livsvarig uten at den reduseres. Betales månedlig livet ut." },
+      { title: "Overgang fra tidligpensjon ved 67 år", text: "Tok du ut pensjon før 67 år, gikk du automatisk over til ordinær alderspensjon ved 67 år.", details: "Beløpet ble justert ved overgangen. Betingelsene for arbeid og inntekt kan ha endret seg. Se vedtaket ditt." },
+      { title: "Regulering hvert år", text: "Alle pensjonsdeler reguleres årlig for lønnsvekst.", details: "Regulering varsles og reflekteres i neste utbetaling etter at den er vedtatt." }
+    ] }],
+    warnings: [
+      { title: "Arbeid kan påvirke samordning av pensjon opptjent før 2020", text: "Arbeider du i stilling med offentlig tjenestepensjon, kan samordningen av gammel pensjonsdel justeres.", details: "AFP livsvarig påvirkes ikke av inntekt, men den samordnede delen fra KLP/NAV kan endres. Kontakt KLP for beregning." },
+      { title: "Inntektsendring – oppdater skattekort", text: "Får du ny inntekt fra arbeid, oppdater skattekort til Skatteetaten for å unngå over- eller undertrekk.", details: "Endringer meldes via skatteetaten.no eller skattemeldingen." }
+    ],
+    unntak: [
+      { title: "Tidligpensjon via særaldersgrense", text: "Var du på betinget tjenestepensjon (tidligpensjon), overgikk du automatisk til alderspensjon ved 67 år.", details: "Beløpet ble justert oppover ved overgang. Betinget tjenestepensjon-perioden er avsluttet." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≥1963", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1963-eller-senere/" }, { label: "KLP – AFP livsvarig", url: "https://www.klp.no/pensjon/afp/" }],
+    lenkerViktig: [{ label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
 
   // --- 1965–1969 ---
   ald_6570_vp: {
@@ -171,8 +287,47 @@ const NODES = {
       { label: "Mottar pensjon", next: "ald_6570_mottar_end" }
     ]
   },
-  ald_6570_veil_end:   { id: "ald_6570_veil_end",   type: "end", label: "Veiledning – 1965–1969",        boxChoices: AG_FILTER, content: tomtSkjelett() },
-  ald_6570_mottar_end: { id: "ald_6570_mottar_end", type: "end", label: "Mottar alderspensjon – 1965–1969", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+  ald_6570_veil_end:   { id: "ald_6570_veil_end",   type: "end", label: "Veiledning – 1965–1969",        boxChoices: AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Full ny påslagsordning", text: "Hele din tjenestepensjon bygges etter ny påslagsordning: 5,7 % av lønn opp til 12 G + 18,1 % av lønn mellom 7,1 G og 12 G.", details: "Opptjening fra 2020 er i påslagsordningen. Har du tjenestetid fra før 2020, er den delen beregnet etter gammel ordning og samordnet med NAV." },
+      { title: "Høyere delingstall enn eldre kull", text: "Ditt årskull har høyere delingstall enn eldre kull fordi forventet levetid er lengre.", details: "Høyere delingstall betyr lavere årlig pensjon ved samme opptjening. En 67-åring født 1965 har høyere delingstall enn en 67-åring født 1955." },
+      { title: "Pensjonsuttak fra 62 år mulig", text: "Du kan ta ut alderspensjon fra fylte 62 år. Normal pensjonsalder er 67 år.", details: "Hvert år du utsetter uttak reduserer delingstallet og øker den årlige pensjonen. Tidlig uttak gir permanent lavere beløp." },
+      { title: "AFP livsvarig – livsvarig tillegg", text: "Du opptjener AFP livsvarig (4,21 % av lønn opp til 7,1 G, spart fra år 13 til 61). Betales livsvarig.", details: "AFP livsvarig betales livet ut og kan kombineres med fullt arbeid uten reduksjon." },
+      { title: "Betinget tjenestepensjon ved særaldersgrense", text: "Har du særaldersgrense og tar tidligpensjon, får du betinget tjenestepensjon (ikke AFP livsvarig) inntil du når normal pensjonsalder.", details: "Betinget tjenestepensjon: 3 % av lønn opp til 7,1 G. Overgang til ordinær alderspensjon ved fastsatt pensjonsalder." }
+    ] }],
+    warnings: [
+      { title: "Levealdersjustering gir merkbart lavere pensjon enn for eldre kull", text: "Ditt delingstall er høyere enn for 1953–1962-kullet. Dette betyr lavere årlig pensjon ved samme opptjening.", details: "Jo yngre du er, desto sterkere er effekten av levealdersjustering. Beregn konsekvensen i KLPs pensjonskalkulator." },
+      { title: "Tidlig uttak kan gi 30–40 % lavere årlig pensjon", text: "Uttak ved 62 år sammenlignet med 67 år kan gi svært stor forskjell i årlig pensjon pga. delingstall.", details: "Effekten er permanent – beløpet øker ikke selv om du lever lenge. Vurder nøye om tidlig uttak lønner seg." },
+      { title: "AFP livsvarig – valget er permanent", text: "Starter du AFP livsvarig, kan det ikke reverseres. Tenk gjennom tidspunktet.", details: "Det lønner seg normalt å utsette AFP livsvarig så lenge du er i arbeid, siden den da gir høyere månedlig beløp." }
+    ],
+    unntak: [
+      { title: "Særaldersgrense 65 år – tidligpensjon fra 62 år", text: "Med særaldersgrense 65 kan du ta tidligpensjon fra 62 år.", details: "85-årsregelen: alder + tjenestetid i stillingen ≥ 85. Gir betinget tjenestepensjon, ikke AFP livsvarig." },
+      { title: "Særaldersgrense 60 år – tidligpensjon fra 60 år", text: "Med særaldersgrense 60 kan du ta tidligpensjon fra 60 år.", details: "Samme vilkår som over. Fra 2025 gjelder livsvarig supplement for å kompensere for tidligere pensjonsstart." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≥1963", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1963-eller-senere/" }, { label: "KLP – Levealdersjustering", url: "https://www.klp.no/pensjon/alderspensjon/" }],
+    lenkerViktig: [{ label: "KLP – AFP livsvarig", url: "https://www.klp.no/pensjon/afp/" }, { label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Tidligpensjon og særaldersgrense", url: "https://www.klp.no/pensjon/alderspensjon/" }]
+  } },
+  ald_6570_mottar_end: { id: "ald_6570_mottar_end", type: "end", label: "Mottar alderspensjon – 1965–1969", boxChoices: PENSJONSTYPE_FILTER, content: {
+    infos: [{ list: [
+      { title: "Pensjon fordelt over forventet levetid", text: "Din pensjon er beregnet med delingstall for ditt årskull og din alder ved uttak. Beløpet er fastsatt permanent.", details: "Delingstallet reflekterer forventet levetid. Det endres ikke etter at uttaket er startet." },
+      { title: "AFP livsvarig betales for livet", text: "AFP livsvarig er et livsvarig tillegg som betales månedlig uavhengig av annen inntekt.", details: "Du kan arbeide fullt ved siden av AFP livsvarig uten at den reduseres." },
+      { title: "Beløp fastsatt ved pensjonsstart", text: "Pensjonsbeløpet ble fastsatt basert på opptjening, alder ved uttak og delingstall. Det justeres kun via regulering.", details: "Beløpet kan ikke økes i etterkant selv om du arbeider eller utsetter annet uttak." },
+      { title: "Regulering hvert år", text: "Alle pensjonsdeler reguleres årlig for lønnsvekst.", details: "Regulering varsles og reflekteres i neste utbetaling." },
+      { title: "Pensjonsuttalelse i januar hvert år", text: "Du mottar pensjonsuttalelse mellom 12. januar og 31. januar hvert år.", details: "Uttalelsen viser pensjon fra KLP, NAV og andre ordninger. Kontroller beløpene." }
+    ] }],
+    warnings: [
+      { title: "AFP livsvarig påvirkes ikke av arbeid – men samordnet del kan endre seg", text: "Arbeider du i stilling med offentlig tjenestepensjon, kan den samordnede delen av KLP-pensjonen justeres.", details: "AFP livsvarig er alltid trygt å kombinere med arbeid. For samordnet del – kontakt KLP for beregning." },
+      { title: "Inntektsendring – oppdater skattekort", text: "Ny inntekt fra arbeid bør meldes til Skatteetaten for å unngå feil skattetrekk.", details: "For mye betalt skatt tilbakebetales ved skatteoppgjøret, men det er ryddigere å ha riktig skattekort løpende." },
+      { title: "Beløpet er permanent – ikke mulig å justere i etterkant", text: "Valgte du tidlig uttak og fikk lavere beløp, kan dette ikke endres i ettertid.", details: "Fremtidsplanlegging bør hensynta at beløpet ikke øker selv ved lang levetid." }
+    ],
+    unntak: [
+      { title: "Tidligpensjon via særaldersgrense – overgang ved 67 år", text: "Var du på betinget tjenestepensjon via særaldersgrense, gikk du automatisk over til ordinær alderspensjon ved pensjonsalder.", details: "Beløpet ble justert ved overgangen. Kontakt KLP for detaljer om din overgang." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≥1963", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1963-eller-senere/" }, { label: "KLP – AFP livsvarig", url: "https://www.klp.no/pensjon/afp/" }],
+    lenkerViktig: [{ label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
 
   // --- 1970 eller senere ---
   ald_71_vp: {
@@ -182,8 +337,47 @@ const NODES = {
       { label: "Mottar pensjon", next: "ald_71_mottar_end" }
     ]
   },
-  ald_71_veil_end:   { id: "ald_71_veil_end",   type: "end", label: "Veiledning – 1970 eller senere",        boxChoices: AG_FILTER, content: tomtSkjelett() },
-  ald_71_mottar_end: { id: "ald_71_mottar_end", type: "end", label: "Mottar alderspensjon – 1970 eller senere", boxChoices: PENSJONSTYPE_FILTER, content: tomtSkjelett() },
+  ald_71_veil_end:   { id: "ald_71_veil_end",   type: "end", label: "Veiledning – 1970 eller senere",        boxChoices: AG_FILTER, content: {
+    infos: [{ list: [
+      { title: "Full påslagsordning fra 2020", text: "Din alderspensjon er fullt ut basert på ny påslagsordning: 5,7 % av lønn opp til 12 G + 18,1 % av lønn mellom 7,1 G og 12 G.", details: "Er du ansatt fra 2020 eller senere, har du bare påslagspensjon. Tjenestetid fra før 2020 beregnes etter gammel ordning og samordnes med NAV." },
+      { title: "Høyeste delingstall av alle kull", text: "Ditt årskull forventes å leve lengst og har derfor høyest delingstall, noe som gir lavere årlig pensjon ved samme opptjening.", details: "En 67-åring født 1970 kan få 20–30 % lavere årlig pensjon enn en 67-åring født 1955 med identisk opptjening. Delingstallet fastsettes av NAV." },
+      { title: "Pensjonsuttak fra 62 år mulig", text: "Du kan ta ut pensjon fra 62 år, men normal pensjonsalder er 67 år.", details: "Tidlig uttak gir permanent lavere pensjon. Uttak ved 62 år kan gi 40–50 % lavere årlig beløp enn ved 67 år for dette kullet." },
+      { title: "AFP livsvarig – livsvarig tillegg", text: "Du opptjener AFP livsvarig (4,21 % av lønn opp til 7,1 G, spart fra år 13 til 61). Betales livsvarig.", details: "AFP livsvarig kan kombineres med fullt arbeid uten reduksjon og betales månedlig resten av livet." },
+      { title: "Samordning med NAV minimert", text: "Påslagspensjon og AFP livsvarig samordnes ikke direkte med NAV-pensjon på samme måte som gammel ordning.", details: "For de med kun opptjening etter 2020 er det ingen tradisjonell samordning. Gammel opptjening (pre-2020) samordnes fortsatt." }
+    ] }],
+    warnings: [
+      { title: "Levealdersjustering slår hardest for dette kullet", text: "Høyest delingstall av alle kull betyr at du må enten jobbe lenger eller spare mer for tilsvarende pensjon som eldre generasjoner.", details: "Beregn konsekvensen i KLPs pensjonskalkulator. Vurder å utsette uttaket så lenge som mulig." },
+      { title: "Uttak ved 62 år kan gi 40–50 % lavere pensjon enn ved 67 år", text: "For 1970-kullet er effekten av tidlig uttak spesielt stor pga. høyt delingstall og lang forventet levetid.", details: "Differansen er permanent. Hvert år du utsetter uttak øker den årlige pensjonen markant." },
+      { title: "AFP livsvarig – valget er permanent", text: "Starter du AFP livsvarig, kan det ikke reverseres. Beregn nøye før du bestemmer deg.", details: "Det lønner seg normalt å utsette AFP livsvarig så lenge du er i arbeid, da utsatt start gir høyere månedlig beløp." }
+    ],
+    unntak: [
+      { title: "Særaldersgrense 65 år – tidligpensjon fra 62 år", text: "Med særaldersgrense 65 kan du ta tidligpensjon fra 62 år og får betinget tjenestepensjon.", details: "85-årsregelen: alder + tjenestetid i stillingen ≥ 85. Overgang til ordinær alderspensjon ved pensjonsalder." },
+      { title: "Særaldersgrense 60 år – tidligpensjon fra 60 år", text: "Med særaldersgrense 60 kan du ta tidligpensjon fra 60 år.", details: "Fra 2025 gjelder livsvarig supplement for å kompensere for at du går av tidligere enn de uten særaldersgrense." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≥1963", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1963-eller-senere/" }, { label: "KLP – AFP livsvarig", url: "https://www.klp.no/pensjon/afp/" }],
+    lenkerViktig: [{ label: "KLP – Levealdersjustering", url: "https://www.klp.no/pensjon/alderspensjon/" }, { label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Tidligpensjon og særaldersgrense", url: "https://www.klp.no/pensjon/alderspensjon/" }]
+  } },
+  ald_71_mottar_end: { id: "ald_71_mottar_end", type: "end", label: "Mottar alderspensjon – 1970 eller senere", boxChoices: PENSJONSTYPE_FILTER, content: {
+    infos: [{ list: [
+      { title: "Påslagspensjon og AFP livsvarig utbetales månedlig", text: "Du mottar påslagspensjon fra KLP og AFP livsvarig. Begge er fordelt via delingstall for ditt årskull og din alder ved uttak.", details: "Beløpene er fastsatt permanent ved uttakstidspunktet og justeres kun via årlig regulering." },
+      { title: "Delingstall bestemmer ditt beløp", text: "Årlig pensjon = opptjent beholdning ÷ delingstall. Høyere alder ved uttak gir lavere delingstall og høyere beløp.", details: "Ditt delingstall ble fastsatt da du startet uttaket og endres ikke. For 1970-kullet er delingstallet høyest av alle kull." },
+      { title: "AFP livsvarig betales livet ut", text: "AFP livsvarig er et livsvarig tillegg du kan kombinere med fullt arbeid uten at det reduseres.", details: "AFP livsvarig betales uavhengig av inntekt og fortsetter livet ut." },
+      { title: "Regulering hvert år", text: "Alle pensjonsdeler reguleres årlig for lønnsvekst.", details: "Regulering varsles og reflekteres i neste utbetaling." },
+      { title: "Pensjonsuttalelse i januar hvert år", text: "Du mottar pensjonsuttalelse mellom 12. januar og 31. januar hvert år.", details: "Uttalelsen viser pensjon fra KLP, NAV og andre ordninger. Kontroller beløpene." }
+    ] }],
+    warnings: [
+      { title: "Beløpet er permanent – kan ikke justeres i etterkant", text: "Valgte du tidlig uttak, er det lavere beløpet permanent. Det økes ikke selv ved lang levetid.", details: "AFP livsvarig og påslagspensjon er fastsatt ved uttak. Regulering er den eneste løpende justeringen." },
+      { title: "AFP livsvarig kan kombineres med arbeid fritt", text: "Du kan arbeide fullt ved siden av uten at AFP livsvarig reduseres.", details: "Gammel opptjening (pre-2020) kan imidlertid ha en samordnet del som påvirkes av ny arbeidsinntekt. Kontakt KLP ved spørsmål." },
+      { title: "Inntektsendring – oppdater skattekort", text: "Ny arbeidsinntekt bør meldes til Skatteetaten for korrekt skattetrekk.", details: "Feil trekk korrigeres ved skatteoppgjøret, men det er ryddigere å oppdatere løpende." }
+    ],
+    unntak: [
+      { title: "Tidligpensjon via særaldersgrense – overgang ved pensjonsalder", text: "Var du på betinget tjenestepensjon via særaldersgrense, gikk du automatisk over til ordinær alderspensjon ved fastsatt pensjonsalder.", details: "Beløpet ble justert ved overgangen. Fra 2025 gjelder livsvarig supplement for å kompensere for tidligere pensjonsstart." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Alderspensjon ≥1963", url: "https://www.klp.no/pensjon/alderspensjon/alderspensjon-fodt-1963-eller-senere/" }, { label: "KLP – AFP livsvarig", url: "https://www.klp.no/pensjon/afp/" }],
+    lenkerViktig: [{ label: "NAV – Alderspensjon", url: "https://www.nav.no/alderspensjon" }],
+    lenkerUnntak: [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
 
   // ═══════════════════════════════════════════
   //  UFØREPENSJON
@@ -195,8 +389,48 @@ const NODES = {
       { label: "1963 og senere",       sub: "Nytt regelverk",    next: "ufo_new_end" }
     ]
   },
-  ufo_old_end: { id: "ufo_old_end", type: "end", label: "Uførepensjon – 1962 eller tidligere", content: tomtSkjelett() },
-  ufo_new_end: { id: "ufo_new_end", type: "end", label: "Uførepensjon – 1963 og senere",       content: tomtSkjelett() },
+  ufo_old_end: { id: "ufo_old_end", type: "end", label: "Uførepensjon – 1962 eller tidligere", content: {
+    infos: [{ list: [
+      { title: "Bruttoordning – fast andel av pensjonsgrunnlaget", text: "Du er i gammel bruttoordning: uførepensjonen beregnes som en andel av pensjonsgrunnlaget ditt.", details: "Med NAV uføretrygd: 3 % av pensjonsgrunnlag (0–6 G) + 69 % av pensjonsgrunnlag (6–12 G). Uten NAV-ytelse: 69 % av pensjonsgrunnlag opp til 12 G. Samlet skal pensjon fra KLP og NAV utgjøre ca. 70–75 % av inntekt før sykdom." },
+      { title: "Samordning med NAV uføretrygd", text: "KLP-uførepensjonen samordnes med NAV uføretrygd – du får ikke dobbel dekning for samme inntektstap.", details: "Samordningen er allerede beregnet i vedtaket ditt. Endringer i NAV-ytelsen kan påvirke KLP-beløpet." },
+      { title: "Reduksjon etter uføregrad og tjenestetid", text: "Pensjonen reduseres etter din uføregrad og antall år i tjenestepensjon (maks 30 år).", details: "Under 30 år tjenestetid gir proporsjonal reduksjon. Uføregrad fastsettes av NAV og dokumenteres i vedtaket." },
+      { title: "Barnetillegg – 4 % per barn", text: "For hvert barn under 18 år (maks 3 barn) utbetales tillegg på 4 % av pensjonsgrunnlaget.", details: "Barnetillegget reduseres også etter uføregrad og tjenestetid. Maks 3 barn gir tillegg." },
+      { title: "Pensjonsopptjening fortsetter til 67 år", text: "Mens du mottar uførepensjon, opptjenes alderspensjon som om du fremdeles var i arbeid.", details: "Beregningsgrunnlaget er inntekten du hadde da du ble ufør. Alderspensjonen utbetales fra 67 år." }
+    ] }],
+    warnings: [
+      { title: "Søknadsfrist – inntil 3 måneder før NAV-sykepenger utløper", text: "Søk KLP om uførepensjon senest 3 måneder før sykepengene fra NAV opphører.", details: "Søker du for sent, kan det oppstå gap i utbetalinger. Kontakt NAV først for å avklare AAP eller uføretrygd, deretter søk KLP." },
+      { title: "Etteroppgjør – kontroller inntektsregistreringen", text: "KLP gjennomfører årlig etteroppgjør basert på skatteoppgjøret. For mye utbetalt kan kreves tilbakebetalt.", details: "Oppdater inntektsopplysninger løpende på Min side hos KLP for å unngå uventede krav ved etteroppgjøret." },
+      { title: "Inntekt ved siden av – rapportering og mulig reduksjon", text: "Arbeider du ved siden av, må inntekten rapporteres. Pensjonen kan reduseres hvis inntekten overstiger grensen.", details: "Fribeløp er 0,4 G ved 100 % uføregrad og full NAV uføretrygd. Over 80 % av tidligere inntekt stanser pensjonen helt." }
+    ],
+    unntak: [
+      { title: "Økt arbeidsinnsats siste 2 år pga. kjent tilstand", text: "Dersom du økte stillingsprosenten de siste 2 år før sykdom pga. en allerede kjent tilstand, kan pensjonsgrunnlaget reduseres.", details: "Dette forhindrer at kjente tilstander brukes til å øke pensjonsgrunnlaget kunstig." },
+      { title: "Overgang til alderspensjon ved 67 år er automatisk", text: "Uførepensjonen opphører og erstattes av alderspensjon fra KLP når du fyller 67 år.", details: "Beløpet kan endres ved overgangen. Du varsles av KLP i god tid." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Uførepensjon", url: "https://www.klp.no/pensjon/uforepensjon/" }, { label: "NAV – Uføretrygd", url: "https://www.nav.no/uforetrygd" }],
+    lenkerViktig: [{ label: "KLP – Uførepensjon vilkår", url: "https://www.klp.no/pensjon/uforepensjon/" }],
+    lenkerUnntak: [{ label: "KLP – Inntekt og uførepensjon", url: "https://www.klp.no/pensjon/uforepensjon/" }]
+  } },
+  ufo_new_end: { id: "ufo_new_end", type: "end", label: "Uførepensjon – 1963 og senere",       content: {
+    infos: [{ list: [
+      { title: "Nettoordning – tillegg på toppen av NAV uføretrygd", text: "KLP-uførepensjonen er et nettotillegg oppå NAV uføretrygd. De to utbetalingene er separate og uavhengige.", details: "KLP-pensjonen er designet slik at samlet inntekt fra KLP + NAV utgjør ca. 70–75 % av inntekt før sykdom." },
+      { title: "Vilkår: sykemeldt, KLP-medlem, ikke full arbeidsevne", text: "Du må være sykemeldt, være aktivt KLP-medlem, og ikke kunne returnere til full stilling.", details: "Krav: minst 20 % inntektsreduksjon pga. sykdom eller skade. Over 50 % arbeid krever legeerklæring og egenerklæring. Under 50 % arbeid krever vedtak om AAP eller uføretrygd fra NAV." },
+      { title: "Søknadsfrist – inntil 3 måneder før NAV-sykepenger utløper", text: "Du kan søke fra og med 3 måneder før sykepengene fra NAV opphører.", details: "Kontakt NAV først for å avklare AAP eller uføretrygd. Søknad til KLP startes på Min side. KLP koordinerer automatisk med NAV der det er mulig." },
+      { title: "Inntekt ved siden av – inntil 80 % av tidligere lønn", text: "Du kan jobbe deltid ved siden av uførepensjonen. Pensjonen stanser helt dersom inntekten når 80 % av tidligere lønn.", details: "Fribeløp: 0,4 G (ca. 52 000 kr/år) ved 100 % uføregrad og full NAV uføretrygd. KLP fastsetter individuell inntektsgrense. Inntektsendringer må rapporteres på Min side." },
+      { title: "Pensjonsopptjening fortsetter under uføreperioden", text: "Selv med uførepensjon opptjener du alderspensjon som om du fremdeles jobbet, basert på lønnen da du ble ufør.", details: "Fra 2020 opptjenes påslagspensjon. Fra 62 år kan du eventuelt ta ut betinget alderspensjon ved siden av full uførepensjon." }
+    ] }],
+    warnings: [
+      { title: "NAV-vedtak må foreligge – kontakt NAV FØR du søker KLP", text: "KLP kan ikke utbetale uførepensjon uten at NAV har innvilget AAP eller uføretrygd.", details: "Planlegg tidslinjen nøye: NAV-søknad → NAV-vedtak → KLP-søknad (innen 3 mnd. før sykepenger utløper)." },
+      { title: "Etteroppgjør – rapporter inntekt nøyaktig og løpende", text: "KLP gjennomfører årlig etteroppgjør. For mye utbetalt pensjon kan kreves tilbakebetalt.", details: "Rapporter løpende: lønn inkl. overtid og feriepenger, selvstendig næringsinntekt, omsorgshonorar. Skal IKKE rapporteres: NAV-ytelser, andre pensjoner, investeringsinntekter." },
+      { title: "80 %-taket stanser hele pensjonen", text: "Overstiger samlet arbeidsinntekt 80 % av tidligere lønn, utbetales ingen KLP-uførepensjon det året.", details: "Dette er ikke en gradvis reduksjon – pensjonen stanser helt. Vær særlig oppmerksom ved lønnsøkninger eller økt stillingsprosent." }
+    ],
+    unntak: [
+      { title: "Pensjonsreform 2026 – aldersgrenser og satser justeres", text: "Fra 2026 endres pensjonsregelverket for uførepensjon. Aldersgrenser økes og satser for pensjonistlønn justeres.", details: "Sjekk klp.no og Min side for oppdatert informasjon når 2026-endringene trer i kraft." },
+      { title: "Uføregrad under 20 % – ikke rett til uførepensjon", text: "Du må ha minst 20 % inntektsreduksjon for å ha rett til uførepensjon fra KLP.", details: "Graden dokumenteres av lege og bekreftes via NAV-vedtak. Under 20 % gir ingen KLP-rett uansett." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Uførepensjon", url: "https://www.klp.no/pensjon/uforepensjon/" }, { label: "NAV – Uføretrygd", url: "https://www.nav.no/uforetrygd" }],
+    lenkerViktig: [{ label: "KLP – Etteroppgjør uførepensjon", url: "https://www.klp.no/pensjon/uforepensjon/" }],
+    lenkerUnntak: [{ label: "KLP – Inntekt og uførepensjon", url: "https://www.klp.no/pensjon/uforepensjon/" }]
+  } },
 
   // ═══════════════════════════════════════════
   //  ETTERLATTEPENSJON
@@ -209,9 +443,69 @@ const NODES = {
       { label: "Avdøde hadde oppsatt rett",      sub: "Tidligere KLP-medlem", next: "etl_oppsatt_end" }
     ]
   },
-  etl_aktiv_end:   { id: "etl_aktiv_end",   type: "end", label: "Etterlattepensjon – avdøde var aktivt medlem",      content: tomtSkjelett() },
-  etl_pensjon_end: { id: "etl_pensjon_end", type: "end", label: "Etterlattepensjon – avdøde mottok pensjon",         content: tomtSkjelett() },
-  etl_oppsatt_end: { id: "etl_oppsatt_end", type: "end", label: "Etterlattepensjon – avdøde hadde oppsatt rett",     content: tomtSkjelett() },
+  etl_aktiv_end:   { id: "etl_aktiv_end",   type: "end", label: "Etterlattepensjon – avdøde var aktivt medlem",      content: {
+    infos: [{ list: [
+      { title: "Hvem kan motta etterlattepensjon", text: "Gjenlevende ektefelle, registrert partner, fraskilt ektefelle (med vilkår) og barn under 20 år.", details: "Ektefelle og registrert partner mottar pensjon livet ut, eller til de gifter seg på nytt. Barn mottar til fylte 20 år. Samboere har IKKE rett til etterlattepensjon fra KLP." },
+      { title: "Krav: minimum 3 år opptjening i offentlig tjenestepensjon", text: "Avdøde må ha hatt minst 3 år samlet opptjening i KLP og/eller andre offentlige pensjonsordninger.", details: "Opptjening fra KLP, SPK, OPF og andre offentlige ordninger teller samlet. Under 3 år gir ingen rett til etterlattepensjon." },
+      { title: "Ektefellepensjon – 9 % av pensjonsgrunnlaget", text: "Med full opptjening (30 år, 100 % stilling) utgjør ektefellepensjonen 9 % av avdødes lønn per år.", details: "Pensjon utbetales månedlig livet ut (eller til gjengifte). Kortere tjenestetid enn 30 år gir proporsjonal reduksjon." },
+      { title: "Barnepensjon – 15 % av pensjonsgrunnlaget per barn", text: "Hvert barn under 20 år mottar 15 % av avdødes pensjonsgrunnlag (ved full opptjening).", details: "Pensjon utbetales fra måneden etter dødsfallet til barnet fyller 20 år. Kortere tjenestetid gir proporsjonal reduksjon." },
+      { title: "Fraskilt ektefelle – strengere vilkår", text: "Fraskilt ektefelle kan ha rett til etterlattepensjon med tilleggsvilkår.", details: "Krav: ekteskapet varte i minst 10 år, den fraskilte var minst 45 år ved skilsmissen, og har ikke giftet seg på nytt. Hvis både nåværende og fraskilt ektefelle har rett, deles pensjonen etter ekteskapslengde." }
+    ] }],
+    warnings: [
+      { title: "KRITISK: Samboere har IKKE rett til etterlattepensjon fra KLP", text: "Samboere – uavhengig av varighet, felles barn eller felles økonomi – har ingen rett til etterlattepensjon fra KLP.", details: "Eneste mulige dekning for samboer er gruppelivsforsikring (engangsbeløp), dersom avdøde hadde slik forsikring gjennom arbeidsgiver." },
+      { title: "Gjengifte stanser ektefellepensjonen umiddelbart", text: "Gifter gjenlevende ektefelle eller fraskilt ektefelle seg på nytt, opphører etterlattepensjon fra KLP.", details: "Tidligere utbetalt pensjon beholdes. Pensjonen kan ikke gjenopprettes ved evt. ny skilsmisse." },
+      { title: "Under 3 år opptjening – ingen etterlattepensjon", text: "Hadde avdøde kortere enn 3 år samlet offentlig tjenestepensjon, utbetales ingen etterlattepensjon.", details: "Kontakt KLP for å bekrefte opptjeningstid dersom du er usikker." }
+    ],
+    unntak: [
+      { title: "Gruppelivsforsikring – kan dekke samboer", text: "Avdøde kan ha hatt gruppelivsforsikring gjennom arbeidsgiver som gir engangsbeløp til etterlatte.", details: "Gruppelivsforsikring kan tilkomme ektefelle, samboer, registrert partner, barn eller bo. Kontakt KLP eller arbeidsgiver for å sjekke om slik forsikring fantes." },
+      { title: "Dødsfallet innen 1 år etter ansettelse og kjent tilstand", text: "Dør den ansatte innen 1 år etter jobbstart pga. en tilstand som var kjent ved ansettelse, kan retten til etterlattepensjon nektes.", details: "Dette er et krav om lojalitet ved innmelding. Kontakt KLP for individuell vurdering." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }, { label: "NAV – Gjenlevendepensjon", url: "https://www.nav.no/gjenlevendepensjon" }],
+    lenkerViktig: [{ label: "KLP – Søknad om etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }],
+    lenkerUnntak: [{ label: "KLP – Gruppelivsforsikring", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
+  etl_pensjon_end: { id: "etl_pensjon_end", type: "end", label: "Etterlattepensjon – avdøde mottok pensjon",         content: {
+    infos: [{ list: [
+      { title: "Etablert pensjonsforhold – pensjon videreføres til etterlatte", text: "Avdøde mottok alderspensjon eller uførepensjon fra KLP. Etterlatte har automatisk rett til etterlattepensjon.", details: "KLP mottar automatisk melding fra Folkeregisteret ved dødsfallet. Etterlatte varsles og pensjon starter normalt uten søknad – unntak gjelder for fraskilt ektefelle." },
+      { title: "Ektefellepensjon – 9 % av avdødes pensjonsgrunnlag", text: "Gjenlevende ektefelle eller registrert partner mottar 9 % av det pensjonsgrunnlaget avdøde hadde ved pensjoneringen.", details: "Beregnes direkte fra avdødes pensjonsgrunnlag (ikke fra lønn). Utbetales månedlig livet ut eller til gjengifte." },
+      { title: "Barnepensjon – 15 % per barn", text: "Hvert barn under 20 år mottar 15 % av avdødes pensjonsgrunnlag per år.", details: "Pensjon utbetales fra måneden etter dødsfallet til barnet fyller 20 år. Hvert barn får full 15 % – andelen deles ikke mellom søsken." },
+      { title: "Samordning med NAV gjenlevendepensjon", text: "Etterlatte kan motta både KLP-etterlattepensjon og NAV gjenlevendepensjon (eller omstillingsstønad). Disse er uavhengige.", details: "NAV gjenlevendepensjon fases ut: siste utbetaling er desember 2026. Fra 1. januar 2024 kan etterlatte søke omstillingsstønad fra NAV som erstatning." },
+      { title: "Automatisk behandling – normalt ingen søknad nødvendig", text: "KLP starter behandling automatisk basert på melding fra Folkeregisteret. Gjenlevende kontaktes av KLP.", details: "Fraskilt ektefelle må søke separat. Barn under 20 år varsles automatisk." }
+    ] }],
+    warnings: [
+      { title: "Gjengifte stanser ektefellepensjonen", text: "Gifter gjenlevende ektefelle seg på nytt, opphører etterlattepensjon fra KLP umiddelbart.", details: "Tidligere utbetalt pensjon beholdes. Pensjonen gjenopprettes ikke ved evt. ny skilsmisse." },
+      { title: "NAV gjenlevendepensjon fases ut desember 2026", text: "NAV gjenlevendepensjon utbetales kun til og med desember 2026. Etterlatte må søke omstillingsstønad fra NAV.", details: "KLP-etterlattepensjon påvirkes ikke av denne omleggingen. Det er kun NAV-ytelsen som endres." },
+      { title: "NAV-ytelsen reduseres ved høy inntekt", text: "NAV gjenlevendepensjon/omstillingsstønad reduseres hvis gjenlevende har arbeidsinntekt over halvparten av grunnbeløpet.", details: "KLP-etterlattepensjon påvirkes ikke av gjenlevendes inntekt." }
+    ],
+    unntak: [
+      { title: "Fraskilt ektefelle – søknad må sendes separat", text: "Fraskilt ektefelle varsles ikke automatisk og må selv søke KLP om etterlattepensjon.", details: "Vilkår: ekteskapet varte minst 10 år, den fraskilte var minst 45 år ved skilsmissen, har ikke giftet seg på nytt, og har ikke fraskrevet seg rettighetene." },
+      { title: "Samboere har IKKE rett til etterlattepensjon", text: "Uavhengig av om avdøde var pensjonist fra KLP – samboere har ingen rett til etterlattepensjon.", details: "Kontroller om avdøde hadde gruppelivsforsikring som kan gi engangsbeløp til samboer." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }, { label: "NAV – Omstillingsstønad", url: "https://www.nav.no/omstillingsstonad" }],
+    lenkerViktig: [{ label: "NAV – Gjenlevendepensjon", url: "https://www.nav.no/gjenlevendepensjon" }],
+    lenkerUnntak: [{ label: "KLP – Etterlattepensjon fraskilt", url: "https://www.klp.no/pensjon/etterlattepensjon/" }]
+  } },
+  etl_oppsatt_end: { id: "etl_oppsatt_end", type: "end", label: "Etterlattepensjon – avdøde hadde oppsatt rett",     content: {
+    infos: [{ list: [
+      { title: "Hva er oppsatt rett?", text: "Avdøde sluttet i offentlig sektor men hadde opparbeidet rett til pensjon fra KLP ved 67 år. Pensjon var ikke startet da avdøde døde.", details: "Tidligere KLP-medlem som skiftet jobb til privat sektor eller avsluttet yrkeskarrieren beholder retten til pensjon ved 67 år. Denne retten kalles oppsatt rett." },
+      { title: "Krav: minimum 3 år samlet opptjening", text: "Avdøde må ha hatt minst 3 år samlet opptjening i KLP og/eller andre offentlige pensjonsordninger.", details: "Opptjening fra KLP, SPK, OPF og andre offentlige ordninger teller samlet. Under 3 år gir ingen rett til etterlattepensjon." },
+      { title: "Ektefellepensjon – beregnet fra opptjeningstid", text: "Ektefellepensjonen beregnes som 9 % av avdødes pensjonsgrunnlag, redusert proporsjonalt etter faktisk tjenestetid.", details: "Eksempel: 15 år av 30 mulig gir 50 % av full sats, dvs. 4,5 % av pensjonsgrunnlaget. Utbetales månedlig livet ut eller til gjengifte." },
+      { title: "Barnepensjon – 15 % per barn, proporsjonalt redusert", text: "Hvert barn under 20 år mottar 15 % av avdødes pensjonsgrunnlag, redusert etter faktisk tjenestetid.", details: "Hvert barn får sin andel individuelt – de deler ikke pensjonen mellom seg." },
+      { title: "Søknad må sendes aktivt til KLP", text: "KLP varsles ikke automatisk ved dødsfall av tidligere ansatte. Etterlatte må selv ta kontakt og sende søknad.", details: "Kontakt KLP og oppgi at avdøde hadde oppsatt rett. Legg ved dødssertifikat og dokumentasjon på ekteskapet/familierelasjonen." }
+    ] }],
+    warnings: [
+      { title: "KRITISK: Samboere har IKKE rett – heller ikke ved oppsatt rett", text: "Selv om avdøde hadde oppsatt rett fra KLP, har samboere ingen rett til etterlattepensjon.", details: "Kontroller om avdøde hadde gruppelivsforsikring som evt. kan gi engangsbeløp til samboer." },
+      { title: "Søknaden må sendes aktivt – ingen automatisk varsling", text: "KLP vet ikke om dødsfallet med mindre etterlatte tar kontakt. Vent ikke – søk straks.", details: "Etterlatte som ikke er klar over avdødes KLP-opptjening, kan gå glipp av pensjon de har rett på. Sjekk avdødes pensjonshistorikk via Norsk Pensjon (norskpensjon.no)." },
+      { title: "Kort opptjening gir lav etterlattepensjon", text: "Med bare 3–5 års opptjening blir etterlattepensjonene svært lave (10–17 % av full sats).", details: "Vurder om søknaden er verdt å sende basert på antall opptjeningsår." }
+    ],
+    unntak: [
+      { title: "Fraskilt ektefelle – samme rett som ved aktivt medlemskap", text: "Fraskilt ektefelle kan søke etterlattepensjon fra oppsatt rett med samme vilkår som ellers.", details: "Krav: ekteskapet varte minst 10 år, den fraskilte var minst 45 år ved skilsmissen, har ikke giftet seg på nytt." },
+      { title: "Avdøde hadde søkt pensjon men døde før utbetaling startet", text: "Hadde avdøde søkt og fått vedtak om alderspensjon men døde før første utbetaling, behandles det som etablert rett.", details: "Etterlatte får da full etterlattepensjon basert på vedtakets pensjonsgrunnlag – ikke redusert for tjenestetid." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Etterlattepensjon", url: "https://www.klp.no/pensjon/etterlattepensjon/" }, { label: "Norsk Pensjon – pensjonsoversikt", url: "https://www.norskpensjon.no" }],
+    lenkerViktig: [{ label: "KLP – Hva skjer når du slutter i offentlig sektor", url: "https://www.klp.no/pensjon/medlemskap/" }],
+    lenkerUnntak: [{ label: "NAV – Gjenlevendepensjon", url: "https://www.nav.no/gjenlevendepensjon" }]
+  } },
 
   // ═══════════════════════════════════════════
   //  MEDLEMSKAP
@@ -225,10 +519,90 @@ const NODES = {
       { label: "Pensjonistvilkår",                   sub: "Unntak fra innmelding",        next: "med_pens_end" }
     ]
   },
-  med_inn_end:  { id: "med_inn_end",  type: "end", label: "Medlemskap – innmelding",        content: tomtSkjelett() },
-  med_ut_end:   { id: "med_ut_end",   type: "end", label: "Medlemskap – utmelding",         content: tomtSkjelett() },
-  med_perm_end: { id: "med_perm_end", type: "end", label: "Medlemskap – permisjon",         content: tomtSkjelett() },
-  med_pens_end: { id: "med_pens_end", type: "end", label: "Medlemskap – pensjonistvilkår",  content: tomtSkjelett() }
+  med_inn_end:  { id: "med_inn_end",  type: "end", label: "Medlemskap – innmelding",        content: {
+    infos: [{ list: [
+      { title: "Automatisk innmelding fra første arbeidstime", text: "Ansatte meldes automatisk inn i KLP fra første arbeidstime. Arbeidsgiver er ansvarlig for innmeldingen.", details: "Det er ingen karensdager eller ventetid. Både fast og midlertidig ansatte meldes inn automatisk." },
+      { title: "Stillingsprosent-krav avviklet for de fleste", text: "Tidligere krav om minimum 20 % stilling er fjernet for de fleste yrkesgrupper fra 2025.", details: "Fra 1. januar 2025 er nedre innmeldingsgrense avviklet for sykepleiere og mange andre grupper. Sjekk gjeldende regler for din yrkesgruppe." },
+      { title: "Midlertidig ansatte – kvartalsvis rapportering", text: "Midlertidig ansatte med minst 20 % gjennomsnittlig stilling rapporteres av arbeidsgiver hvert kvartal.", details: "Gjennomsnittlig stillingsprosent over kvartalet avgjør om den midlertidig ansatte teller som medlem." },
+      { title: "Aldersgrense 70 år", text: "Ansatte kan ikke meldes inn etter fylte 70 år.", details: "Noen stillinger med særaldersgrense 60 eller 65 år har lavere øvre grense. Pensjonistlønn-ansatte meldes ikke inn uansett alder." },
+      { title: "Pensjonistvilkår – unntak fra innmelding", text: "Ansatte som jobber på pensjonistlønn (269 kr/time fra 2026) meldes ikke inn og opptjener ingen pensjon.", details: "Pensjonistlønn er et alternativ for pensjonister som ønsker å jobbe uten at eksisterende pensjon reduseres." }
+    ] }],
+    warnings: [
+      { title: "Arbeidsgiver har meldeplikt – ikke den ansatte", text: "Den ansatte kan ikke velge å stå utenfor ordningen. Innmelding er obligatorisk og arbeidsgivers ansvar.", details: "Feil innmelding eller manglende innmelding er arbeidsgivers ansvar overfor KLP." },
+      { title: "Permisjon over 1 måned medfører automatisk utmelding", text: "Ved permisjon lenger enn 1 måned meldes den ansatte automatisk ut av KLP.", details: "Etterlattepensjon og uførepensjon beholdes i 2 år etter utmelding. Pensjonsopptjening stoppes umiddelbart." },
+      { title: "Pensjonistlønn gir ingen pensjonsopptjening", text: "Ansatte på pensjonistlønn er ikke medlemmer og opptjener ingen alderspensjon fra KLP.", details: "Dette er gjerne fordelaktig for arbeidsgiver (lavere kostnad) men gir den ansatte ingen ny opptjening." }
+    ],
+    unntak: [
+      { title: "Sykepleiere – spesialregler fra 2025", text: "Fra 1. januar 2025 er nedre innmeldingsgrense for sykepleiere fjernet. Alle stillingsprosenter gir rett til opptjening.", details: "Unntak beholdes for sykepleiere som allerede mottar pensjon: disse skal ikke meldes inn under 20 % stilling." },
+      { title: "Leger under 168 timer per kvartal med full alderspensjon", text: "Leger som mottar full alderspensjon og arbeider under 168 timer per kvartal, skal ikke meldes inn.", details: "Dette er et lovfestet unntak spesifikt for legegruppen. Kontakt KLP for bekreftelse i tvilstilfeller." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Innmeldingsregler", url: "https://www.klp.no/pensjon/medlemskap/" }, { label: "KLP – Hva betyr det å være medlem", url: "https://www.klp.no/pensjon/medlemskap/" }],
+    lenkerViktig: [{ label: "KLP – Jobb og pensjon (arbeidsgiver)", url: "https://www.klp.no/pensjon/medlemskap/" }],
+    lenkerUnntak: [{ label: "KLP – Pensjonistlønn", url: "https://www.klp.no/pensjon/medlemskap/" }]
+  } },
+  med_ut_end:   { id: "med_ut_end",   type: "end", label: "Medlemskap – utmelding",         content: {
+    infos: [{ list: [
+      { title: "Oppsatt rett inntrer etter 3 år (født før 1963)", text: "For de født før 1963 kreves minst 3 år samlet opptjening i offentlig tjenestepensjon for å få oppsatt rett.", details: "Med oppsatt rett beholder du retten til alderspensjon fra KLP ved 67 år, selv om du slutter i offentlig sektor." },
+      { title: "Oppsatt rett for 1963-kullet og yngre – kun 1 år", text: "For de født 1963 eller senere med opptjening etter 2020 er kravet redusert til minimum 1 år samlet opptjening.", details: "Påslagspensjon opptjenes fra 2020. Selv kort opptjening gir rett til en (liten) pensjon fra KLP." },
+      { title: "Opptjening fra flere ordninger teller samlet", text: "Opptjening fra KLP, SPK, OPF og andre offentlige pensjonsordninger summeres.", details: "Ved jobbskifte mellom offentlige arbeidsgivere legges tjenestetiden sammen. Det er den siste ordningen du var i som beregner og utbetaler pensjonen." },
+      { title: "Pensjonssertifikat utferdiges ved utmelding", text: "Når du slutter, utferdiger KLP et pensjonssertifikat som dokumenterer din opptjeningstid.", details: "Ta vare på sertifikatet. Det brukes til å kombinere pensjonsperioder dersom du kommer tilbake til offentlig sektor." },
+      { title: "Norsk Pensjon samler pensjonsrettigheter", text: "KLP rapporterer til Norsk Pensjon, der du kan se samlet oversikt over pensjonsrettigheter fra alle ordninger.", details: "Logg inn på norskpensjon.no for en samlet pensjonsoversikt. KLP henter automatisk info fra andre offentlige ordninger ved beregning." }
+    ] }],
+    warnings: [
+      { title: "Under 3 år opptjening (født før 1963) – ingen oppsatt rett", text: "Slutter du i offentlig sektor med kortere enn 3 år opptjening og er født før 1963, mister du all pensjonsopptjening.", details: "Det finnes ingen ordning for å «kjøpe seg inn» i ettertid. Sørg for å fullføre 3 år før du eventuelt bytter sektor." },
+      { title: "Blanding av gammel og ny ordning er komplisert", text: "Har du opptjening både før og etter 2020, beregnes de to delene etter ulike regler.", details: "Gammel opptjening (pre-2020) samordnes med NAV. Påslagspensjon (post-2020) fordeles via delingstall. Kontakt KLP for en samlet beregning." },
+      { title: "Behold pensjonssertifikatet fra tidligere ordninger", text: "Sertifikater fra tidligere offentlige pensjonsordninger (SPK, OPF etc.) er viktige dokumenter.", details: "Uten sertifikat kan det være vanskelig å dokumentere samlet opptjening ved fremtidig beregning. KLP kan likevel hente info via Norsk Pensjon." }
+    ],
+    unntak: [
+      { title: "Overgang mellom offentlige ordninger – automatisk sammenslåing", text: "Bytter du mellom KLP, SPK og OPF, slås opptjeningstiden automatisk sammen hos siste ordning.", details: "Du trenger ikke gjøre noe aktivt. Det skjer automatisk ved beregning av pensjon." },
+      { title: "Privatsektor mellom to offentlige stillinger", text: "Periode i privat sektor bryter ikke opptjeningstiden i offentlig sektor – de to periodene i offentlig sektor legges fortsatt sammen.", details: "Privatsektorperioden gir separat pensjon via privat pensjonsordning. Offentlig opptjening er bevart via oppsatt rett." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Hva skjer når du slutter", url: "https://www.klp.no/pensjon/medlemskap/" }, { label: "Norsk Pensjon", url: "https://www.norskpensjon.no" }],
+    lenkerViktig: [{ label: "KLP – Alderspensjon opptjent før 2020", url: "https://www.klp.no/pensjon/alderspensjon/" }],
+    lenkerUnntak: [{ label: "KLP – Medlemskap og opptjening", url: "https://www.klp.no/pensjon/medlemskap/" }]
+  } },
+  med_perm_end: { id: "med_perm_end", type: "end", label: "Medlemskap – permisjon",         content: {
+    infos: [{ list: [
+      { title: "Permisjon over 1 måned → automatisk utmelding", text: "Permisjon lengre enn 1 måned medfører automatisk utmelding fra KLP. Pensjonsopptjening stoppes.", details: "Den ansatte beholder risikodekninger (uførepensjon og etterlattepensjon) i 2 år etter utmelding, men opptjener ingen alderspensjon i permisjonstiden." },
+      { title: "Frivillig dekning – søknad innen 2 måneder fra permisjonstart", text: "Du kan beholde fullt KLP-medlemskap under permisjon ved å søke om frivillig dekning senest 2 måneder etter permisjonstart.", details: "Fristen er absolutt. Etter 2 måneder kan du ikke lenger få frivillig dekning for den aktuelle permisjonsperioden." },
+      { title: "Du betaler hele premien selv ved frivillig dekning", text: "Ved frivillig dekning betaler du full premie – både arbeidsgiver- og arbeidstakerdelens andel.", details: "Premien kan være betydelig. Vurder om det er verdt det økonomisk, særlig ved kortere permisjoner." },
+      { title: "Maksimalt 2 år med frivillig dekning", text: "Frivillig medlemskap kan opprettholdes i inntil 2 år under permisjon.", details: "For permisjon utover 2 år kan du søke KLP om dispensasjon. Dette er unntakstilfeller og krever begrunnelse." },
+      { title: "Risikodekning beholdes i 2 år uten frivillig dekning", text: "Selv uten frivillig dekning er du dekket for uførepensjon og etterlattepensjon i 2 år etter utmelding.", details: "Etter 2 år faller all KLP-dekning bort dersom du ikke er tilbake i en KLP-stilling." }
+    ] }],
+    warnings: [
+      { title: "Fristen på 2 måneder er absolutt – ikke gå glipp av den", text: "Søker du om frivillig dekning etter 2 måneder, mister du muligheten for den permisjonsperioden.", details: "Sett en påminnelse straks permisjonen starter. KLP varsler ikke automatisk om fristen." },
+      { title: "Frivillig dekning er kostbar – du betaler begge parters andeler", text: "Full premie inkluderer både arbeidstaker- og arbeidsgiverdelen, noe som kan utgjøre et betydelig beløp.", details: "Vurder kostnad opp mot antall opptjeningsår du mister uten dekning." },
+      { title: "Uten frivillig dekning: ingen pensjonsopptjening under permisjon", text: "Opptjening av alderspensjon stoppes ved utmelding. Permisjonstiden teller ikke med i tjenestetiden.", details: "Unntak: ulønnet utdanningspermisjon kan gi opptjening for ansatte født 1963 eller senere, dersom arbeidsgiver vurderer den som relevant for stillingen." }
+    ],
+    unntak: [
+      { title: "Ulønnet utdanningspermisjon – opptjening for 1963-kullet og yngre", text: "For ansatte født 1963 eller senere kan ulønnet utdanningspermisjon gi pensjonsopptjening dersom arbeidsgiver vurderer permisjonen som relevant for stillingen.", details: "Krever aktiv vurdering og bekreftelse fra arbeidsgiver. Kontakt KLP for avklaring." },
+      { title: "Lønnet permisjon – opptjening fortsetter", text: "Under lønnet permisjon (f.eks. foreldrepermisjon med lønn) beholdes KLP-medlemskapet og opptjeningen fortsetter.", details: "Lønnet foreldrepermisjon regnes som ordinær ansettelse for pensjonsformål." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Pensjonsrettigheter ved permisjon", url: "https://www.klp.no/pensjon/medlemskap/" }, { label: "KLP – Frivillig dekning", url: "https://www.klp.no/pensjon/medlemskap/" }],
+    lenkerViktig: [{ label: "KLP – Hva skjer ved permisjon og permittering", url: "https://www.klp.no/pensjon/medlemskap/" }],
+    lenkerUnntak: [{ label: "KLP – Utdanningspermisjon og opptjening", url: "https://www.klp.no/pensjon/alderspensjon/" }]
+  } },
+  med_pens_end: { id: "med_pens_end", type: "end", label: "Medlemskap – pensjonistvilkår",  content: {
+    infos: [{ list: [
+      { title: "Pensjonistlønn – fast sats fra 2026", text: "Pensjonistlønn er fastsatt til 269 kroner per time fra 1. januar 2026.", details: "Ansatte på pensjonistlønn meldes ikke inn i KLP og opptjener ingen ny pensjon. Eksisterende alderspensjon, AFP eller tidligpensjon reduseres ikke uansett antall timer arbeidet." },
+      { title: "Hvem kan jobbe på pensjonistvilkår?", text: "Primært personer som allerede mottar alderspensjon, AFP livsvarig eller tidligpensjon fra KLP.", details: "Pensjonistvilkår gjør at pensjonisten kan jobbe for arbeidsgiver uten at pensjonen reduseres og uten at arbeidsgiver betaler pensjonspremie til KLP." },
+      { title: "Ingen innmelding i KLP – ingen pensjonsopptjening", text: "Ansatte på pensjonistlønn er ikke KLP-medlemmer og opptjener ingen alderspensjon fra arbeidet.", details: "Dette er hele poenget: pensjonisten kan jobbe fritt, arbeidsgiver sparer pensjonspremie, og eksisterende pensjon fortsetter uendret." },
+      { title: "Pensjon reduseres ikke ved arbeid på pensjonistvilkår", text: "Alderspensjon, AFP livsvarig og tidligpensjon fra KLP berøres ikke av arbeid på pensjonistlønn.", details: "Det er ingen inntektsgrense eller samordningsfradrag knyttet til arbeid på pensjonistvilkår. Pensjonen betales i sin helhet uavhengig av arbeidsinntekten." },
+      { title: "Aldersgrense 70 år gjelder", text: "Ingen kan meldes inn i KLP etter fylte 70 år, heller ikke på pensjonistvilkår.", details: "Arbeid etter 70 år skjer alltid utenfor KLP-ordningen. Noen særaldersgrensestillinger har lavere øvre grense." }
+    ] }],
+    warnings: [
+      { title: "Arbeidsgiver må benytte pensjonistlønns-ordningen korrekt", text: "Pensjonistlønn er ikke automatisk – arbeidsgiver velger aktivt å tilby denne lønnsformen og rapporterer til KLP.", details: "Feilrapportering kan medføre innmelding og pensjonspremie arbeidsgiver ikke hadde planlagt." },
+      { title: "Pensjonistlønn er lavere enn ordinær lønn", text: "269 kr/time er vesentlig lavere enn ordinær tarifflønn. Pensjonisten bør vurdere om det lønner seg å jobbe på disse vilkårene.", details: "For arbeidsgiver er pensjonistlønn attraktivt fordi det ikke betales pensjonspremie. For pensjonisten kan det oppleves som lav betaling." },
+      { title: "Ingen risikodekning ved arbeid på pensjonistvilkår", text: "Ansatte på pensjonistvilkår har ikke uføredekning eller etterlattepensjon fra KLP knyttet til arbeidsforholdet.", details: "Eksisterende pensjonsrettigheter (alderspensjon og evt. etterlattepensjon for ektefelle) påvirkes ikke, men det opparbeides ingen ny risikodekning." }
+    ],
+    unntak: [
+      { title: "Sykepleiere født 1964 eller tidligere – unntatt fra innmeldingsplikt under 20 %", text: "Sykepleiere som mottar pensjon og arbeider under 20 % stilling, skal ikke meldes inn selv etter at den generelle innmeldingsgrensen ble fjernet i 2025.", details: "Dette er et bevart unntak spesifikt for eldre sykepleiere som mottar pensjon og fortsetter i redusert stilling." },
+      { title: "Særaldersgrensestillinger – pensjonistvilkår etter tidligpensjon", text: "Ansatte som går av med tidligpensjon via særaldersgrense kan fortsette å jobbe for samme eller annen arbeidsgiver på pensjonistvilkår.", details: "Tidligpensjonen fortsetter uavbrutt. Lønnsvilkår avtales med arbeidsgiver. Kontakt KLP for å bekrefte at pensjonistvilkår gjelder i ditt tilfelle." }
+    ],
+    lenkerHoved:  [{ label: "KLP – Pensjonistlønn", url: "https://www.klp.no/pensjon/medlemskap/" }, { label: "KLP – Aldersgrenser", url: "https://www.klp.no/pensjon/alderspensjon/" }],
+    lenkerViktig: [{ label: "KLP – Jobb og pensjon", url: "https://www.klp.no/pensjon/medlemskap/" }],
+    lenkerUnntak: [{ label: "KLP – Sykepleiere og pensjonistvilkår", url: "https://www.klp.no/pensjon/medlemskap/" }]
+  } }
 
 };
 // @@ADMIN_NODES_END@@
