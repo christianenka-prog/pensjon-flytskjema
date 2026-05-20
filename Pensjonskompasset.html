@@ -4,15 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pensjonskompasset</title>
-  <style>    :root {      --klp-gray-900: #3d3d3d;      --klp-gray-700: #5e5e5e;      --klp-gray-300: #cacaca;      --klp-white: #ffffff;      --klp-green-100: #3d7460;      --klp-green-600: #3d7460;      --klp-green-700: #2d5a48;      --klp-pink-100: #f5c4ce;      --klp-pink-600: #cc4169;      --bg: #f4f4f4;      --card: #ffffff;      --border: #e3e3e3;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      background: #f0f0f0;      color: var(--klp-gray-900);      min-height: 100%;      display: flex;      flex-direction: column;    }    .topbar {      background: #4a4a4a;      color: #ffffff;      padding: 14px 20px;      display: flex;      justify-content: space-between;      align-items: center;      position: sticky;      top: 0;      z-index: 10;      border-bottom: 3px solid #3d3d3d;    }    .brand {      font-size: 18px;      font-weight: 700;      letter-spacing: 0.2px;    }    .brand span { color: var(--klp-white); }    .meta {      color: var(--klp-gray-300);      font-size: 12px;      margin-top: 2px;    }    .btn-reset {      border: 1px solid rgba(255,255,255,0.6);      background: rgba(255,255,255,0.15);      color: #ffffff;      padding: 7px 12px;      border-radius: 8px;      cursor: pointer;      font-size: 13px;      font-weight: 600;    }    .btn-reset:hover {      border-color: var(--klp-green-700);      background: var(--klp-white);    }    .page {      padding: 20px;    }    .flow-board {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 0;      padding-bottom: 24px;    }    .flow-row {      display: flex;      flex-direction: row;      align-items: center;      gap: 10px;      padding: 10px 0;      flex-shrink: 0;    }    .flow-row + .flow-row {      padding-left: 0;    }    .flow-row-sep {      font-size: 22px;      color: var(--klp-gray-300);      padding: 0 12px;      flex-shrink: 0;      user-select: none;    }    .flow-row-label {      flex-shrink: 0;      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.3px;      white-space: nowrap;    }    .flow-row-choices {      display: flex;      flex-wrap: wrap;      gap: 6px;    }    /* Text-style classes still used in detail panel */    .column-step {      font-size: 11px;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.4px;      margin-bottom: 4px;    }    .column-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);      line-height: 1.3;    }    .column-sub {      font-size: 13px;      color: var(--klp-gray-700);      margin-top: 6px;      line-height: 1.5;    }    .option {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      text-align: left;      cursor: pointer;      transition: all 0.18s ease;    }    .option-label {      font-size: 12px;      font-weight: 600;      color: var(--klp-gray-900);      line-height: 1.3;      white-space: nowrap;    }    .option:hover {      border-color: var(--klp-green-600);      background: rgba(86, 153, 148, 0.12);    }    .option.selected {      border-color: var(--klp-green-600);      background: rgba(184, 218, 214, 0.6);    }    .option.current-choice {      border-color: var(--klp-pink-600);      background: var(--klp-pink-100);    }    .option-sub {      font-size: 12px;      color: var(--klp-gray-700);      margin-top: 3px;      line-height: 1.4;    }    .panel {      border: 1px solid var(--border);      border-radius: 10px;      padding: 10px;      background: #fbfbfb;    }    .panel.info {      border-left: 3px solid var(--klp-green-600);    }    .panel.warn {      border-left: 3px solid var(--klp-pink-600);      background: #fff6f8;    }    .panel-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 6px;    }    .panel p,    .panel li {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);    }    .panel ul {      padding-left: 16px;      margin-top: 2px;    }    .panel a {      color: var(--klp-green-700);      font-weight: 500;      text-decoration: underline;      text-underline-offset: 2px;    }    .panel a:hover { color: var(--klp-pink-600); }    .btn-next {      border: none;      border-radius: 10px;      padding: 10px;      font-size: 13px;      font-weight: 700;      cursor: pointer;      background: var(--klp-pink-600);      color: #fff;      margin-top: 2px;    }    .btn-next:hover { background: #a83255; }    /* \uc0── FANER ─────────────────────────────────────────────── */    .tabs {      display: flex;      gap: 4px;      padding: 12px 20px 0;      border-bottom: 2px solid var(--border);      background: transparent;    }    .tab-btn {      padding: 7px 18px;      font-size: 14px;      font-weight: 600;      border: 1px solid var(--border);      border-bottom: none;      border-radius: 8px 8px 0 0;      background: #ececec;      color: var(--klp-gray-700);      cursor: pointer;      position: relative;      bottom: -2px;      transition: background 0.15s;    }    .tab-btn:hover {      background: #e0e0e0;    }    .tab-btn.active {      background: var(--card);      color: var(--klp-gray-900);      border-color: var(--border);      border-bottom-color: var(--card);    }    .tab-panel { display: none; }    .tab-panel.active { display: block; }    /* \uc0── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */    .flow-board.has-detail {      align-items: stretch;    }    .detail-panel {      flex-basis: 100%;      max-width: 900px;      margin-top: 16px;      background: var(--card);      border: 1px solid var(--klp-green-600);      border-radius: 12px;      box-shadow: 0 4px 16px rgba(0,0,0,0.10);      overflow: hidden;      display: flex;      flex-direction: column;    }    .detail-panel-head {      padding: 14px 18px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;    }    .detail-panel-body {      padding: 16px;      display: flex;      flex-direction: row;      flex-wrap: wrap;      gap: 16px;      align-items: flex-start;      flex: 1;    }    .detail-section {      flex: 1;      min-width: 220px;      background: #fbfbfb;      border: 1px solid var(--border);      border-left: 3px solid var(--klp-green-600);      border-radius: 10px;      padding: 12px 14px;    }    .detail-section-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 10px;    }    .checkbox-item {      display: flex;      align-items: flex-start;      gap: 8px;      margin-bottom: 8px;    }    .checkbox-item input[type="checkbox"] {      margin-top: 2px;      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;    }    .checkbox-item label {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);      cursor: pointer;    }    .checkbox-item input:checked + label {      color: var(--klp-gray-700);      text-decoration: line-through;      text-decoration-color: var(--klp-green-600);    }    .detail-panel-foot {      padding: 12px 16px;      border-top: 1px solid var(--border);      display: flex;      flex-wrap: wrap;      gap: 8px;    }    /* \uc0── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */    .tab-panel.active {      display: flex;      flex-direction: column;      flex: 1;      min-height: 0;      overflow: hidden;    }    .content-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 16px;      flex: 1;      min-height: 0;    }    .content-box {      background: var(--card);      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      display: flex;      flex-direction: column;      overflow: hidden;      min-height: 0;    }    .content-box-head {      padding: 12px 16px;      border-bottom: 2px solid #4a4a4a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      flex-shrink: 0;    }    .content-box-body {      flex: 1;      display: flex;      flex-direction: column;      min-height: 0;      overflow: hidden;    }    .content-box-main {      flex: 1;      overflow-y: auto;      padding: 14px 16px;      min-height: 0;    }    .content-box-foot {      flex-shrink: 0;      padding: 10px 16px;      border-top: 1px solid #d8d8d8;      background: #f0f0f0;    }    .content-box-foot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .content-box-foot-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .content-box-foot-list a { font-size: 12px; color: var(--klp-pink-600); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .content-box-foot-list a:hover { color: #f5c4ce; }    /* \uc0── SAMMENDRAG ─────────────────────────────────────────── */    .summary-box {      flex-shrink: 0;      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      background: var(--card);      display: flex;      flex-direction: column;      height: 90px;      margin-top: 0;    }    .summary-box-head {      padding: 10px 16px;      border-bottom: 1px solid #3a3a3a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;    }    .summary-copy-btn {      border: none;      background: var(--klp-pink-600);      color: #fff;      padding: 4px 14px;      border-radius: 8px;      cursor: pointer;      font-size: 12px;      font-weight: 700;      transition: all 0.15s;    }    .summary-copy-btn:hover {      background: #a83255;    }    .summary-textarea {      flex: 1;      padding: 10px 16px;      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      font-size: 12px;      line-height: 1.5;      color: var(--klp-gray-900);      border: none;      resize: none;      background: var(--card);      outline: none;      border-radius: 0 0 12px 12px;    }    .content-placeholder {      color: var(--klp-gray-300);      font-size: 13px;      font-style: italic;    }    .box-filter-area {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 16px;      padding: 10px 16px;      border-bottom: 1px solid var(--klp-green-600);      background: rgba(61,116,96,0.12);    }    .box-filter-row {      display: flex;      align-items: center;      gap: 6px;      flex-wrap: nowrap;    }    .box-filter-label {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.3px;      color: var(--klp-gray-700);      min-width: 40px;      flex-shrink: 0;    }    .box-filter-btn {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      font-size: 12px;      font-weight: 600;      cursor: pointer;      transition: all 0.18s ease;      color: var(--klp-gray-900);    }    .box-filter-btn:hover {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.08);    }    .box-filter-btn.active {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.15);      color: var(--klp-gray-900);    }    /* \uc0── TEMAKORT (inni Hovedregler) ────────────────────────── */    .topic-cards-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 8px;      margin-top: 14px;    }    .topic-card {      display: flex;      flex-direction: column;      gap: 8px;      background: #f0f0f0;      border: 1px solid #d8d8d8;      border-radius: 6px;      padding: 12px;      cursor: pointer;      transition: background 0.15s, border-color 0.15s;      min-height: 90px;    }    .topic-card:hover { background: #e4e4e4; border-color: #cacaca; }    .topic-card.checked {      background: #dcdcdc;      border-color: #b0b0b0;    }    .topic-card-top {      display: flex;      align-items: center;      gap: 8px;    }    .topic-card input[type="checkbox"] {      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;      margin: 0;    }    .topic-card-title {      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-900);      flex: 1;    }    .topic-card-desc {      font-size: 12px;      color: var(--klp-gray-700);      line-height: 1.5;    }    .topic-card-chevron {      margin-left: auto;      font-size: 12px;      color: var(--klp-green-700);      opacity: 0.7;    }    .topic-card-details { display: none; }    .topic-cards-grid { align-items: start; }    .card-popup-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.18);      opacity: 0;      pointer-events: none;      transition: opacity 0.2s;      z-index: 999;    }    .card-popup-overlay.open { opacity: 1; pointer-events: auto; }    .card-popup {      position: fixed;      width: 540px;      max-width: 92vw;      background: var(--klp-white);      border: 1px solid var(--klp-green-600);      border-radius: 14px;      padding: 26px 30px;      box-shadow: 0 16px 40px rgba(0,0,0,0.24);      z-index: 1000;      opacity: 0;      pointer-events: none;      transform: scale(0.2);      transform-origin: top left;      transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);    }    .card-popup.open {      opacity: 1;      pointer-events: auto;      transform: scale(1);    }    .card-popup-close {      position: absolute;      top: 8px;      right: 10px;      background: none;      border: none;      font-size: 22px;      line-height: 1;      cursor: pointer;      color: var(--klp-gray-700);      padding: 4px 8px;      border-radius: 6px;    }    .card-popup-close:hover { background: var(--border); }    .card-popup-title {      font-size: 20px;      font-weight: 700;      color: var(--klp-green-700);      margin-bottom: 14px;      padding-right: 32px;      line-height: 1.3;    }    .card-popup-body { font-size: 15px; line-height: 1.65; color: var(--klp-gray-900); max-height: 55vh; overflow-y: auto; }    .topic-section-divider {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin: 14px 0 6px;    }    .box-link-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }    .box-link-footer-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .box-link-footer-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .box-link-footer-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .box-link-footer-list a:hover { color: var(--klp-pink-600); }    /* \uc0── TEMA-DRAWER ─────────────────────────────────────────── */    .topic-drawer-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.3);      z-index: 199;      opacity: 0;      pointer-events: none;      transition: opacity 0.25s;    }    .topic-drawer-overlay.open {      opacity: 1;      pointer-events: auto;    }    .topic-drawer {      position: fixed;      top: 0;      right: 0;      width: 380px;      max-width: 95vw;      height: 100vh;      background: var(--card);      box-shadow: -4px 0 30px rgba(0,0,0,0.15);      z-index: 200;      display: flex;      flex-direction: column;      transform: translateX(100%);      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);    }    .topic-drawer.open { transform: translateX(0); }    .topic-drawer-head {      padding: 16px 20px;      border-bottom: 1px solid var(--border);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;      background: #fbfbfb;    }    .topic-drawer-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);    }    .topic-drawer-close {      background: none;      border: none;      font-size: 22px;      cursor: pointer;      color: var(--klp-gray-700);      line-height: 1;      padding: 2px 8px;      border-radius: 6px;    }    .topic-drawer-close:hover { background: var(--border); }    .topic-drawer-body {      padding: 16px 20px;      overflow-y: auto;      flex: 1;    }    .topic-drawer-section { margin-bottom: 16px; }    .topic-drawer-section:last-child { margin-bottom: 0; }    .topic-drawer-section-title {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 5px;    }    .topic-drawer-section p {      font-size: 13px;      line-height: 1.6;      color: var(--klp-gray-900);    }    @media (max-width: 720px) {      .page { padding: 12px; }      .content-grid { grid-template-columns: 1fr; }      .summary-box { height: 120px; }    }    .summary-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; }    .flow-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; padding: 2px 0 6px; flex-basis: 100%; }    /* ── SØKEFELT ────────────────────────────────────────────── */    .search-wrap { position: relative; max-width: 200px; }    .search-input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s, width 0.2s; width: 140px; }    .search-input:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.12); width: 200px; }    .search-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--klp-white); border: 1px solid var(--klp-green-600); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 50; max-height: 260px; overflow-y: auto; display: none; }    .search-results.open { display: block; }    .search-result-item { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--klp-gray-900); border-bottom: 1px solid var(--border); }    .search-result-item:last-child { border-bottom: none; }    .search-result-item:hover { background: rgba(86,153,148,0.1); color: var(--klp-green-700); }    .search-result-item strong { color: var(--klp-green-700); }    .search-result-path { font-size: 11px; color: var(--klp-gray-300); margin-top: 1px; }    .search-result-kort { display: inline-block; margin-right: 6px; }    .search-result-kort::before { content: '→ '; }    /* ── ADMIN REDIGERINGSMODUS ──────────────────────────────── */    .admin-tab-icon { background: none; border: none; cursor: pointer; color: var(--klp-gray-300); font-size: 13px; padding: 7px 10px; opacity: 0.35; position: relative; bottom: -2px; border-radius: 8px 8px 0 0; transition: opacity 0.2s; line-height: 1; }    .admin-tab-icon:hover { opacity: 0.9; color: var(--klp-gray-700); }    .admin-tab-icon.active { opacity: 1; color: var(--klp-gray-700); background: var(--card); border: 1px solid var(--border); border-bottom-color: var(--card); }    .admin-layout { display: flex; flex-direction: row; flex: 1; min-height: 0; gap: 0; }    .admin-tree { width: 240px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; background: #fafafa; }    .admin-tree-item { display: flex; align-items: center; gap: 6px; padding: 6px 12px 6px 10px; cursor: pointer; font-size: 12px; color: var(--klp-gray-700); border-left: 3px solid transparent; transition: background 0.12s; user-select: none; }    .admin-tree-item:hover { background: rgba(86,153,148,0.08); }    .admin-tree-item.selected { background: rgba(86,153,148,0.15); border-left-color: var(--klp-green-600); color: var(--klp-gray-900); font-weight: 600; }    .node-type-badge { font-size: 10px; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }    .badge-choice { background: #dbeafe; color: #1e40af; }    .badge-end { background: #d1fae5; color: #065f46; }    .admin-tree-group { padding: 8px 12px 2px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-300); }    .admin-editor { flex: 1; overflow-y: auto; padding: 20px 24px; }    .admin-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--klp-green-100); }    .admin-editor-title { font-size: 16px; font-weight: 700; color: var(--klp-gray-900); }    .admin-export-btn { background: var(--klp-pink-600); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }    .admin-export-btn:hover { background: #a83255; }    .admin-section { margin-bottom: 24px; }    .admin-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-700); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }    .admin-field { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s; }    .admin-field:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.15); }    .admin-field.ta { resize: vertical; min-height: 58px; }    .admin-field-label { font-size: 11px; font-weight: 600; color: var(--klp-gray-700); margin-bottom: 3px; display: block; }    .admin-field-group { margin-bottom: 8px; }    .admin-card-row { background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }    .admin-card-row-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }    .admin-card-num { font-size: 11px; font-weight: 700; color: var(--klp-gray-300); }    .admin-btn-del { background: none; border: 1px solid #fca5a5; color: #dc2626; border-radius: 6px; padding: 2px 8px; font-size: 12px; cursor: pointer; transition: all 0.12s; }    .admin-btn-del:hover { background: #fef2f2; }    .admin-btn-add { background: none; border: 1px dashed var(--klp-green-600); color: var(--klp-green-700); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; transition: all 0.12s; }    .admin-btn-add:hover { background: rgba(86,153,148,0.08); }    .admin-choice-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; }    .admin-link-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }    #admin-export-dialog { border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: min(720px, 95vw); box-shadow: 0 16px 48px rgba(0,0,0,0.2); }    #admin-export-dialog::backdrop { background: rgba(0,0,0,0.45); }    .admin-export-dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; }    .admin-export-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--klp-gray-700); padding: 2px 8px; border-radius: 6px; line-height: 1; }    .admin-export-close:hover { background: var(--border); }    .admin-export-copy { background: var(--klp-green-600); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 12px; }    .admin-export-copy:hover { background: var(--klp-green-700); }    #admin-export-textarea { width: 100%; height: 55vh; font-family: monospace; font-size: 11px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; resize: none; display: block; }  </style>
+  <style>    :root {      --klp-gray-900: #3d3d3d;      --klp-gray-700: #5e5e5e;      --klp-gray-300: #cacaca;      --klp-white: #ffffff;      --klp-green-100: #3d7460;      --klp-green-600: #3d7460;      --klp-green-700: #2d5a48;      --klp-pink-100: #f5c4ce;      --klp-pink-600: #cc4169;      --bg: #f4f4f4;      --card: #ffffff;      --border: #e3e3e3;    }    * { box-sizing: border-box; margin: 0; padding: 0; }    html, body { height: 100%; }    body {      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      background: #f0f0f0;      color: var(--klp-gray-900);      min-height: 100%;      display: flex;      flex-direction: column;    }    .topbar {      background: #4a4a4a;      color: #ffffff;      padding: 14px 20px;      display: flex;      justify-content: space-between;      align-items: center;      position: sticky;      top: 0;      z-index: 10;      border-bottom: 3px solid #3d3d3d;    }    .brand {      font-size: 18px;      font-weight: 700;      letter-spacing: 0.2px;    }    .brand span { color: var(--klp-white); }    .meta {      color: var(--klp-gray-300);      font-size: 12px;      margin-top: 2px;    }    .btn-reset {      border: 1px solid rgba(255,255,255,0.6);      background: rgba(255,255,255,0.15);      color: #ffffff;      padding: 7px 12px;      border-radius: 8px;      cursor: pointer;      font-size: 13px;      font-weight: 600;    }    .btn-reset:hover {      border-color: var(--klp-green-700);      background: var(--klp-white);    }    .page {      padding: 20px;    }    .flow-board {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 0;      padding-bottom: 24px;    }    .flow-row {      display: flex;      flex-direction: row;      align-items: center;      gap: 10px;      padding: 10px 0;      flex-shrink: 0;    }    .flow-row + .flow-row {      padding-left: 0;    }    .flow-row-sep {      font-size: 22px;      color: var(--klp-gray-300);      padding: 0 12px;      flex-shrink: 0;      user-select: none;    }    .flow-row-label {      flex-shrink: 0;      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.3px;      white-space: nowrap;    }    .flow-row-choices {      display: flex;      flex-wrap: wrap;      gap: 6px;    }    /* Text-style classes still used in detail panel */    .column-step {      font-size: 11px;      color: var(--klp-gray-700);      text-transform: uppercase;      letter-spacing: 0.4px;      margin-bottom: 4px;    }    .column-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);      line-height: 1.3;    }    .column-sub {      font-size: 13px;      color: var(--klp-gray-700);      margin-top: 6px;      line-height: 1.5;    }    .option {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      text-align: left;      cursor: pointer;      transition: all 0.18s ease;    }    .option-label {      font-size: 12px;      font-weight: 600;      color: var(--klp-gray-900);      line-height: 1.3;      white-space: nowrap;    }    .option:hover {      border-color: var(--klp-green-600);      background: rgba(86, 153, 148, 0.12);    }    .option.selected {      border-color: var(--klp-green-600);      background: rgba(184, 218, 214, 0.6);    }    .option.current-choice {      border-color: var(--klp-pink-600);      background: var(--klp-pink-100);    }    .option-sub {      font-size: 12px;      color: var(--klp-gray-700);      margin-top: 3px;      line-height: 1.4;    }    .panel {      border: 1px solid var(--border);      border-radius: 10px;      padding: 10px;      background: #fbfbfb;    }    .panel.info {      border-left: 3px solid var(--klp-green-600);    }    .panel.warn {      border-left: 3px solid var(--klp-pink-600);      background: #fff6f8;    }    .panel-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 6px;    }    .panel p,    .panel li {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);    }    .panel ul {      padding-left: 16px;      margin-top: 2px;    }    .panel a {      color: var(--klp-green-700);      font-weight: 500;      text-decoration: underline;      text-underline-offset: 2px;    }    .panel a:hover { color: var(--klp-pink-600); }    .btn-next {      border: none;      border-radius: 10px;      padding: 10px;      font-size: 13px;      font-weight: 700;      cursor: pointer;      background: var(--klp-pink-600);      color: #fff;      margin-top: 2px;    }    .btn-next:hover { background: #a83255; }    /* \uc0── FANER ─────────────────────────────────────────────── */    .tabs {      display: flex;      gap: 4px;      padding: 12px 20px 0;      border-bottom: 2px solid var(--border);      background: transparent;    }    .tab-btn {      padding: 7px 18px;      font-size: 14px;      font-weight: 600;      border: 1px solid var(--border);      border-bottom: none;      border-radius: 8px 8px 0 0;      background: #ececec;      color: var(--klp-gray-700);      cursor: pointer;      position: relative;      bottom: -2px;      transition: background 0.15s;    }    .tab-btn:hover {      background: #e0e0e0;    }    .tab-btn.active {      background: var(--card);      color: var(--klp-gray-900);      border-color: var(--border);      border-bottom-color: var(--card);    }    .tab-panel { display: none; }    .tab-panel.active { display: block; }    /* \uc0── DETALJPANEL (alderspensjon sluttnoder) ───────────────── */    .flow-board.has-detail {      align-items: stretch;    }    .detail-panel {      flex-basis: 100%;      max-width: 900px;      margin-top: 16px;      background: var(--card);      border: 1px solid var(--klp-green-600);      border-radius: 12px;      box-shadow: 0 4px 16px rgba(0,0,0,0.10);      overflow: hidden;      display: flex;      flex-direction: column;    }    .detail-panel-head {      padding: 14px 18px;      border-bottom: 1px solid var(--border);      background: #fbfbfb;    }    .detail-panel-body {      padding: 16px;      display: flex;      flex-direction: row;      flex-wrap: wrap;      gap: 16px;      align-items: flex-start;      flex: 1;    }    .detail-section {      flex: 1;      min-width: 220px;      background: #fbfbfb;      border: 1px solid var(--border);      border-left: 3px solid var(--klp-green-600);      border-radius: 10px;      padding: 12px 14px;    }    .detail-section-title {      font-size: 12px;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 10px;    }    .checkbox-item {      display: flex;      align-items: flex-start;      gap: 8px;      margin-bottom: 8px;    }    .checkbox-item input[type="checkbox"] {      margin-top: 2px;      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;    }    .checkbox-item label {      font-size: 13px;      line-height: 1.5;      color: var(--klp-gray-900);      cursor: pointer;    }    .checkbox-item input:checked + label {      color: var(--klp-gray-700);      text-decoration: line-through;      text-decoration-color: var(--klp-green-600);    }    .detail-panel-foot {      padding: 12px 16px;      border-top: 1px solid var(--border);      display: flex;      flex-wrap: wrap;      gap: 8px;    }    /* \uc0── 3-KOLONNERS INNHOLDSBOKSER ────────────────────────── */    .tab-panel.active {      display: flex;      flex-direction: column;      flex: 1;      min-height: 0;      overflow: hidden;    }    .content-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 16px;      flex: 1;      min-height: 0;    }    .content-box {      background: var(--card);      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      display: flex;      flex-direction: column;      overflow: hidden;      min-height: 0;    }    .content-box-head {      padding: 12px 16px;      border-bottom: 2px solid #4a4a4a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      flex-shrink: 0;    }    .content-box-body {      flex: 1;      display: flex;      flex-direction: column;      min-height: 0;      overflow: hidden;    }    .content-box-main {      flex: 1;      overflow-y: auto;      padding: 14px 16px;      min-height: 0;    }    .content-box-foot {      flex-shrink: 0;      padding: 10px 16px;      border-top: 1px solid #d8d8d8;      background: #f0f0f0;    }    .content-box-foot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .content-box-foot-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .content-box-foot-list a { font-size: 12px; color: var(--klp-pink-600); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .content-box-foot-list a:hover { color: #f5c4ce; }    /* \uc0── SAMMENDRAG ─────────────────────────────────────────── */    .summary-box {      flex-shrink: 0;      border: 1px solid var(--border);      border-radius: 12px;      box-shadow: 0 2px 10px rgba(0,0,0,0.06);      background: var(--card);      display: flex;      flex-direction: column;      height: 90px;      margin-top: 0;    }    .summary-box-head {      padding: 10px 16px;      border-bottom: 1px solid #3a3a3a;      background: #4a4a4a;      font-size: 15px;      font-weight: 700;      color: #ffffff;      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;    }    .summary-copy-btn {      border: none;      background: var(--klp-pink-600);      color: #fff;      padding: 4px 14px;      border-radius: 8px;      cursor: pointer;      font-size: 12px;      font-weight: 700;      transition: all 0.15s;    }    .summary-copy-btn:hover {      background: #a83255;    }    .summary-textarea {      flex: 1;      padding: 10px 16px;      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;      font-size: 12px;      line-height: 1.5;      color: var(--klp-gray-900);      border: none;      resize: none;      background: var(--card);      outline: none;      border-radius: 0 0 12px 12px;    }    .content-placeholder {      color: var(--klp-gray-300);      font-size: 13px;      font-style: italic;    }    .box-filter-area {      display: flex;      flex-direction: row;      flex-wrap: wrap;      align-items: center;      gap: 16px;      padding: 10px 16px;      border-bottom: 1px solid var(--klp-green-600);      background: rgba(61,116,96,0.12);    }    .box-filter-row {      display: flex;      align-items: center;      gap: 6px;      flex-wrap: nowrap;    }    .box-filter-label {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.3px;      color: var(--klp-gray-700);      min-width: 40px;      flex-shrink: 0;    }    .box-filter-btn {      border: 1px solid var(--border);      background: var(--klp-white);      border-radius: 8px;      padding: 5px 10px;      font-size: 12px;      font-weight: 600;      cursor: pointer;      transition: all 0.18s ease;      color: var(--klp-gray-900);    }    .box-filter-btn:hover {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.08);    }    .box-filter-btn.active {      border-color: var(--klp-green-600);      background: rgba(61,116,96,0.15);      color: var(--klp-gray-900);    }    /* \uc0── TEMAKORT (inni Hovedregler) ────────────────────────── */    .topic-cards-grid {      display: grid;      grid-template-columns: repeat(3, 1fr);      gap: 8px;      margin-top: 14px;    }    .topic-card {      display: flex;      flex-direction: column;      gap: 8px;      background: #f0f0f0;      border: 1px solid #d8d8d8;      border-radius: 6px;      padding: 12px;      cursor: pointer;      transition: background 0.15s, border-color 0.15s;      min-height: 90px;    }    .topic-card:hover { background: #e4e4e4; border-color: #cacaca; }    .topic-card.checked {      background: #dcdcdc;      border-color: #b0b0b0;    }    .topic-card-top {      display: flex;      align-items: center;      gap: 8px;    }    .topic-card input[type="checkbox"] {      flex-shrink: 0;      width: 15px;      height: 15px;      accent-color: var(--klp-green-600);      cursor: pointer;      margin: 0;    }    .topic-card-title {      font-size: 13px;      font-weight: 700;      color: var(--klp-gray-900);      flex: 1;    }    .topic-card-desc {      font-size: 12px;      color: var(--klp-gray-700);      line-height: 1.5;    }    .topic-card-chevron {      margin-left: auto;      font-size: 12px;      color: var(--klp-green-700);      opacity: 0.7;    }    .topic-card-details { display: none; }    .topic-cards-grid { align-items: start; }    .card-popup-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.18);      opacity: 0;      pointer-events: none;      transition: opacity 0.2s;      z-index: 999;    }    .card-popup-overlay.open { opacity: 1; pointer-events: auto; }    .card-popup {      position: fixed;      width: 540px;      max-width: 92vw;      background: var(--klp-white);      border: 1px solid var(--klp-green-600);      border-radius: 14px;      padding: 26px 30px;      box-shadow: 0 16px 40px rgba(0,0,0,0.24);      z-index: 1000;      opacity: 0;      pointer-events: none;      transform: scale(0.2);      transform-origin: top left;      transition: opacity 0.22s ease, transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);    }    .card-popup.open {      opacity: 1;      pointer-events: auto;      transform: scale(1);    }    .card-popup-close {      position: absolute;      top: 8px;      right: 10px;      background: none;      border: none;      font-size: 22px;      line-height: 1;      cursor: pointer;      color: var(--klp-gray-700);      padding: 4px 8px;      border-radius: 6px;    }    .card-popup-close:hover { background: var(--border); }    .card-popup-title {      font-size: 20px;      font-weight: 700;      color: var(--klp-green-700);      margin-bottom: 14px;      padding-right: 32px;      line-height: 1.3;    }    .card-popup-body { font-size: 15px; line-height: 1.65; color: var(--klp-gray-900); max-height: 55vh; overflow-y: auto; }    .topic-section-divider {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin: 14px 0 6px;    }    .box-link-footer { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); }    .box-link-footer-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--klp-gray-700); margin-bottom: 6px; }    .box-link-footer-list { display: flex; flex-wrap: wrap; gap: 6px 14px; }    .box-link-footer-list a { font-size: 12px; color: var(--klp-green-700); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }    .box-link-footer-list a:hover { color: var(--klp-pink-600); }    /* \uc0── TEMA-DRAWER ─────────────────────────────────────────── */    .topic-drawer-overlay {      position: fixed;      inset: 0;      background: rgba(0,0,0,0.3);      z-index: 199;      opacity: 0;      pointer-events: none;      transition: opacity 0.25s;    }    .topic-drawer-overlay.open {      opacity: 1;      pointer-events: auto;    }    .topic-drawer {      position: fixed;      top: 0;      right: 0;      width: 380px;      max-width: 95vw;      height: 100vh;      background: var(--card);      box-shadow: -4px 0 30px rgba(0,0,0,0.15);      z-index: 200;      display: flex;      flex-direction: column;      transform: translateX(100%);      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);    }    .topic-drawer.open { transform: translateX(0); }    .topic-drawer-head {      padding: 16px 20px;      border-bottom: 1px solid var(--border);      display: flex;      align-items: center;      justify-content: space-between;      flex-shrink: 0;      background: #fbfbfb;    }    .topic-drawer-title {      font-size: 16px;      font-weight: 700;      color: var(--klp-gray-900);    }    .topic-drawer-close {      background: none;      border: none;      font-size: 22px;      cursor: pointer;      color: var(--klp-gray-700);      line-height: 1;      padding: 2px 8px;      border-radius: 6px;    }    .topic-drawer-close:hover { background: var(--border); }    .topic-drawer-body {      padding: 16px 20px;      overflow-y: auto;      flex: 1;    }    .topic-drawer-section { margin-bottom: 16px; }    .topic-drawer-section:last-child { margin-bottom: 0; }    .topic-drawer-section-title {      font-size: 11px;      font-weight: 700;      text-transform: uppercase;      letter-spacing: 0.4px;      color: var(--klp-gray-700);      margin-bottom: 5px;    }    .topic-drawer-section p {      font-size: 13px;      line-height: 1.6;      color: var(--klp-gray-900);    }    @media (max-width: 720px) {      .page { padding: 12px; }      .content-grid { grid-template-columns: 1fr; }      .summary-box { height: 120px; }    }    .summary-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; }    .flow-hint { font-size: 11px; color: var(--klp-gray-300); font-style: italic; padding: 2px 0 6px; flex-basis: 100%; }    /* ── SØKEFELT ────────────────────────────────────────────── */    .search-wrap { position: relative; max-width: 200px; }    .search-input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s, width 0.2s; width: 140px; }    .search-input:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.12); width: 200px; }    .search-results { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--klp-white); border: 1px solid var(--klp-green-600); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 50; max-height: 260px; overflow-y: auto; display: none; }    .search-results.open { display: block; }    .search-result-item { padding: 8px 14px; font-size: 13px; cursor: pointer; color: var(--klp-gray-900); border-bottom: 1px solid var(--border); }    .search-result-item:last-child { border-bottom: none; }    .search-result-item:hover { background: rgba(86,153,148,0.1); color: var(--klp-green-700); }    .search-result-item strong { color: var(--klp-green-700); }    .search-result-path { font-size: 11px; color: var(--klp-gray-300); margin-top: 1px; }    .search-result-kort { display: inline-block; margin-right: 6px; }    .search-result-kort::before { content: '→ '; }    /* ── ADMIN REDIGERINGSMODUS ──────────────────────────────── */    .admin-tab-icon { background: none; border: none; cursor: pointer; color: var(--klp-gray-300); font-size: 13px; padding: 7px 10px; opacity: 0.35; position: relative; bottom: -2px; border-radius: 8px 8px 0 0; transition: opacity 0.2s; line-height: 1; }    .admin-tab-icon:hover { opacity: 0.9; color: var(--klp-gray-700); }    .admin-tab-icon.active { opacity: 1; color: var(--klp-gray-700); background: var(--card); border: 1px solid var(--border); border-bottom-color: var(--card); }    .admin-layout { display: flex; flex-direction: row; flex: 1; min-height: 0; gap: 0; }    .admin-tree { width: 240px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; background: #fafafa; }    .admin-tree-item { display: flex; align-items: center; gap: 6px; padding: 6px 12px 6px 10px; cursor: pointer; font-size: 12px; color: var(--klp-gray-700); border-left: 3px solid transparent; transition: background 0.12s; user-select: none; }    .admin-tree-item:hover { background: rgba(86,153,148,0.08); }    .admin-tree-item.selected { background: rgba(86,153,148,0.15); border-left-color: var(--klp-green-600); color: var(--klp-gray-900); font-weight: 600; }    .node-type-badge { font-size: 10px; padding: 1px 5px; border-radius: 4px; flex-shrink: 0; }    .badge-choice { background: #dbeafe; color: #1e40af; }    .badge-end { background: #d1fae5; color: #065f46; }    .admin-tree-group { padding: 8px 12px 2px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-300); }    .admin-editor { flex: 1; overflow-y: auto; padding: 20px 24px; }    .admin-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--klp-green-100); }    .admin-editor-title { font-size: 16px; font-weight: 700; color: var(--klp-gray-900); }    .admin-export-btn { background: var(--klp-pink-600); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }    .admin-export-btn:hover { background: #a83255; }    .admin-section { margin-bottom: 24px; }    .admin-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--klp-gray-700); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }    .admin-field { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); transition: border-color 0.15s; }    .admin-field:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(86,153,148,0.15); }    .admin-field.ta { resize: vertical; min-height: 58px; }    .admin-field-label { font-size: 11px; font-weight: 600; color: var(--klp-gray-700); margin-bottom: 3px; display: block; }    .admin-field-group { margin-bottom: 8px; }    .admin-card-row { background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }    .admin-card-row-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }    .admin-card-num { font-size: 11px; font-weight: 700; color: var(--klp-gray-300); }    .admin-btn-del { background: none; border: 1px solid #fca5a5; color: #dc2626; border-radius: 6px; padding: 2px 8px; font-size: 12px; cursor: pointer; transition: all 0.12s; }    .admin-btn-del:hover { background: #fef2f2; }    .admin-btn-add { background: none; border: 1px dashed var(--klp-green-600); color: var(--klp-green-700); border-radius: 6px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 4px; transition: all 0.12s; }    .admin-btn-add:hover { background: rgba(86,153,148,0.08); }    .admin-choice-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; background: #f8f8f8; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; }    .admin-link-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }    #admin-export-dialog { border: 1px solid var(--border); border-radius: 14px; padding: 24px; width: min(1000px, 92vw); height: min(82vh, 760px); box-shadow: 0 16px 48px rgba(0,0,0,0.2); }    #admin-export-dialog[open] { display: flex; flex-direction: column; }    #admin-export-dialog::backdrop { background: rgba(0,0,0,0.45); }    .admin-export-dialog-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; }    .admin-export-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--klp-gray-700); padding: 2px 8px; border-radius: 6px; line-height: 1; }    .admin-export-close:hover { background: var(--border); }    .admin-export-copy { background: var(--klp-green-600); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 12px; }    .admin-export-copy:hover { background: var(--klp-green-700); }    #admin-export-textarea { width: 100%; flex: 1; min-height: 0; font-family: monospace; font-size: 11px; border: 1px solid var(--border); border-radius: 8px; padding: 10px; resize: none; display: block; }    /* ── KARTLEGGING ─────────────────────────────────────────── */    .kart-placeholder { color: var(--klp-gray-300); font-size: 13px; font-style: italic; padding: 8px 0; }    .kart-admin-block { background: #f4f9f7; border: 1px solid #c8e0d8; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }    .kart-admin-main-card { background: #fff; border: 2px solid var(--klp-green-600); border-radius: 8px; padding: 10px 36px 10px 12px; cursor: pointer; position: relative; margin-bottom: 10px; transition: background 0.12s; }    .kart-admin-main-card:hover { background: rgba(61,116,96,0.06); }    .kart-admin-sub-card { background: #fff; border: 1px solid var(--border); border-radius: 7px; padding: 8px 32px 8px 10px; cursor: pointer; position: relative; margin-bottom: 6px; transition: background 0.12s; font-size: 13px; }    .kart-admin-sub-card:hover { background: #f8f8f8; }    .kart-admin-sub-card.viktig { border-left: 3px solid var(--klp-green-600); }    .kart-admin-sub-card.unntak { border-left: 3px solid var(--klp-pink-600); }    .kart-admin-card-title { font-size: 13px; font-weight: 700; color: var(--klp-gray-900); }    .kart-admin-card-text { font-size: 12px; color: var(--klp-gray-700); margin-top: 2px; line-height: 1.4; }    .kart-admin-del { position: absolute; top: 7px; right: 8px; background: none; border: none; color: var(--klp-gray-300); font-size: 15px; cursor: pointer; line-height: 1; padding: 2px 4px; border-radius: 4px; }    .kart-admin-del:hover { color: #dc2626; background: #fef2f2; }    .kart-admin-sub-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin: 10px 0 5px; padding-left: 2px; }    .kart-admin-sub-label.v { color: var(--klp-green-700); }    .kart-admin-sub-label.u { color: var(--klp-pink-600); }    #admin-kart-dialog { border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; width: min(520px, 92vw); box-shadow: 0 12px 36px rgba(0,0,0,0.18); }    #admin-kart-dialog[open] { display: flex; flex-direction: column; }    #admin-kart-dialog::backdrop { background: rgba(0,0,0,0.35); }    /* ── BEREGNINGER ────────────────────────────────────────── */    .ber-flow-row { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 18px; border-bottom: 2px solid var(--border); margin-bottom: 18px; }    .ber-calc-panel { background: var(--card); border: 1px solid var(--klp-green-600); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); max-width: 560px; overflow: hidden; }    .ber-calc-head { padding: 14px 18px; background: #fbfbfb; border-bottom: 1px solid var(--border); }    .ber-calc-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }    .ber-param-row { display: flex; align-items: center; gap: 12px; }    .ber-param-label { font-size: 13px; font-weight: 600; color: var(--klp-gray-700); width: 180px; flex-shrink: 0; }    .ber-param-input-wrap { display: flex; align-items: center; gap: 6px; flex: 1; }    .ber-param-input { border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 14px; font-family: inherit; color: var(--klp-gray-900); background: var(--klp-white); width: 140px; text-align: right; transition: border-color 0.15s; }    .ber-param-input:focus { outline: none; border-color: var(--klp-green-600); box-shadow: 0 0 0 2px rgba(61,116,96,0.12); }    .ber-param-enhet { font-size: 13px; color: var(--klp-gray-700); white-space: nowrap; }    .ber-result-row { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding-top: 12px; border-top: 2px solid var(--klp-green-600); }    .ber-result-label { font-size: 13px; font-weight: 700; color: var(--klp-gray-900); text-transform: uppercase; letter-spacing: 0.3px; }    .ber-result-value { font-size: 22px; font-weight: 700; color: var(--klp-green-700); }    .ber-result-enhet { font-size: 14px; font-weight: 600; color: var(--klp-gray-700); margin-left: 6px; }  </style>
 </head>
-<body>  <header class="topbar">    <div>      <div class="brand"><span>Pensjonskompasset</span></div>    </div>    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>  </header>  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">    <nav class="tabs">      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-bottom:2px"><div class="search-wrap" style="margin-bottom:0"><input id="search-input" class="search-input" type="text" placeholder="Søk…" oninput="handleSearch(this.value)" onblur="setTimeout(function(){closeSearch()},150)" autocomplete="off"><ul id="search-results" class="search-results"></ul></div><button id="admin-tab-btn" class="admin-tab-icon" onclick="openAdminTab()" title="Redigeringsmodus">✎</button></div>    </nav>    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">      <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>      <div class="content-grid">        <div class="content-box">          <div class="content-box-head">Hovedregler</div>          <div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Viktig å huske på</div>          <div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>        <div class="content-box">          <div class="content-box-head">Unntak</div>          <div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div>        </div>      </div>      <div class="summary-box">        <div class="summary-box-head">          <span>Notatsammendrag</span>          <button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button>        </div>        <textarea id="summary-textarea" class="summary-textarea" placeholder="Hak av bokser over, eller skriv her..."></textarea>      </div>    </div>    <div id="tab-beregninger" class="tab-panel" style="padding:20px">      <p style="color:var(--klp-gray-700);font-size:14px">Beregningsverktøy kommer her.</p>    </div>    <div id="tab-rediger" class="tab-panel" style="padding:0;gap:0"><div class="admin-layout"><div id="admin-tree" class="admin-tree"></div><div id="admin-editor" class="admin-editor"><div class="admin-editor-header"><span class="admin-editor-title">Rediger flytskjema</span><button class="admin-export-btn" onclick="openExportModal()">Generer kode</button></div><p style="color:var(--klp-gray-700);font-size:13px">Velg et element i menyen til venstre for å redigere det.</p></div></div></div>  </main>
+<body>  <header class="topbar">    <div>      <div class="brand"><span>Pensjonskompasset</span></div>    </div>    <button class="btn-reset" onclick="resetFlow()">Start på nytt</button>  </header>  <main class="page" style="padding-top:0;flex:1;display:flex;flex-direction:column;overflow:hidden;">    <nav class="tabs">      <button class="tab-btn active" onclick="switchTab('veiledning', this)">Veiledning</button>      <button class="tab-btn" onclick="switchTab('beregninger', this)">Beregninger</button>      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding-bottom:2px"><div class="search-wrap" style="margin-bottom:0"><input id="search-input" class="search-input" type="text" placeholder="Søk…" oninput="handleSearch(this.value)" onblur="setTimeout(function(){closeSearch()},150)" autocomplete="off"><ul id="search-results" class="search-results"></ul></div><button id="admin-lagre-btn" class="admin-export-btn" onclick="saveToFile()" style="display:none;font-size:12px;padding:5px 12px;margin-right:2px;background:var(--klp-green-600)">Lagre</button><button id="admin-generer-btn" class="admin-export-btn" onclick="openExportModal()" style="display:none;font-size:12px;padding:5px 12px;margin-right:2px">Generer kode</button><button id="admin-tab-btn" class="admin-tab-icon" onclick="openAdminTab()" title="Redigeringsmodus">✎</button></div>    </nav>    <div id="tab-veiledning" class="tab-panel active" style="padding:20px;gap:12px">
+      <div id="veiledning-normal" style="display:contents">
+        <section id="flow" class="flow-board" style="flex-shrink:0;padding-bottom:14px;border-bottom:2px solid var(--border)"></section>
+        <div class="content-grid">
+          <div class="content-box"><div class="content-box-head">Kartlegging</div><div class="content-box-body" id="box-hoved-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div></div>
+          <div class="content-box"><div class="content-box-head">Viktig å huske på</div><div class="content-box-body" id="box-viktig-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div></div>
+          <div class="content-box"><div class="content-box-head">Unntak</div><div class="content-box-body" id="box-unntak-body"><p class="content-placeholder">Velg et alternativ i navigasjonen over for å se innhold her.</p></div></div>
+        </div>
+        <div class="summary-box"><div class="summary-box-head"><span>Notatsammendrag</span><button id="summary-copy-btn" class="summary-copy-btn" onclick="copySummary()">Kopier</button></div><textarea id="summary-textarea" class="summary-textarea" placeholder="Hak av bokser over, eller skriv her..."></textarea></div>
+      </div>
+      <div id="admin-veiledning-layout" class="admin-layout" style="display:none;flex:1;margin:-20px"></div>
+    </div>
+    <div id="tab-beregninger" class="tab-panel" style="padding:20px">
+      <div id="beregninger-normal"><p id="beregninger-placeholder" style="color:var(--klp-gray-700);font-size:14px">Ingen beregninger er lagt til ennå.</p></div>
+      <div id="admin-beregninger-panel" style="display:none;flex:1;flex-direction:column;overflow-y:auto;margin:-20px;padding:20px 24px">
+        <div id="admin-beregninger-content"></div>
+      </div>
+    </div>  </main>
 <div id="card-popup-overlay" class="card-popup-overlay" onclick="closeCardPopup()"></div>
 <div id="card-popup" class="card-popup" role="dialog" aria-modal="true">
   <button class="card-popup-close" onclick="closeCardPopup()" aria-label="Lukk">×</button>
   <div id="card-popup-title" class="card-popup-title"></div>
   <div id="card-popup-body" class="card-popup-body"></div>
 </div>
+<dialog id="admin-kart-dialog">
+  <div class="admin-export-dialog-head" style="margin-bottom:16px">
+    <strong id="admin-kart-dialog-title" style="font-size:15px">Rediger</strong>
+    <button class="admin-export-close" onclick="document.getElementById('admin-kart-dialog').close()">×</button>
+  </div>
+  <div id="admin-kart-dialog-body"></div>
+  <div style="margin-top:16px;display:flex;justify-content:flex-end">
+    <button class="admin-export-copy" style="margin-bottom:0" onclick="document.getElementById('admin-kart-dialog').close()">Ferdig</button>
+  </div>
+</dialog>
 <dialog id="admin-export-dialog">
   <div class="admin-export-dialog-head">
     <strong>Ferdig HTML — kopier og lim inn i GitHub</strong>
@@ -206,6 +233,9 @@ const NODES = {
 };
 // @@ADMIN_NODES_END@@
 
+// @@ADMIN_BEREGNINGER_START@@
+var BEREGNINGER = [];
+// @@ADMIN_BEREGNINGER_END@@
 
 const path = [{ nodeId: "root", selected: null }];
 let boxState = {};
@@ -314,21 +344,32 @@ function render() {
   renderContentBoxes(endNode);
 }
 
-function renderCheckboxCard(cbId, item) {
+function renderCheckboxCard(cbId, item, extraAttr) {
   const title   = (item && typeof item === 'object') ? (item.title   || '') : (item || '');
   const text    = (item && typeof item === 'object') ? (item.text    || '') : '';
   const details = (item && typeof item === 'object') ? (item.details || '') : '';
-  const cardId = 'card_' + cbId;
+  const lenker  = (item && typeof item === 'object' && Array.isArray(item.lenker)) ? item.lenker : [];
+  const cardId  = 'card_' + cbId;
+  const hasExpand = !!(details || lenker.length);
+  var detailsInner = '';
+  if (details) detailsInner += '<p>' + esc(details) + '</p>';
+  if (lenker.length) {
+    detailsInner += '<div class="box-link-footer" style="margin-top:8px">'
+      + '<div class="box-link-footer-title">Lenker</div>'
+      + '<div class="box-link-footer-list">';
+    lenker.forEach(function(l) {
+      detailsInner += '<a href="' + escAttr(l.url || '#') + '" target="_blank" rel="noopener noreferrer">' + esc(l.label || l.url || '') + '</a>';
+    });
+    detailsInner += '</div></div>';
+  }
   return '<div class="topic-card" id="' + cardId + '" onclick="toggleCardExpand(event, \'' + cardId + '\')">'
     + '<div class="topic-card-top">'
-    + '<input type="checkbox" id="' + cbId + '" onchange="updateSummary()" onclick="event.stopPropagation()">'
-    + '<label for="' + cbId + '" class="topic-card-title" onclick="event.stopPropagation()">'
-    + esc(title)
-    + '</label>'
-    + (details ? '<span class="topic-card-chevron" aria-hidden="true">▾</span>' : '')
+    + '<input type="checkbox" id="' + cbId + '" ' + (extraAttr || 'onchange="updateSummary()"') + ' onclick="event.stopPropagation()">'
+    + '<label for="' + cbId + '" class="topic-card-title" onclick="event.stopPropagation()">' + esc(title) + '</label>'
+    + (hasExpand ? '<span class="topic-card-chevron" aria-hidden="true">▾</span>' : '')
     + '</div>'
     + (text ? '<div class="topic-card-desc">' + esc(text) + '</div>' : '')
-    + (details ? '<div class="topic-card-details"><p>' + esc(details) + '</p></div>' : '')
+    + (hasExpand ? '<div class="topic-card-details">' + detailsInner + '</div>' : '')
     + '</div>';
 }
 
@@ -348,9 +389,9 @@ function toggleCardExpand(event, cardId) {
   }
 
   const titleEl   = card.querySelector('.topic-card-title');
-  const detailsEl = card.querySelector('.topic-card-details p');
+  const detailsEl = card.querySelector('.topic-card-details');
   document.getElementById('card-popup-title').textContent = titleEl ? titleEl.textContent : '';
-  document.getElementById('card-popup-body').textContent  = detailsEl ? detailsEl.textContent : '';
+  document.getElementById('card-popup-body').innerHTML    = detailsEl ? detailsEl.innerHTML : '';
 
   // Posisjoner popup-en oppå kortets posisjon — animasjonen vil flytte diagonalt og skalere opp
   const rect = card.getBoundingClientRect();
@@ -472,6 +513,10 @@ function ventPaaFilterMelding(node) {
 }
 
 function renderContentBoxes(node) {
+  if (node && node.content && node.content.kartlegging) {
+    renderKartleggingMode(node);
+    return;
+  }
   const emptyPlaceholder = '';
   const hoofdBody  = document.getElementById("box-hoved-body");
   const viktigBody = document.getElementById("box-viktig-body");
@@ -536,6 +581,69 @@ function renderContentBoxes(node) {
   updateSummary();
 }
 
+function renderKartleggingMode(node) {
+  var content = node.content;
+  var hoofdBody = document.getElementById('box-hoved-body');
+  var viktigBody = document.getElementById('box-viktig-body');
+  var unntakBody = document.getElementById('box-unntak-body');
+
+  var kHtml = '';
+  (content.kartlegging || []).forEach(function(k, i) {
+    kHtml += renderCheckboxCard(
+      'kart_' + node.id + '_' + i, k,
+      'onchange="updateKartleggingBoxes(\'' + node.id + '\');updateSummary()"'
+    );
+  });
+  hoofdBody.innerHTML = wrapBoxContent(
+    kHtml || '<p class="kart-placeholder">Ingen kartleggingspunkter lagt til.</p>',
+    renderLinkFooter(content.lenkerHoved)
+  );
+
+  viktigBody.innerHTML = wrapBoxContent('', renderLinkFooter(content.lenkerViktig));
+  unntakBody.innerHTML = wrapBoxContent('', renderLinkFooter(content.lenkerUnntak));
+
+  updateKartleggingBoxes(node.id);
+}
+
+function updateKartleggingBoxes(nodeId) {
+  var node = NODES[nodeId];
+  if (!node) return;
+  var content = node.content;
+  var viktigBody = document.getElementById('box-viktig-body');
+  var unntakBody = document.getElementById('box-unntak-body');
+
+  var viktigItems = [].concat(content.globalViktig || []);
+  var unntakItems = [].concat(content.globalUnntak || []);
+
+  (content.kartlegging || []).forEach(function(k, i) {
+    var cb = document.getElementById('kart_' + nodeId + '_' + i);
+    if (cb && cb.checked) {
+      viktigItems = viktigItems.concat(k.viktig || []);
+      unntakItems = unntakItems.concat(k.unntak || []);
+    }
+  });
+
+  var vHtml = '';
+  viktigItems.forEach(function(item, idx) {
+    vHtml += renderCheckboxCard('kv_' + nodeId + '_' + idx, item);
+  });
+  viktigBody.innerHTML = wrapBoxContent(vHtml, renderLinkFooter(content.lenkerViktig));
+
+  var uHtml = '';
+  unntakItems.forEach(function(item, idx) {
+    uHtml += renderCheckboxCard('ku_' + nodeId + '_' + idx, item);
+  });
+  unntakBody.innerHTML = wrapBoxContent(uHtml, renderLinkFooter(content.lenkerUnntak));
+}
+
+function getCurrentEndNode() {
+  for (var i = 0; i < path.length; i++) {
+    var n = NODES[path[i].nodeId];
+    if (n && n.type === 'end') return n;
+  }
+  return null;
+}
+
 function updateSummary() {
   const ta = document.getElementById('summary-textarea');
   if (!ta) return;
@@ -596,6 +704,7 @@ function switchTab(name, btn) {
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
   document.getElementById("tab-" + name).classList.add("active");
   btn.classList.add("active");
+  if (adminMode && name === 'beregninger') renderAdminBeregninger();
 }
 
 // ── SØKEFUNKSJON ─────────────────────────────────────────
@@ -717,6 +826,7 @@ function navigerTilNode(targetId) {
 
 let adminMode = false;
 let adminSelectedNodeId = null;
+let selectedBeregningId = null;
 
 function escAttr(str) {
   return String(str == null ? '' : str)
@@ -725,16 +835,197 @@ function escAttr(str) {
 }
 
 function openAdminTab() {
+  if (adminMode) {
+    // Avslutt admin-modus
+    adminMode = false;
+    document.getElementById('admin-veiledning-layout').style.display = 'none';
+    document.getElementById('veiledning-normal').style.display = 'contents';
+    document.getElementById('admin-beregninger-panel').style.display = 'none';
+    document.getElementById('beregninger-normal').style.display = '';
+    document.getElementById('admin-generer-btn').style.display = 'none';
+    document.getElementById('admin-lagre-btn').style.display = 'none';
+    const btn = document.getElementById('admin-tab-btn');
+    btn.classList.remove('active');
+    btn.style.opacity = '';
+    return;
+  }
   const pw = prompt('Skriv inn administrasjonskode:');
   if (pw !== 'klp2025') return;
   adminMode = true;
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn, .admin-tab-icon').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-rediger').classList.add('active');
   const btn = document.getElementById('admin-tab-btn');
   btn.classList.add('active');
   btn.style.opacity = '1';
+  document.getElementById('admin-generer-btn').style.display = '';
+  document.getElementById('admin-lagre-btn').style.display = '';
+  showAdminPanels();
   renderAdminTab();
+}
+
+function showAdminPanels() {
+  const activeTab = document.querySelector('.tab-panel.active')?.id;
+  // Veiledning: bytt til admin-layout
+  document.getElementById('veiledning-normal').style.display = 'none';
+  const avl = document.getElementById('admin-veiledning-layout');
+  if (!avl.querySelector('#admin-tree')) {
+    avl.innerHTML = '<div id="admin-tree" class="admin-tree"></div><div id="admin-editor" class="admin-editor"><p style="color:var(--klp-gray-700);font-size:13px">Velg et element i menyen til venstre for å redigere det.</p></div>';
+  }
+  avl.style.display = 'flex';
+  // Beregninger: bytt til admin-panel
+  document.getElementById('beregninger-normal').style.display = 'none';
+  document.getElementById('admin-beregninger-panel').style.display = 'flex';
+  if (activeTab === 'tab-beregninger') renderAdminBeregninger();
+}
+
+function renderAdminBeregninger() {
+  const el = document.getElementById('admin-beregninger-content');
+  if (!el) return;
+  let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--klp-green-100)">'
+    + '<span style="font-size:16px;font-weight:700;color:var(--klp-gray-900)">Rediger beregninger</span>'
+    + '</div>';
+  BEREGNINGER.forEach(function(ber, idx) {
+    html += '<div class="admin-card-row">';
+    html += '<div class="admin-card-row-head"><span class="admin-card-num">Beregning ' + (idx + 1) + '</span>'
+      + '<button class="admin-btn-del" onclick="deleteBeregning(\'' + ber.id + '\')">Slett</button></div>';
+    html += adminFieldGroup('Tittel', '<input class="admin-field" value="' + escAttr(ber.tittel || '') + '" oninput="updateBeregning(\'' + ber.id + '\',\'tittel\',this.value)">');
+    html += adminFieldGroup('Beskrivelse', '<textarea class="admin-field ta" oninput="updateBeregning(\'' + ber.id + '\',\'beskrivelse\',this.value)">' + escAttr(ber.beskrivelse || '') + '</textarea>');
+    html += adminFieldGroup('Resultat-etikett', '<input class="admin-field" placeholder="f.eks. Total pensjon" value="' + escAttr(ber.resultatLabel || '') + '" oninput="updateBeregning(\'' + ber.id + '\',\'resultatLabel\',this.value)">');
+    html += adminFieldGroup('Resultat-enhet', '<input class="admin-field" placeholder="f.eks. kr/år" value="' + escAttr(ber.resultatEnhet || '') + '" oninput="updateBeregning(\'' + ber.id + '\',\'resultatEnhet\',this.value)">');
+    html += adminFieldGroup('Formel (valgfri)',
+      '<input class="admin-field" placeholder="Tomt = sum. Bruk p0, p1, p2… f.eks. p0 * 0.02 * p1" value="' + escAttr(ber.formel || '') + '" oninput="updateBeregning(\'' + ber.id + '\',\'formel\',this.value)">'
+    );
+    // Parameters
+    html += '<div class="admin-section-title" style="margin-top:10px">Parametere</div>';
+    (ber.parametere || []).forEach(function(p, pi) {
+      html += '<div class="admin-choice-row" style="grid-template-columns:2fr 1fr 1fr auto;margin-bottom:6px">';
+      html += '<div><label class="admin-field-label">Navn</label><input class="admin-field" value="' + escAttr(p.label || '') + '" placeholder="f.eks. Årslønn" oninput="updateBeregningParam(\'' + ber.id + '\',\'' + p.id + '\',\'label\',this.value)"></div>';
+      html += '<div><label class="admin-field-label">Enhet</label><input class="admin-field" value="' + escAttr(p.enhet || '') + '" placeholder="kr, %, år" oninput="updateBeregningParam(\'' + ber.id + '\',\'' + p.id + '\',\'enhet\',this.value)"></div>';
+      html += '<div><label class="admin-field-label">Standardverdi</label><input class="admin-field" type="number" value="' + escAttr(p.standard || '') + '" placeholder="0" oninput="updateBeregningParam(\'' + ber.id + '\',\'' + p.id + '\',\'standard\',this.value)"></div>';
+      html += '<div style="padding-bottom:1px"><button class="admin-btn-del" onclick="deleteBeregningParam(\'' + ber.id + '\',\'' + p.id + '\')">×</button></div>';
+      html += '</div>';
+    });
+    html += '<button class="admin-btn-add" style="margin-top:4px" onclick="addBeregningParam(\'' + ber.id + '\')">+ Legg til parameter</button>';
+    html += '</div>';
+  });
+  html += '<button class="admin-btn-add" style="margin-top:8px" onclick="addBeregning()">+ Legg til beregning</button>';
+  el.innerHTML = html;
+}
+
+function addBeregning() {
+  BEREGNINGER.push({ id: 'ber_' + Date.now(), tittel: '', beskrivelse: '', resultatLabel: 'Resultat', resultatEnhet: '', formel: '', parametere: [] });
+  renderAdminBeregninger();
+  renderBeregningerTab();
+}
+
+function deleteBeregning(id) {
+  if (selectedBeregningId === id) selectedBeregningId = null;
+  BEREGNINGER = BEREGNINGER.filter(function(b) { return b.id !== id; });
+  renderAdminBeregninger();
+  renderBeregningerTab();
+}
+
+function updateBeregning(id, field, value) {
+  const ber = BEREGNINGER.find(function(b) { return b.id === id; });
+  if (ber) ber[field] = value;
+  renderBeregningerTab();
+}
+
+function addBeregningParam(berId) {
+  const ber = BEREGNINGER.find(function(b) { return b.id === berId; });
+  if (!ber) return;
+  if (!ber.parametere) ber.parametere = [];
+  ber.parametere.push({ id: 'p_' + Date.now(), label: '', enhet: '', standard: '' });
+  renderAdminBeregninger();
+  renderBeregningerTab();
+}
+
+function deleteBeregningParam(berId, pId) {
+  const ber = BEREGNINGER.find(function(b) { return b.id === berId; });
+  if (!ber || !ber.parametere) return;
+  ber.parametere = ber.parametere.filter(function(p) { return p.id !== pId; });
+  renderAdminBeregninger();
+  renderBeregningerTab();
+}
+
+function updateBeregningParam(berId, pId, field, value) {
+  const ber = BEREGNINGER.find(function(b) { return b.id === berId; });
+  if (!ber || !ber.parametere) return;
+  const p = ber.parametere.find(function(x) { return x.id === pId; });
+  if (p) p[field] = value;
+  renderBeregningerTab();
+}
+
+function selectBeregning(id) {
+  selectedBeregningId = selectedBeregningId === id ? null : id;
+  renderBeregningerTab();
+}
+
+function updateBerCalc(berId) {
+  const ber = BEREGNINGER.find(function(b) { return b.id === berId; });
+  if (!ber) return;
+  const vals = (ber.parametere || []).map(function(p, i) {
+    const inp = document.getElementById('ber-input-' + berId + '-' + i);
+    return inp ? (parseFloat(inp.value) || 0) : 0;
+  });
+  var result;
+  if (ber.formel && ber.formel.trim()) {
+    try {
+      var expr = ber.formel.replace(/p(\d+)/g, function(_, n) { return vals[parseInt(n, 10)] !== undefined ? vals[parseInt(n, 10)] : 0; });
+      result = Function('"use strict"; return (' + expr + ')')();
+    } catch(e) { result = NaN; }
+  } else {
+    result = vals.reduce(function(a, b) { return a + b; }, 0);
+  }
+  const valEl = document.getElementById('ber-result-val-' + berId);
+  if (valEl) {
+    if (isNaN(result)) {
+      valEl.textContent = 'Feil i formel';
+    } else {
+      var formatted = result.toLocaleString('nb-NO', { maximumFractionDigits: 2 });
+      var enhet = ber.resultatEnhet ? ' ' + ber.resultatEnhet : '';
+      valEl.textContent = formatted + enhet;
+    }
+  }
+}
+
+function renderBeregningerTab() {
+  const el = document.getElementById('beregninger-normal');
+  if (!el) return;
+  if (!BEREGNINGER.length) {
+    el.innerHTML = '<p id="beregninger-placeholder" style="color:var(--klp-gray-700);font-size:14px">Ingen beregninger er lagt til ennå.</p>';
+    return;
+  }
+  let html = '<div class="ber-flow-row">';
+  BEREGNINGER.forEach(function(ber) {
+    const isActive = ber.id === selectedBeregningId;
+    html += '<button class="option' + (isActive ? ' selected' : '') + '" onclick="selectBeregning(\'' + ber.id + '\')">'
+      + '<div class="option-label">' + esc(ber.tittel || 'Uten tittel') + '</div>'
+      + '</button>';
+  });
+  html += '</div>';
+  if (selectedBeregningId) {
+    const ber = BEREGNINGER.find(function(b) { return b.id === selectedBeregningId; });
+    if (ber) {
+      html += '<div class="ber-calc-panel">';
+      html += '<div class="ber-calc-head"><div style="font-size:16px;font-weight:700;color:var(--klp-gray-900)">' + esc(ber.tittel || 'Beregning') + '</div>';
+      if (ber.beskrivelse) html += '<div style="font-size:13px;color:var(--klp-gray-700);margin-top:4px">' + esc(ber.beskrivelse) + '</div>';
+      html += '</div><div class="ber-calc-body">';
+      (ber.parametere || []).forEach(function(p, i) {
+        html += '<div class="ber-param-row">'
+          + '<label class="ber-param-label" for="ber-input-' + ber.id + '-' + i + '">' + esc(p.label || ('Parameter ' + (i + 1))) + '</label>'
+          + '<div class="ber-param-input-wrap">'
+          + '<input class="ber-param-input" type="number" id="ber-input-' + ber.id + '-' + i + '" value="' + escAttr(p.standard || '') + '" placeholder="0" oninput="updateBerCalc(\'' + ber.id + '\')">'
+          + (p.enhet ? '<span class="ber-param-enhet">' + esc(p.enhet) + '</span>' : '')
+          + '</div></div>';
+      });
+      html += '<div class="ber-result-row">'
+        + '<span class="ber-result-label">' + esc(ber.resultatLabel || 'Resultat') + '</span>'
+        + '<span class="ber-result-value" id="ber-result-val-' + ber.id + '">—</span>'
+        + '</div>';
+      html += '</div></div>';
+    }
+  }
+  el.innerHTML = html;
+  if (selectedBeregningId) updateBerCalc(selectedBeregningId);
 }
 
 function renderAdminTab() {
@@ -879,10 +1170,84 @@ function renderAdminEndEditor(node) {
     return s;
   }
 
-  const infoList = content.infos && content.infos[0] ? (content.infos[0].list || []) : [];
-  html += contentSection('Hovedregler (kort)', 'infos', infoList);
-  html += contentSection('Viktig å huske på (kort)', 'warnings', content.warnings || []);
-  html += contentSection('Unntak (kort)', 'unntak', content.unntak || []);
+  // ── Kartlegging-modus toggle ───────────────────────────────
+  var harKartlegging = !!(content.kartlegging);
+  html += '<div class="admin-section">';
+  if (harKartlegging) {
+    html += '<button class="admin-btn-add" style="border-style:solid;border-color:var(--klp-pink-600);color:var(--klp-pink-600);margin-bottom:12px" onclick="toggleKartleggingModus(\'' + node.id + '\')">✕ Deaktiver Kartlegging-modus</button>';
+  } else {
+    html += '<button class="admin-btn-add" style="border-style:solid;border-color:var(--klp-green-600);color:var(--klp-green-700);margin-bottom:0" onclick="toggleKartleggingModus(\'' + node.id + '\')">✦ Aktiver Kartlegging-modus</button>';
+  }
+  html += '</div>';
+
+  if (harKartlegging) {
+    // ── Kortbasert oversikt ────────────────────────────────
+    html += '<div class="admin-section"><div class="admin-section-title">Kartleggingspunkter</div>';
+    (content.kartlegging || []).forEach(function(k, kIdx) {
+      html += '<div class="kart-admin-block">';
+      // Hoved-kort
+      html += '<div class="kart-admin-main-card" onclick="openKartEditDialog(\'' + node.id + '\',\'item\',' + kIdx + ')">'
+        + '<button class="kart-admin-del" onclick="event.stopPropagation();deleteKartleggingItem(\'' + node.id + '\',' + kIdx + ')">×</button>'
+        + '<div class="kart-admin-card-title">' + esc(k.title || '(Uten tittel)') + '</div>'
+        + (k.text ? '<div class="kart-admin-card-text">' + esc(k.text) + '</div>' : '')
+        + '</div>';
+      // Viktig
+      html += '<div class="kart-admin-sub-label v">Viktig å huske på — vises når huket av</div>';
+      (k.viktig || []).forEach(function(sub, sIdx) {
+        html += '<div class="kart-admin-sub-card viktig" onclick="openKartEditDialog(\'' + node.id + '\',\'sub\',' + kIdx + ',\'viktig\',' + sIdx + ')">'
+          + '<button class="kart-admin-del" onclick="event.stopPropagation();deleteKartleggingSubItem(\'' + node.id + '\',' + kIdx + ',\'viktig\',' + sIdx + ')">×</button>'
+          + '<div class="kart-admin-card-title">' + esc(sub.title || '(Uten tittel)') + '</div>'
+          + (sub.text ? '<div class="kart-admin-card-text">' + esc(sub.text) + '</div>' : '')
+          + '</div>';
+      });
+      html += '<button class="admin-btn-add" style="margin-bottom:8px" onclick="addKartleggingSubItem(\'' + node.id + '\',' + kIdx + ',\'viktig\')">+ Legg til viktig-kort</button>';
+      // Unntak
+      html += '<div class="kart-admin-sub-label u">Unntak — vises når huket av</div>';
+      (k.unntak || []).forEach(function(sub, sIdx) {
+        html += '<div class="kart-admin-sub-card unntak" onclick="openKartEditDialog(\'' + node.id + '\',\'sub\',' + kIdx + ',\'unntak\',' + sIdx + ')">'
+          + '<button class="kart-admin-del" onclick="event.stopPropagation();deleteKartleggingSubItem(\'' + node.id + '\',' + kIdx + ',\'unntak\',' + sIdx + ')">×</button>'
+          + '<div class="kart-admin-card-title">' + esc(sub.title || '(Uten tittel)') + '</div>'
+          + (sub.text ? '<div class="kart-admin-card-text">' + esc(sub.text) + '</div>' : '')
+          + '</div>';
+      });
+      html += '<button class="admin-btn-add" onclick="addKartleggingSubItem(\'' + node.id + '\',' + kIdx + ',\'unntak\')">+ Legg til unntak-kort</button>';
+      html += '</div>'; // kart-admin-block
+    });
+    html += '<button class="admin-btn-add" style="margin-top:4px;border-style:solid" onclick="addKartleggingItem(\'' + node.id + '\')">+ Legg til kartleggingspunkt</button>';
+    html += '</div>';
+
+    // ── Globale elementer ──────────────────────────────────
+    html += '<div class="admin-section"><div class="admin-section-title">Globale elementer <span style="font-weight:400;font-size:11px;text-transform:none;letter-spacing:0">(alltid synlige)</span></div>';
+    // globalViktig
+    html += '<div class="kart-admin-sub-label v" style="margin-top:0">Viktig å huske på</div>';
+    (content.globalViktig || []).forEach(function(item, idx) {
+      html += '<div class="kart-admin-sub-card viktig" onclick="openKartEditDialog(\'' + node.id + '\',\'global\',0,\'globalViktig\',' + idx + ')">'
+        + '<button class="kart-admin-del" onclick="event.stopPropagation();deleteGlobalKartItem(\'' + node.id + '\',\'globalViktig\',' + idx + ')">×</button>'
+        + '<div class="kart-admin-card-title">' + esc(item.title || '(Uten tittel)') + '</div>'
+        + (item.text ? '<div class="kart-admin-card-text">' + esc(item.text) + '</div>' : '')
+        + '</div>';
+    });
+    html += '<button class="admin-btn-add" style="margin-bottom:10px" onclick="addGlobalKartItem(\'' + node.id + '\',\'globalViktig\')">+ Legg til</button>';
+    // globalUnntak
+    html += '<div class="kart-admin-sub-label u">Unntak</div>';
+    (content.globalUnntak || []).forEach(function(item, idx) {
+      html += '<div class="kart-admin-sub-card unntak" onclick="openKartEditDialog(\'' + node.id + '\',\'global\',0,\'globalUnntak\',' + idx + ')">'
+        + '<button class="kart-admin-del" onclick="event.stopPropagation();deleteGlobalKartItem(\'' + node.id + '\',\'globalUnntak\',' + idx + ')">×</button>'
+        + '<div class="kart-admin-card-title">' + esc(item.title || '(Uten tittel)') + '</div>'
+        + (item.text ? '<div class="kart-admin-card-text">' + esc(item.text) + '</div>' : '')
+        + '</div>';
+    });
+    html += '<button class="admin-btn-add" onclick="addGlobalKartItem(\'' + node.id + '\',\'globalUnntak\')">+ Legg til</button>';
+    html += '</div>';
+
+  } else {
+    // Gammel modus
+    const infoList = content.infos && content.infos[0] ? (content.infos[0].list || []) : [];
+    html += contentSection('Kartlegging / Hovedregler (kort)', 'infos', infoList);
+    html += contentSection('Viktig å huske på (kort)', 'warnings', content.warnings || []);
+    html += contentSection('Unntak (kort)', 'unntak', content.unntak || []);
+  }
+
 
   function linkSection(title, key, links) {
     let s = '<div class="admin-section"><div class="admin-section-title">' + title + '</div>';
@@ -908,6 +1273,208 @@ function renderAdminEndEditor(node) {
     + '</div>';
 
   return html;
+}
+
+// ── Kartlegging-admin-funksjoner ─────────────────────────
+
+var _kartDialogCtx = null;
+
+function getKartDialogItem(ctx) {
+  if (!ctx) return null;
+  var node = NODES[ctx.nodeId];
+  if (!node || !node.content) return null;
+  var c = node.content;
+  if (ctx.type === 'item') return c.kartlegging && c.kartlegging[ctx.kIdx];
+  if (ctx.type === 'sub') return c.kartlegging && c.kartlegging[ctx.kIdx] && c.kartlegging[ctx.kIdx][ctx.section] && c.kartlegging[ctx.kIdx][ctx.section][ctx.sIdx];
+  if (ctx.type === 'global') return c[ctx.section] && c[ctx.section][ctx.sIdx];
+  return null;
+}
+
+function refreshKartDialogLinks() {
+  var ctx = _kartDialogCtx;
+  var item = getKartDialogItem(ctx);
+  if (!item) return;
+  var lenker = item.lenker || [];
+  var html = '<div class="admin-section-title" style="margin-top:14px;margin-bottom:8px">Lenker</div>';
+  lenker.forEach(function(l, lIdx) {
+    html += '<div class="admin-link-row" style="margin-bottom:6px">';
+    html += '<div>' + adminFieldGroup('Lenketekst', '<input class="admin-field" value="' + escAttr(l.label || '') + '" oninput="updateKartDialogLink(' + lIdx + ',\'label\',this.value)">') + '</div>';
+    html += '<div>' + adminFieldGroup('URL', '<input class="admin-field" value="' + escAttr(l.url || '') + '" oninput="updateKartDialogLink(' + lIdx + ',\'url\',this.value)">') + '</div>';
+    html += '<div style="padding-bottom:1px"><button class="admin-btn-del" onclick="deleteKartDialogLink(' + lIdx + ')">×</button></div>';
+    html += '</div>';
+  });
+  html += '<button class="admin-btn-add" onclick="addKartDialogLink()">+ Legg til lenke</button>';
+  document.getElementById('kd-links-section').innerHTML = html;
+}
+
+function addKartDialogLink() {
+  var item = getKartDialogItem(_kartDialogCtx);
+  if (!item) return;
+  if (!item.lenker) item.lenker = [];
+  item.lenker.push({ label: '', url: '' });
+  refreshKartDialogLinks();
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function deleteKartDialogLink(lIdx) {
+  var item = getKartDialogItem(_kartDialogCtx);
+  if (!item || !item.lenker) return;
+  item.lenker.splice(lIdx, 1);
+  refreshKartDialogLinks();
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function updateKartDialogLink(lIdx, field, val) {
+  var item = getKartDialogItem(_kartDialogCtx);
+  if (!item || !item.lenker || !item.lenker[lIdx]) return;
+  item.lenker[lIdx][field] = val;
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function openKartEditDialog(nodeId, type, kIdx, section, sIdx) {
+  var node = NODES[nodeId];
+  if (!node || !node.content) return;
+  var content = node.content;
+  var item, titleText, onInputTitle, onInputTekst, onInputDetails;
+
+  if (type === 'item') {
+    item = content.kartlegging[kIdx] || {};
+    titleText = 'Rediger kartleggingspunkt';
+    onInputTitle   = 'updateKartleggingItemField(\'' + nodeId + '\',' + kIdx + ',\'title\',this.value)';
+    onInputTekst   = 'updateKartleggingItemField(\'' + nodeId + '\',' + kIdx + ',\'text\',this.value)';
+    onInputDetails = 'updateKartleggingItemField(\'' + nodeId + '\',' + kIdx + ',\'details\',this.value)';
+  } else if (type === 'sub') {
+    item = (content.kartlegging[kIdx][section] || [])[sIdx] || {};
+    titleText = section === 'viktig' ? 'Rediger Viktig å huske på-kort' : 'Rediger Unntak-kort';
+    onInputTitle   = 'updateKartleggingSubItem(\'' + nodeId + '\',' + kIdx + ',\'' + section + '\',' + sIdx + ',\'title\',this.value)';
+    onInputTekst   = 'updateKartleggingSubItem(\'' + nodeId + '\',' + kIdx + ',\'' + section + '\',' + sIdx + ',\'text\',this.value)';
+    onInputDetails = 'updateKartleggingSubItem(\'' + nodeId + '\',' + kIdx + ',\'' + section + '\',' + sIdx + ',\'details\',this.value)';
+  } else {
+    item = (content[section] || [])[sIdx] || {};
+    titleText = section === 'globalViktig' ? 'Rediger globalt Viktig-kort' : 'Rediger globalt Unntak-kort';
+    onInputTitle   = 'updateGlobalKartItem(\'' + nodeId + '\',\'' + section + '\',' + sIdx + ',\'title\',this.value)';
+    onInputTekst   = 'updateGlobalKartItem(\'' + nodeId + '\',\'' + section + '\',' + sIdx + ',\'text\',this.value)';
+    onInputDetails = 'updateGlobalKartItem(\'' + nodeId + '\',\'' + section + '\',' + sIdx + ',\'details\',this.value)';
+  }
+
+  _kartDialogCtx = { nodeId: nodeId, type: type, kIdx: kIdx, section: section, sIdx: sIdx };
+
+  document.getElementById('admin-kart-dialog-title').textContent = titleText;
+
+  var body = '';
+  body += adminFieldGroup('Tittel', '<input class="admin-field" id="kd-title" value="' + escAttr(item.title || '') + '" oninput="' + onInputTitle + ';document.getElementById(\'kd-preview-title\').textContent=this.value">');
+  body += adminFieldGroup('Beskrivelse', '<textarea class="admin-field ta" id="kd-text" oninput="' + onInputTekst + ';document.getElementById(\'kd-preview-text\').textContent=this.value">' + escAttr(item.text || '') + '</textarea>');
+  body += adminFieldGroup('Detaljer (valgfri popup-tekst)', '<textarea class="admin-field ta" id="kd-details" oninput="' + onInputDetails + '">' + escAttr(item.details || '') + '</textarea>');
+  body += '<div id="kd-links-section"></div>';
+  body += '<div style="margin-top:14px;padding:10px 12px;background:#f4f4f4;border-radius:8px;border:1px solid var(--border)">'
+    + '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;color:var(--klp-gray-700);margin-bottom:6px">Forhåndsvisning</div>'
+    + '<div class="topic-card" style="pointer-events:none;cursor:default">'
+    + '<div class="topic-card-top"><div class="topic-card-title" id="kd-preview-title">' + esc(item.title || '') + '</div></div>'
+    + '<div class="topic-card-desc" id="kd-preview-text">' + esc(item.text || '') + '</div>'
+    + '</div></div>';
+
+  document.getElementById('admin-kart-dialog-body').innerHTML = body;
+  refreshKartDialogLinks();
+  document.getElementById('admin-kart-dialog').showModal();
+
+  document.getElementById('admin-kart-dialog').onclose = function() {
+    _kartDialogCtx = null;
+    renderAdminEditor(nodeId);
+  };
+}
+
+function toggleKartleggingModus(nodeId) {
+  var node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (node.content.kartlegging) {
+    if (!confirm('Deaktivere Kartlegging-modus? Kartleggingsdata slettes.')) return;
+    delete node.content.kartlegging;
+    delete node.content.globalViktig;
+    delete node.content.globalUnntak;
+  } else {
+    node.content.kartlegging = [];
+    node.content.globalViktig = [];
+    node.content.globalUnntak = [];
+  }
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function addKartleggingItem(nodeId) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content.kartlegging) return;
+  node.content.kartlegging.push({ id: 'k_' + Date.now(), title: '', text: '', details: '', viktig: [], unntak: [] });
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function deleteKartleggingItem(nodeId, kIdx) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content.kartlegging) return;
+  node.content.kartlegging.splice(kIdx, 1);
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function updateKartleggingItemField(nodeId, kIdx, field, val) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content.kartlegging) return;
+  node.content.kartlegging[kIdx][field] = val;
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function addKartleggingSubItem(nodeId, kIdx, section) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content.kartlegging) return;
+  var k = node.content.kartlegging[kIdx];
+  if (!k) return;
+  if (!k[section]) k[section] = [];
+  k[section].push({ title: '', text: '', details: '' });
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function deleteKartleggingSubItem(nodeId, kIdx, section, sIdx) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content.kartlegging) return;
+  var k = node.content.kartlegging[kIdx];
+  if (!k || !k[section]) return;
+  k[section].splice(sIdx, 1);
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function updateKartleggingSubItem(nodeId, kIdx, section, sIdx, field, val) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content.kartlegging) return;
+  var k = node.content.kartlegging[kIdx];
+  if (!k || !k[section] || !k[section][sIdx]) return;
+  k[section][sIdx][field] = val;
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function addGlobalKartItem(nodeId, section) {
+  var node = NODES[nodeId];
+  if (!node || !node.content) return;
+  if (!node.content[section]) node.content[section] = [];
+  node.content[section].push({ title: '', text: '', details: '' });
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function deleteGlobalKartItem(nodeId, section, idx) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content[section]) return;
+  node.content[section].splice(idx, 1);
+  renderAdminEditor(nodeId);
+  renderContentBoxes(getCurrentEndNode());
+}
+
+function updateGlobalKartItem(nodeId, section, idx, field, val) {
+  var node = NODES[nodeId];
+  if (!node || !node.content || !node.content[section] || !node.content[section][idx]) return;
+  node.content[section][idx][field] = val;
+  renderContentBoxes(getCurrentEndNode());
 }
 
 // ── Mutasjons-hjelpere ────────────────────────────────────
@@ -1060,27 +1627,63 @@ function copyExportCode() {
   }
 }
 
+async function saveToFile() {
+  const html = generateExportHTML();
+  const btn = document.getElementById('admin-lagre-btn');
+  const orig = btn.textContent;
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'Pensjonskompasset.html',
+        types: [{ description: 'HTML-fil', accept: { 'text/html': ['.html'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(html);
+      await writable.close();
+      btn.textContent = 'Lagret!';
+      setTimeout(function() { btn.textContent = orig; }, 2500);
+    } catch(e) {
+      if (e.name !== 'AbortError') fallbackDownload(html);
+    }
+  } else {
+    fallbackDownload(html);
+  }
+}
+
+function fallbackDownload(html) {
+  const a = document.createElement('a');
+  a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+  a.download = 'Pensjonskompasset.html';
+  a.click();
+}
+
 function generateExportHTML() {
   const source = document.documentElement.outerHTML;
   const MARKER_RC_START = '// @@ADMIN_ROOT_CHOICES_START@@';
   const MARKER_RC_END   = '// @@ADMIN_ROOT_CHOICES_END@@';
   const MARKER_N_START  = '// @@ADMIN_NODES_START@@';
   const MARKER_N_END    = '// @@ADMIN_NODES_END@@';
+  const MARKER_B_START  = '// @@ADMIN_BEREGNINGER_START@@';
+  const MARKER_B_END    = '// @@ADMIN_BEREGNINGER_END@@';
 
   const newRC = MARKER_RC_START + '\nconst ROOT_CHOICES = ' + JSON.stringify(ROOT_CHOICES, null, 2) + ';\n' + MARKER_RC_END;
   const newN  = MARKER_N_START  + '\nconst NODES = '        + JSON.stringify(NODES,        null, 2) + ';\n' + MARKER_N_END;
+  const newB  = MARKER_B_START  + '\nvar BEREGNINGER = '    + JSON.stringify(BEREGNINGER,  null, 2) + ';\n' + MARKER_B_END;
 
   const s1 = source.indexOf(MARKER_RC_START);
   const e1 = source.indexOf(MARKER_RC_END) + MARKER_RC_END.length;
   const s2 = source.indexOf(MARKER_N_START);
   const e2 = source.indexOf(MARKER_N_END)  + MARKER_N_END.length;
+  const s3 = source.indexOf(MARKER_B_START);
+  const e3 = source.indexOf(MARKER_B_END)  + MARKER_B_END.length;
 
-  if (s1 < 0 || s2 < 0) return source;
+  if (s1 < 0 || s2 < 0 || s3 < 0) return source;
 
   return '<!DOCTYPE html>\n'
     + source.slice(0, s1) + newRC
     + source.slice(e1, s2) + newN
-    + source.slice(e2);
+    + source.slice(e2, s3) + newB
+    + source.slice(e3);
 }
 
 render();
